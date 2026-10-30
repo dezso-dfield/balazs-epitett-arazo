@@ -387,7 +387,7 @@
       "allowMultipleTemplates": true,
       "order": 1,
       "menuId": "menu_kocsibeallo",
-      "imageUrl": "/uploads/offers/carport/carport-18.jpg"
+      "imageUrl": "/uploads/offers/carport/carport-01.jpg"
     },
     {
       "id": "cat_napvitorla",
@@ -606,7 +606,7 @@
         },
         {
           "id": "ph_offer_sb400_1",
-          "imageUrl": "/uploads/offers/sb400/sb400-24.jpg",
+          "imageUrl": "/uploads/offers/sb400/sb400-01.jpg",
           "titleAbove": "",
           "captionBelow": "Megvalósult SOLARE 400 pergola",
           "widthPct": 75,
@@ -614,7 +614,7 @@
           "subPhotos": [
             {
               "id": "ph_offer_sb400_1_1",
-              "imageUrl": "/uploads/offers/sb400/sb400-25.jpg",
+              "imageUrl": "/uploads/offers/sb400/sb400-11.jpg",
               "titleAbove": "",
               "captionBelow": "Falhoz rögzítve, elöl lábakkal",
               "widthPct": 50,
@@ -3865,7 +3865,7 @@
         },
         {
           "id": "ph_offer_seesky_1",
-          "imageUrl": "/uploads/offers/seesky/seesky-29.jpg",
+          "imageUrl": "/uploads/offers/seesky/seesky-01.jpg",
           "titleAbove": "",
           "captionBelow": "SEESKY BIO LED-világítással a gerendákban",
           "widthPct": 75,
@@ -21636,7 +21636,7 @@
         },
         {
           "id": "ph_offer_veranda-tens_1",
-          "imageUrl": "/uploads/offers/veranda-tens/veranda-tens-21.jpg",
+          "imageUrl": "/uploads/offers/veranda-tens/veranda-tens-01.jpg",
           "titleAbove": "",
           "captionBelow": "VERANDA TENS felépítése",
           "widthPct": 75,
@@ -23514,7 +23514,7 @@
         },
         {
           "id": "ph_offer_veranda-vziip_1",
-          "imageUrl": "/uploads/offers/veranda-vziip/veranda-vziip-23.jpg",
+          "imageUrl": "/uploads/offers/veranda-vziip/veranda-vziip-01.jpg",
           "titleAbove": "",
           "captionBelow": "VERANDA V ZIIP tetőárnyékoló",
           "widthPct": 75,
@@ -23522,7 +23522,7 @@
           "subPhotos": [
             {
               "id": "ph_offer_veranda-vziip_1_1",
-              "imageUrl": "/uploads/offers/veranda-vziip/veranda-vziip-22.jpg",
+              "imageUrl": "/uploads/offers/veranda-vziip/veranda-vziip-11.jpg",
               "titleAbove": "",
               "captionBelow": "Kazetta és vezetősín keresztmetszete",
               "widthPct": 50,
@@ -31635,7 +31635,7 @@
         },
         {
           "id": "ph_offer_neos_1",
-          "imageUrl": "/uploads/offers/neos/neos-26.jpg",
+          "imageUrl": "/uploads/offers/neos/neos-01.jpg",
           "titleAbove": "",
           "captionBelow": "KEDRY NEOS bioklimatikus pergola",
           "widthPct": 75,
@@ -31643,7 +31643,7 @@
           "subPhotos": [
             {
               "id": "ph_offer_neos_1_1",
-              "imageUrl": "/uploads/offers/neos/neos-27.jpg",
+              "imageUrl": "/uploads/offers/neos/neos-11.jpg",
               "titleAbove": "",
               "captionBelow": "Különálló szerkezetként",
               "widthPct": 50,
@@ -31651,7 +31651,7 @@
             },
             {
               "id": "ph_offer_neos_1_2",
-              "imageUrl": "/uploads/offers/neos/neos-28.jpg",
+              "imageUrl": "/uploads/offers/neos/neos-12.jpg",
               "titleAbove": "",
               "captionBelow": "Nagy, több modulos kivitel",
               "widthPct": 50,
@@ -46428,7 +46428,7 @@
         },
         {
           "id": "ph_offer_run_4",
-          "imageUrl": "/uploads/offers/run/run-32.jpg",
+          "imageUrl": "/uploads/offers/run/run-04.jpg",
           "titleAbove": "",
           "captionBelow": "Kulcsos záras kilincs",
           "widthPct": 75,
@@ -46436,7 +46436,7 @@
           "subPhotos": [
             {
               "id": "ph_offer_run_4_1",
-              "imageUrl": "/uploads/offers/run/run-30.jpg",
+              "imageUrl": "/uploads/offers/run/run-41.jpg",
               "titleAbove": "",
               "captionBelow": "Süllyesztett fogantyú",
               "widthPct": 50,
@@ -46444,7 +46444,7 @@
             },
             {
               "id": "ph_offer_run_4_2",
-              "imageUrl": "/uploads/offers/run/run-31.jpg",
+              "imageUrl": "/uploads/offers/run/run-42.jpg",
               "titleAbove": "",
               "captionBelow": "Gombos zár",
               "widthPct": 50,
@@ -46868,7 +46868,7 @@
       "photos": [
         {
           "id": "ph_offer_carport_1",
-          "imageUrl": "/uploads/offers/carport/carport-18.jpg",
+          "imageUrl": "/uploads/offers/carport/carport-01.jpg",
           "titleAbove": "",
           "captionBelow": "FIX tetejű kocsibeálló, 4 lábon álló",
           "widthPct": 75,
@@ -46876,7 +46876,7 @@
           "subPhotos": [
             {
               "id": "ph_offer_carport_1_1",
-              "imageUrl": "/uploads/offers/carport/carport-19.jpg",
+              "imageUrl": "/uploads/offers/carport/carport-11.jpg",
               "titleAbove": "",
               "captionBelow": "Opál polikarbonát tető alulnézetből",
               "widthPct": 50,
@@ -46884,7 +46884,7 @@
             },
             {
               "id": "ph_offer_carport_1_2",
-              "imageUrl": "/uploads/offers/carport/carport-20.jpg",
+              "imageUrl": "/uploads/offers/carport/carport-12.jpg",
               "titleAbove": "",
               "captionBelow": "Ház mellé építve",
               "widthPct": 50,
@@ -48227,7 +48227,7 @@
       "photos": [
         {
           "id": "ph_offer_unica_1",
-          "imageUrl": "/uploads/offers/unica/unica-10.jpg",
+          "imageUrl": "/uploads/offers/unica/unica-01.jpg",
           "titleAbove": "",
           "captionBelow": "UNICA karos napellenző",
           "widthPct": 75,
@@ -48235,7 +48235,7 @@
           "subPhotos": [
             {
               "id": "ph_offer_unica_1_1",
-              "imageUrl": "/uploads/offers/unica/unica-09.jpg",
+              "imageUrl": "/uploads/offers/unica/unica-11.jpg",
               "titleAbove": "",
               "captionBelow": "Kazetta nélküli kivitel",
               "widthPct": 50,
@@ -48454,7 +48454,7 @@
       "photos": [
         {
           "id": "ph_offer_silver-plus_1",
-          "imageUrl": "/uploads/offers/silver-plus/silver-plus-11.jpg",
+          "imageUrl": "/uploads/offers/silver-plus/silver-plus-01.jpg",
           "titleAbove": "",
           "captionBelow": "SILVER PLUS karos napellenző",
           "widthPct": 75,
@@ -48462,7 +48462,7 @@
           "subPhotos": [
             {
               "id": "ph_offer_silver-plus_1_1",
-              "imageUrl": "/uploads/offers/silver-plus/silver-plus-12.jpg",
+              "imageUrl": "/uploads/offers/silver-plus/silver-plus-11.jpg",
               "titleAbove": "",
               "captionBelow": "Fali, mennyezeti és szarufára szerelés",
               "widthPct": 50,
@@ -52114,5 +52114,5 @@
     }
   ],
   "trackingEvents": [],
-  "dataRevision": 2
+  "dataRevision": 3
 }
