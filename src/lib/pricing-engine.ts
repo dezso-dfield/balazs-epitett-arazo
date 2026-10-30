@@ -231,6 +231,15 @@ export interface ModuleCounts {
 }
 
 /** Modulszám tengelyenként (pl. ceil(szélesség ÷ 700)), az összes modul a kettő szorzata */
+/** Elforgatható szerkezetnél: felcserélt szélesség/kinyúlással kevesebb modul kell-e */
+export function shouldRotate(template: QuoteTemplate, widthCm: number, projectionCm: number): boolean {
+  if (!template.allowRotate || widthCm === projectionCm) return false;
+  return (
+    getModuleCounts(template, projectionCm, widthCm).total <
+    getModuleCounts(template, widthCm, projectionCm).total
+  );
+}
+
 export function getModuleCounts(
   template: QuoteTemplate,
   widthCm: number,
@@ -437,6 +446,9 @@ export function checkTemplateFit(
   heightCm: number,
   mountType?: MountType
 ): { status: 'ok' | 'no_limits' | 'out_of_range'; reasons: string[] } {
+  if (shouldRotate(template, widthCm, projectionCm)) {
+    return checkTemplateFit({ ...template, allowRotate: false }, projectionCm, widthCm, heightCm, mountType);
+  }
   const lim = template.sizeLimits || {};
   const reasons: string[] = [];
   const check = (
@@ -662,7 +674,11 @@ export function calculateTemplateRows(
 
   // A más beépítési módhoz / modulszámhoz tartozó tételek (pl. szabadon álló mérettábla,
   // 2 modulos felár) kimaradnak
-  const modules = getModuleCounts(template, widthCm, projectionCm);
+  // Elforgatott szerkezet: a szerkezet saját tételei felcserélt méretekkel, az oldalsó extrák a valódi oldalakkal
+  const rotated = shouldRotate(template, widthCm, projectionCm);
+  const structW = rotated ? projectionCm : widthCm;
+  const structP = rotated ? widthCm : projectionCm;
+  const modules = getModuleCounts(template, structW, structP);
   const mountMaterials = template.materials.filter(
     (m) =>
       (!m.mountTypes?.length || m.mountTypes.includes(ctx.mountType)) &&
@@ -704,7 +720,10 @@ export function calculateTemplateRows(
       Math.max(1, Number(item.defaultQuantity) || 1) *
       moduleMult *
       ownSplitCount(item, widthCm, projectionCm, heightCm);
-    const ed = effectiveDims(item, modules, widthCm, projectionCm, heightCm);
+    const ownStructure = rotated && item.itemRole === 'base' && !item.chosenExtra && !item.priceSource;
+    const ed = ownStructure
+      ? effectiveDims(item, modules, structW, structP, heightCm)
+      : effectiveDims(item, modules, widthCm, projectionCm, heightCm);
     const dim = computeDimensionValue(
       item.dimensionSource || 'roof',
       ed.widthCm,

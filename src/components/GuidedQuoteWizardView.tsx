@@ -18,6 +18,7 @@ import {
   calculateTemplateRows,
   checkTemplateFit,
   getModuleCounts,
+  shouldRotate,
   isTemplateInCategory,
   computeBlockBreakdown,
 } from '@/lib/pricing-engine';
@@ -522,7 +523,10 @@ export function GuidedQuoteWizardView({
       const calc = !wrongMount
         ? calculateTemplateRows(effectiveTemplate(tpl), calcCtx, getSelectedMaterialsForTemplate(tpl))
         : null;
-      const modules = getModuleCounts(tpl, widthCm, projectionCm);
+      const rotated = shouldRotate(tpl, widthCm, projectionCm);
+      const modules = rotated
+        ? getModuleCounts(tpl, projectionCm, widthCm)
+        : getModuleCounts(tpl, widthCm, projectionCm);
       const photo = templateCoverUrl(tpl);
       const status = wrongMount
         ? { text: `Csak ${tpl.mountTypes!.map((m) => mountLabel(m).toLowerCase()).join(' / ')} kérhető`, cls: 'text-slate-500' }
@@ -531,7 +535,9 @@ export function GuidedQuoteWizardView({
         : fit.status === 'no_limits'
         ? { text: 'Nincs megadva méretkorlát - ellenőrizd', cls: 'text-amber-700' }
         : {
-            text: `Ebben a méretben gyártható${modules.total > 1 ? ` · ${modules.total} modul` : ''}`,
+            text: `Ebben a méretben gyártható${modules.total > 1 ? ` · ${modules.total} modul` : ''}${
+              rotated ? ' · elforgatott lamellákkal' : ''
+            }`,
             cls: 'text-green-700',
           };
       return (

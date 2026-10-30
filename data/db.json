@@ -3801,7 +3801,8 @@
           "maxModules": 2
         }
       ],
-      "sizeRules": []
+      "sizeRules": [],
+      "allowRotate": true
     },
     {
       "id": "tpl_legacy_seesky_bio",
@@ -52114,5 +52115,5 @@
     }
   ],
   "trackingEvents": [],
-  "dataRevision": 3
+  "dataRevision": 4
 }

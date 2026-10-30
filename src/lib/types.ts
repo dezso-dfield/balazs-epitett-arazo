@@ -318,6 +318,9 @@ export interface QuoteTemplate {
   moduleSplit?: ModuleSplitRule; // régi, egytengelyes szabály (moduleSplits váltja)
   // Modulokra bontás tengelyenként (szélesség és/vagy kinyúlás), modulszám = szorzatuk
   moduleSplits?: ModuleSplitRule[];
+  // Elforgatva is építhető (pl. SOLARE lamellái mindkét irányban állhatnak): ha így kevesebb modul kell,
+  // a szerkezet ára felcserélt szélességgel és kinyúlással számol (az oldalsó extrák maradnak)
+  allowRotate?: boolean;
   // További kategóriák, ahol ez a sablon is megjelenik (pl. Hydra a tetőre építhetők között is)
   alsoInCategoryIds?: string[];
   // Milyen beépítéssel kérhető (üres = bármelyikkel)
