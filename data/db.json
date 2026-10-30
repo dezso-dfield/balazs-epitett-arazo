@@ -376,6 +376,30 @@
       "order": 1,
       "menuId": "menu_arnyekolo",
       "imageUrl": "/uploads/legacy/types/feszitett_vasznas_tetore.png"
+    },
+    {
+      "id": "cat_kocsibeallo",
+      "name": "Kocsibeálló",
+      "shortName": "Kocsibeálló",
+      "description": "Polikarbonát vagy szendvicspanel tetős kocsibeálló, falhoz rögzítve vagy szabadon állva",
+      "questionPrompt": "Kér az ügyfél kocsibeállót?",
+      "categoryType": "main_structure",
+      "allowMultipleTemplates": true,
+      "order": 1,
+      "menuId": "menu_kocsibeallo",
+      "imageUrl": "/uploads/offers/sandwich/sandwich-01.jpg"
+    },
+    {
+      "id": "cat_napvitorla",
+      "name": "Napvitorla",
+      "shortName": "Napvitorla",
+      "description": "Egyoszlopos, forgatható árnyékoló vitorla kézi vagy motoros vezérléssel",
+      "questionPrompt": "Kér az ügyfél napvitorlát?",
+      "categoryType": "main_structure",
+      "allowMultipleTemplates": true,
+      "order": 5,
+      "menuId": "menu_arnyekolo",
+      "imageUrl": "/uploads/offers/kolibrie/kolibrie-01.jpg"
     }
   ],
   "templates": [
@@ -517,7 +541,7 @@
         "assemblyPerM2Eur": 0
       },
       "introText": "A SOLARE 400 ({{meret}}, {{beepites}}) kedvező árú, forgatható lamellás pergola látható fali konzolokkal és jó terhelési indexekkel; zárt lamellák esetén teljesen vízzáró. Gyártási idő 20-30 nap. Télen-nyáron használható: a lamellák dőlésszögével a bejutó fény és a szellőzés is szabályozható. Később üvegfallal és oldalsó árnyékolóval télikertté bővíthető.",
-      "closingText": "Ha a hónap végéig megrendeli az alapszerkezetet, az infrafűtést és az eső-/szélérzékelőt ajándékba adjuk. Garancia: a szerkezetre 10 év, a vásznakra/ponyvákra 5 év, a motorokra és érzékelőkre 3 év. Átfutási idő a visszaigazolástól számítva 30-60 nap. Az árajánlat a helyszíni felmérés és a műszaki tartalom pontosítása után módosulhat.",
+      "closingText": "Ha a hónap végéig megrendeli az alapszerkezetet, az infrafűtést és az eső-/szélérzékelőt ajándékba adjuk.",
       "textBlocks": [],
       "photos": [
         {
@@ -3725,7 +3749,7 @@
         }
       ],
       "createdAt": "2026-10-19T08:18:53.225Z",
-      "updatedAt": "2026-10-21T11:54:57.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "alsoInCategoryIds": [
         "cat_legacy_tetore"
       ],
@@ -3776,7 +3800,7 @@
         "assemblyPerM2Eur": 0
       },
       "introText": "A SEESKY BIO ({{meret}}, {{beepites}}) magas minőségű, hőszigetelt lamellás pergola rejtett motorral és rejtett csavarokkal; zárt lamellák esetén teljesen vízzáró. Gyártási idő 30-40 nap. Télen-nyáron használható: a lamellák dőlésszögével a bejutó fény és a szellőzés is szabályozható. Később üvegfallal és oldalsó árnyékolóval télikertté bővíthető.",
-      "closingText": "Ha a hónap végéig megrendeli az alapszerkezetet, az infrafűtést és az eső-/szélérzékelőt ajándékba adjuk. Garancia: a szerkezetre 10 év, a vásznakra/ponyvákra 5 év, a motorokra és érzékelőkre 3 év. Átfutási idő a visszaigazolástól számítva 30-60 nap. Az árajánlat a helyszíni felmérés és a műszaki tartalom pontosítása után módosulhat.",
+      "closingText": "Ha a hónap végéig megrendeli az alapszerkezetet, az infrafűtést és az eső-/szélérzékelőt ajándékba adjuk.",
       "textBlocks": [],
       "photos": [
         {
@@ -5716,7 +5740,7 @@
         }
       ],
       "createdAt": "2026-10-19T08:18:53.225Z",
-      "updatedAt": "2026-10-21T11:54:57.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "mountTypes": [
         "Épülethez rögzített",
         "Szabadon álló"
@@ -5764,7 +5788,7 @@
         "assemblyPerM2Eur": 0
       },
       "introText": "A KEDRY SKYLIFE ({{meret}}, {{beepites}}) lamellái elhúzás közben elforognak - minőségben a legmagasabb szint: rejtett motorok, csavarok és fali konzolok, hatalmas hóterhelési index. Olasz prémium termék, gyártási idő 30-40 nap. Télen-nyáron használható: a lamellák dőlésszögével a bejutó fény és a szellőzés is szabályozható. Később üvegfallal és oldalsó árnyékolóval télikertté bővíthető.",
-      "closingText": "Ha a hónap végéig megrendeli az alapszerkezetet, az infrafűtést és az eső-/szélérzékelőt ajándékba adjuk. Garancia: a szerkezetre 10 év, a vásznakra/ponyvákra 5 év, a motorokra és érzékelőkre 3 év. Átfutási idő a visszaigazolástól számítva 30-60 nap. Az árajánlat a helyszíni felmérés és a műszaki tartalom pontosítása után módosulhat. (SKYLIFE termékre +2 év garancia kérhető.)",
+      "closingText": "Ha a hónap végéig megrendeli az alapszerkezetet, az infrafűtést és az eső-/szélérzékelőt ajándékba adjuk. A SKYLIFE termékre +2 év garancia kérhető.",
       "textBlocks": [],
       "photos": [
         {
@@ -7313,7 +7337,7 @@
           "minPrice": 1,
           "multiplier": 0.7,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_kedry_free",
@@ -7691,7 +7715,7 @@
           "minPrice": 1,
           "multiplier": 0.7,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_kedry_free_2w",
@@ -8069,7 +8093,7 @@
           "minPrice": 1,
           "multiplier": 0.7,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_kedry_free_2p",
@@ -8447,7 +8471,7 @@
           "minPrice": 1,
           "multiplier": 0.7,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_kedry_free_4",
@@ -10086,7 +10110,7 @@
         }
       ],
       "createdAt": "2026-10-19T08:18:53.225Z",
-      "updatedAt": "2026-10-21T11:54:57.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "mountTypes": [
         "Épülethez rögzített",
         "Szabadon álló"
@@ -10133,9 +10157,22 @@
         "assemblyFixedEur": 0,
         "assemblyPerM2Eur": 0
       },
-      "introText": "A PERGOLA V ZIIP ({{meret}}) elhúzható, feszített vásznas pergola: a ponyva mindkét oldalára hegesztett zipzár az oldalsó profilokban vezeti a vásznat, így az mindig feszes, ráncmentes marad. Elsősorban árnyékolásra ajánljuk; szélállóság EN 13561 3. osztály (50-70 km/h).",
-      "closingText": "Hóesésben nem használható. Garancia: a szerkezetre 10 év, a vásznakra/ponyvákra 5 év, a motorokra és érzékelőkre 3 év. Átfutási idő a visszaigazolástól számítva 30-60 nap. Az árajánlat a helyszíni felmérés és a műszaki tartalom pontosítása után módosulhat.",
-      "textBlocks": [],
+      "introText": "A PERGOLA V ZIIP ({{meret}}) összecsukható, feszített vásznas pergola, elsősorban árnyékolásra ajánljuk. A szerkezetet falhoz rögzítve, elöl lábakkal építjük.\n\nA ponyva teljesen be van zárva egy kazettás kialakításba, a napháló megvezetése speciális oldalsó megvezetésben történik. A ponyva mindkét oldalára zipzár van hegesztve, így a ponyva mindig feszes (ráncmentes) marad, és végig az oldalsó megvezető profilokban mozog.",
+      "closingText": "Hóesésben nem használható.",
+      "textBlocks": [
+        {
+          "id": "tb_vziip_tech",
+          "title": "Műszaki adatok",
+          "content": "- Szélállóság: EN 13561 szerinti 3. osztály, erős szélnek is ellenáll (50-70 km/h)",
+          "position": "before_photos"
+        },
+        {
+          "id": "tb_vziip_after",
+          "title": "",
+          "content": "A tartó szerkezetek alapszínei: RAL 9010, RAL 9006, RAL 9005, RAL 7016 matt és FSM 71319. Szövet választék katalógusból.",
+          "position": "after_table"
+        }
+      ],
       "photos": [
         {
           "id": "sphoto_legacy_pergola_v_ziip_3",
@@ -11656,7 +11693,7 @@
         }
       ],
       "createdAt": "2026-10-19T08:18:53.225Z",
-      "updatedAt": "2026-10-21T11:54:57.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "mountTypes": [
         "Épülethez rögzített"
       ],
@@ -11697,9 +11734,22 @@
         "assemblyFixedEur": 0,
         "assemblyPerM2Eur": 0
       },
-      "introText": "A HYDRA ({{meret}}) olasz, elhúzható feszített vásznas pergola: a kazettába zárt, zipzáras oldalvezetésű ponyva mindig feszes marad, víztaszító szövettel kisebb esőben is használható. Szélállóság EN 13561 3. osztály (50-70 km/h).",
-      "closingText": "Hóesésben nem használható. Garancia: a szerkezetre 10 év, a vásznakra/ponyvákra 5 év, a motorokra és érzékelőkre 3 év. Átfutási idő a visszaigazolástól számítva 30-60 nap. Az árajánlat a helyszíni felmérés és a műszaki tartalom pontosítása után módosulhat.",
-      "textBlocks": [],
+      "introText": "A HYDRA ({{meret}}) olasz, elhúzható feszített vásznas pergola. Inkább árnyékolásra ajánljuk, de víztaszító szövettel kisebb esőben is használható. Egy modul legfeljebb 600 cm széles.\n\nA ponyva teljesen be van zárva egy új kazettás kialakításba, amely kiemeli minimalista esztétikáját. A ponyva mindkét oldalára zipzár van hegesztve, így mindig feszes (ráncmentes) marad, és végig az oldalsó megvezető profilokban mozog. A kazettába és a vezetőkbe integrálható világítással a HYDRA naplemente után is használható. Okostelefonhoz vagy más otthoni automatizálási eszközhöz is csatlakoztatható: a ponyva nyitása és zárása, a világítás és a nap- és szélérzékelők egyetlen gombnyomással, távirányítóról is kezelhetők. Rejtett esővíz-elvezetés az oszlopokban (oszlop nélküli HYDRA T esetén a szerkezet elején).",
+      "closingText": "Hóesésben nem használható.",
+      "textBlocks": [
+        {
+          "id": "tb_hydra_tech",
+          "title": "Műszaki adatok",
+          "content": "- Profilok: gerenda 13×14 cm, oszlop 8×8 cm\n- Szélállóság: EN 13561 szerinti 3. osztály, erős szélnek is ellenáll (50-70 km/h)",
+          "position": "before_photos"
+        },
+        {
+          "id": "tb_hydra_after",
+          "title": "",
+          "content": "A tartó szerkezetek alapszínei: RAL 9010, RAL 9006, RAL 9005, RAL 7016 matt és FSM 71319. Szövet választék katalógusból. Egyéb színek és szövetek katalógusból, felár ellenében.",
+          "position": "after_table"
+        }
+      ],
       "photos": [
         {
           "id": "sphoto_legacy_hydra_2",
@@ -11722,6 +11772,14 @@
           "imageUrl": "/uploads/legacy/feszitett_vasznas/image_07.png",
           "titleAbove": "",
           "captionBelow": "",
+          "widthPct": 75,
+          "align": "center"
+        },
+        {
+          "id": "ph_offer_hydra_1",
+          "imageUrl": "/uploads/offers/hydra/hydra-01.jpg",
+          "titleAbove": "",
+          "captionBelow": "A kazettába zárt, feszített ponyva alulnézetből",
           "widthPct": 75,
           "align": "center"
         }
@@ -13908,7 +13966,7 @@
         }
       ],
       "createdAt": "2026-10-19T08:18:53.225Z",
-      "updatedAt": "2026-10-21T11:54:57.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "alsoInCategoryIds": [
         "cat_legacy_tetore"
       ],
@@ -13952,9 +14010,22 @@
         "assemblyFixedEur": 0,
         "assemblyPerM2Eur": 0
       },
-      "introText": "A GENIUS A100 LUX ({{meret}}) jó ár-érték arányú, ferde tetős, elcsúsztatható PVC ponyvás pergola előtetővel; négy évszakos, zárt ponyva esetén teljesen vízzáró. Szélállóság EN 13561 6. osztály (119 km/h).",
-      "closingText": "Hóesésben a termék használata nem ajánlott. Garancia: a szerkezetre 10 év, a vásznakra/ponyvákra 5 év, a motorokra és érzékelőkre 3 év. Átfutási idő a visszaigazolástól számítva 30-60 nap. Az árajánlat a helyszíni felmérés és a műszaki tartalom pontosítása után módosulhat.",
-      "textBlocks": [],
+      "introText": "A GENIUS A100 LUX ({{meret}}) ferde tetős, elcsúsztatható PVC ponyvás pergola előtetővel, jó ár-érték arányú termék. Négy évszakos, minden körülmény között használható, zárt ponyva esetén teljesen vízzáró. Egy modul legfeljebb 500 cm széles; a szerkezetet falhoz rögzítve, elöl lábakkal építjük.\n\nTetején a keresztléc profilok és a vezetősínek rögzítve vannak, így teszik lehetővé a ponyva vízszintes csúszását. Motoros működésű, okostelefonhoz vagy más otthoni automatizálási eszközhöz is csatlakoztatható az egyszerűbb kezelésért.",
+      "closingText": "Hóesésben a termék használata nem ajánlott.",
+      "textBlocks": [
+        {
+          "id": "tb_a100_tech",
+          "title": "Műszaki adatok",
+          "content": "- Profilok: gerenda 14×13 cm, oszlop 13×10 cm\n- Szélállóság: EN 13561 szerinti legmagasabb, 6. osztály, orkán erejű szélnek is ellenáll (119 km/h)\n- Videó a termékről: https://www.youtube.com/watch?v=hSXdOXPLh18",
+          "position": "before_photos"
+        },
+        {
+          "id": "tb_a100_after",
+          "title": "",
+          "content": "A tartó szerkezetek alapszínei: RAL 9010, RAL 9006, RAL 9005, RAL 7016 matt és FSM 71319. Szövet választék katalógusból.\n\n+ Opcionálisan rendelhető a termékhez:\n- egyedi RAL színek\n- üvegfalrendszer\n- oldalsó árnyékoló\n- LED világítás a vásznat tartó és mozgató keresztprofilokban\n- okosotthon vezérlő",
+          "position": "after_table"
+        }
+      ],
       "photos": [
         {
           "id": "sphoto_legacy_a100_lux_1",
@@ -13990,7 +14061,7 @@
           "minPrice": 1,
           "multiplier": 0.9,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_a100_base",
@@ -14128,7 +14199,7 @@
           "minPrice": 1,
           "multiplier": 0.9,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_a100_base_2",
@@ -14277,7 +14348,7 @@
           "minPrice": 1,
           "multiplier": 0.9,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_a100_base_3",
@@ -16064,7 +16135,7 @@
         }
       ],
       "createdAt": "2026-10-19T08:18:53.225Z",
-      "updatedAt": "2026-10-21T11:54:57.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "mountTypes": [
         "Épülethez rögzített"
       ],
@@ -16116,9 +16187,22 @@
         "assemblyFixedEur": 0,
         "assemblyPerM2Eur": 0
       },
-      "introText": "A KEPLAN ({{meret}}, {{beepites}}) sík tetejű, elhúzható-összecsukható PVC ponyvás alumínium pergola; a tető mozgatását villanymotor végzi, távirányítóval vagy okostelefonnal. Négy évszakos, zárt ponyva esetén vízzáró. Szélállóság EN 13561 6. osztály.",
-      "closingText": "Hóesésben a termék használata nem ajánlott. Garancia: a szerkezetre 10 év, a vásznakra/ponyvákra 5 év, a motorokra és érzékelőkre 3 év. Átfutási idő a visszaigazolástól számítva 30-60 nap. Az árajánlat a helyszíni felmérés és a műszaki tartalom pontosítása után módosulhat.",
-      "textBlocks": [],
+      "introText": "A KEPLAN ({{meret}}, {{beepites}}) sík tetejű, elhúzható PVC ponyvás pergola. Négy évszakos, minden körülmény között használható, zárt ponyva esetén teljesen vízzáró. Falhoz rögzítve elöl 2 lábbal, vagy különálló szerkezetként 4 lábbal is kérhető.\n\nAlumínium árnyékoló szerkezet elhúzható, összecsukható ponyvával. A ponyva keresztirányú profiljai a mozgó sínhez vannak rögzítve, így a rendszer lehetővé teszi a vízszintes csúsztatást. A tető mozgatását villanymotor végzi, amelyet távirányítóval vagy okostelefonnal vezérelhetünk. Rejtett esővíz-elvezetés nincs, a csapadék a ponyva két szélén folyik le.",
+      "closingText": "Hóesésben a termék használata nem ajánlott.",
+      "textBlocks": [
+        {
+          "id": "tb_keplan_tech",
+          "title": "Műszaki adatok",
+          "content": "- Profilok: gerenda 11×11 cm, oszlop 11×11 cm\n- Szélállóság: EN 13561 szerinti legmagasabb, 6. osztály, orkán erejű szélnek is ellenáll (119 km/h)",
+          "position": "before_photos"
+        },
+        {
+          "id": "tb_keplan_after",
+          "title": "",
+          "content": "Szövet választék katalógusból.\n\n+ Opcionálisan rendelhető a termékhez:\n- egyedi RAL színek\n- üvegfalrendszer\n- oldalsó árnyékoló\n- LED világítás a vásznat tartó és mozgató keresztprofilokban\n- okosotthon vezérlő",
+          "position": "after_table"
+        }
+      ],
       "photos": [
         {
           "id": "sphoto_legacy_keplan_1",
@@ -16143,6 +16227,24 @@
           "captionBelow": "",
           "widthPct": 75,
           "align": "center"
+        },
+        {
+          "id": "ph_offer_keplan_1",
+          "imageUrl": "/uploads/offers/keplan/keplan-01.jpg",
+          "titleAbove": "",
+          "captionBelow": "KEPLAN méretrajz (elölnézet és oldalnézet)",
+          "widthPct": 75,
+          "align": "center",
+          "subPhotos": [
+            {
+              "id": "ph_offer_keplan_1_1",
+              "imageUrl": "/uploads/offers/keplan/keplan-11.jpg",
+              "titleAbove": "",
+              "captionBelow": "Oldalnézet a fali rögzítéssel",
+              "widthPct": 50,
+              "align": "center"
+            }
+          ]
         }
       ],
       "materials": [
@@ -16162,7 +16264,7 @@
           "minPrice": 1,
           "multiplier": 0.9,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_keplan_wall",
@@ -16309,7 +16411,7 @@
           "minPrice": 1,
           "multiplier": 0.9,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_keplan_free",
@@ -18489,7 +18591,7 @@
         }
       ],
       "createdAt": "2026-10-19T08:18:53.225Z",
-      "updatedAt": "2026-10-21T11:54:57.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "mountTypes": [
         "Épülethez rögzített",
         "Szabadon álló"
@@ -18540,9 +18642,22 @@
         "assemblyFixedEur": 0,
         "assemblyPerM2Eur": 0
       },
-      "introText": "Az ISOLA 2A ({{meret}}, {{beepites}}) prémium kategóriás, sík tetejű, elhúzható PVC ponyvás pergola: rejtett motorok, csavarok és fali konzolok, a legmodernebb technológiával. Négy évszakos, zárt ponyva esetén vízzáró; szélállóság EN 13561 6. osztály.",
-      "closingText": "Hóesésben a termék használata nem ajánlott. Garancia: a szerkezetre 10 év, a vásznakra/ponyvákra 5 év, a motorokra és érzékelőkre 3 év. Átfutási idő a visszaigazolástól számítva 30-60 nap. Az árajánlat a helyszíni felmérés és a műszaki tartalom pontosítása után módosulhat.",
-      "textBlocks": [],
+      "introText": "Az ISOLA 2 ({{meret}}, {{beepites}}) prémium kategóriás, sík tetejű, elhúzható PVC ponyvás pergola, olasz termék. Négy évszakos, minden körülmény között használható, zárt ponyva esetén teljesen vízzáró. Falhoz rögzítve elöl 2 lábbal, vagy különálló szerkezetként 4 lábbal is kérhető.\n\nAz alumínium szerkezet a legjobb minőségű anyagokból, a legmodernebb technológiával készül: rejtett motorok, csavarok és fali konzolok. A ponyva keresztirányú profiljai a mozgó sínhez vannak rögzítve, így a rendszer lehetővé teszi a vízszintes csúsztatást. A tető mozgatását villanymotor végzi, amelyet távirányítóval vagy okostelefonnal vezérelhetünk.",
+      "closingText": "Hóesésben a termék használata nem ajánlott.",
+      "textBlocks": [
+        {
+          "id": "tb_isola2_tech",
+          "title": "Műszaki adatok",
+          "content": "- Profilok: gerenda 22×13 cm, oszlop 12×12 cm\n- Szélállóság: EN 13561 szerinti legmagasabb, 6. osztály, orkán erejű szélnek is ellenáll (119 km/h)",
+          "position": "before_photos"
+        },
+        {
+          "id": "tb_isola2_after",
+          "title": "",
+          "content": "A tartó szerkezetek alapszínei: RAL 9010, RAL 9006, RAL 9005, RAL 7016 matt és FSM 71319. Szövet választék katalógusból.\n\n+ Opcionálisan rendelhető a termékhez:\n- egyedi RAL színek\n- üvegfalrendszer\n- oldalsó árnyékoló\n- LED világítás a vásznat tartó és mozgató keresztprofilokban\n- okosotthon vezérlő\n- audio csomag",
+          "position": "after_table"
+        }
+      ],
       "photos": [
         {
           "id": "sphoto_legacy_isola_2a_1",
@@ -18557,6 +18672,14 @@
           "imageUrl": "/uploads/legacy/elhuzhato_ponyvas/image_11.jpg",
           "titleAbove": "",
           "captionBelow": "",
+          "widthPct": 75,
+          "align": "center"
+        },
+        {
+          "id": "ph_offer_isola2_1",
+          "imageUrl": "/uploads/offers/isola2/isola2-01.jpg",
+          "titleAbove": "",
+          "captionBelow": "ISOLA 2 falhoz rögzítve, elöl 2 lábbal",
           "widthPct": 75,
           "align": "center"
         }
@@ -18578,7 +18701,7 @@
           "minPrice": 1,
           "multiplier": 0.7,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_isola_wall",
@@ -18803,7 +18926,7 @@
           "minPrice": 1,
           "multiplier": 0.7,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_isola_free",
@@ -19028,7 +19151,7 @@
           "minPrice": 1,
           "multiplier": 0.7,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 700.0,
+          "fixedSurcharge": 700,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_isola_nolegs",
@@ -21372,7 +21495,7 @@
         }
       ],
       "createdAt": "2026-10-19T08:18:53.225Z",
-      "updatedAt": "2026-10-21T11:54:57.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "alsoInCategoryIds": [
         "cat_legacy_tetore"
       ],
@@ -21411,9 +21534,16 @@
         "assemblyFixedEur": 0,
         "assemblyPerM2Eur": 0
       },
-      "introText": "A VERANDA TENS ({{szelesseg}} × {{kinyulas}} cm) meglévő szerkezetre - télikertre, üvegtetőre vagy pergolára - építhető elhúzható vásznas árnyékoló, a tető fölé és alá is szerelhető; egymodulos és többmodulos kivitelben. Csak motoros vezérléssel; szélállóság EN 13561 2. osztály (30-50 km/h).",
-      "closingText": "Csak árnyékolásra ajánljuk, hóesésben nem használható. Garancia: a szerkezetre 10 év, a vásznakra/ponyvákra 5 év, a motorokra és érzékelőkre 3 év. Átfutási idő a visszaigazolástól számítva 30-60 nap. Az árajánlat a helyszíni felmérés és a műszaki tartalom pontosítása után módosulhat.",
-      "textBlocks": [],
+      "introText": "A VERANDA TENS ({{szelesseg}} × {{kinyulas}} cm) meglévő szerkezetre - télikertre, üvegtetőre vagy pergolára - építhető elhúzható vásznas árnyékoló, a tető fölé és alá is szerelhető; egymodulos és többmodulos kivitelben. Csak motoros vezérléssel; szélállóság EN 13561 2. osztály (30-50 km/h). A napháló megvezetése az oldalsó profilokban történik, a rugós feszítőrendszer segít a vásznat feszesen tartani.",
+      "closingText": "Csak árnyékolásra ajánljuk, hóesésben nem használható.",
+      "textBlocks": [
+        {
+          "id": "tb_vtens_after",
+          "title": "",
+          "content": "Egyéb színek és szövetek katalógusból, felár ellenében.",
+          "position": "after_table"
+        }
+      ],
       "photos": [
         {
           "id": "sphoto_legacy_veranda_tens_1",
@@ -23239,7 +23369,7 @@
         }
       ],
       "createdAt": "2026-10-19T08:18:53.225Z",
-      "updatedAt": "2026-10-21T11:54:57.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "alsoInCategoryIds": [
         "cat_legacy_feszitett"
       ],
@@ -23282,9 +23412,16 @@
         "assemblyFixedEur": 0,
         "assemblyPerM2Eur": 0
       },
-      "introText": "A VERANDA V ZIIP ({{szelesseg}} × {{kinyulas}} cm) meglévő szerkezetre építhető, ZIP-rendszerű feszített árnyékoló: a zipzáras oldalvezetés miatt a ponyva mindig feszes marad. Szélállóság EN 13561 3. osztály (50-70 km/h).",
-      "closingText": "Csak árnyékolásra ajánljuk, hóesésben nem használható. Garancia: a szerkezetre 10 év, a vásznakra/ponyvákra 5 év, a motorokra és érzékelőkre 3 év. Átfutási idő a visszaigazolástól számítva 30-60 nap. Az árajánlat a helyszíni felmérés és a műszaki tartalom pontosítása után módosulhat.",
-      "textBlocks": [],
+      "introText": "A VERANDA V ZIIP ({{szelesseg}} × {{kinyulas}} cm) meglévő szerkezetre építhető, ZIP-rendszerű feszített árnyékoló: a zipzáras oldalvezetés miatt a ponyva mindig feszes marad. Szélállóság EN 13561 3. osztály (50-70 km/h). A ponyva teljesen be van zárva egy kazettás kialakításba, és végig az oldalsó megvezető profilokban mozog.",
+      "closingText": "Csak árnyékolásra ajánljuk, hóesésben nem használható.",
+      "textBlocks": [
+        {
+          "id": "tb_vvzip_after",
+          "title": "",
+          "content": "A tartó szerkezetek alapszínei: RAL 9010, RAL 9006, RAL 9005, RAL 7016 matt és FSM 71319. Szövet választék katalógusból. Egyéb színek és szövetek katalógusból, felár ellenében.",
+          "position": "after_table"
+        }
+      ],
       "photos": [
         {
           "id": "sphoto_legacy_veranda_v_zip_2",
@@ -23320,7 +23457,7 @@
           "minPrice": 1,
           "multiplier": 0.9,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_veranda_vzip_base",
@@ -24924,7 +25061,7 @@
         }
       ],
       "createdAt": "2026-10-19T08:18:53.225Z",
-      "updatedAt": "2026-10-21T11:54:57.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "alsoInCategoryIds": [
         "cat_legacy_feszitett"
       ],
@@ -24967,9 +25104,22 @@
         "assemblyFixedEur": 0,
         "assemblyPerM2Eur": 0
       },
-      "introText": "A POLIFIX ({{meret}}) fix tetejű alumínium pergola 16 mm vastag, opál üregkamrás polikarbonát tetővel: elegendő fényt enged át, de a meleget megszűri. Szélállóság EN 13561 6. osztály; később üvegfallal és oldalsó árnyékolóval bővíthető.",
-      "closingText": "Hóterhelés: szerkezet max. 150 kg/m², polikarbonát lemez 85 kg/m². Garancia: szerkezet 10 év, tető 5 év. Átfutási idő 10-30 nap. A lábak rögzítéséhez beton alap szükséges.",
-      "textBlocks": [],
+      "introText": "A POLIFIX ({{meret}}) fix tetejű alumínium pergola 16 mm vastag, opál színű, üregkamrás polikarbonát tetővel. Télen-nyáron használható: az opál tetőn át elegendő fény jut a tető alá, de a napsugarakat megszűrve a meleget nem engedi át.\n\nAlumínium vázával és oszlopaiban rejtett esővíz-elvezetéssel jó választás az időjárás elemeivel szemben. A szerkezetet min. 8 fokos lejtéssel szereljük (egyedi kérésre lehet kisebb vagy nagyobb). A SOLAR CONTROL polikarbonát lemezek kiválóan kizárják az UV- és az infravörös sugárzást, ugyanakkor a legmagasabb fokú fényáteresztést biztosítják. A teljes vázszerkezet szinterezett alumíniumból, a talpkonzolok rozsdamentes acélból készülnek.\n\nA szerkezet később körbeépíthető elcsúsztatható üvegfalrendszerrel és oldalsó árnyékolókkal, így akár egy télen-nyáron használható télikert is kialakítható.",
+      "closingText": "Hóterhelés: szerkezet max. 150 kg/m², polikarbonát lemez 85 kg/m². A polikarbonát lemezekre 10 év garanciát vállalunk az UV-sugárzással és a mechanikai behatásokkal (pl. jégeső) szemben. A lábak és az üvegfalrendszer alsó sínjeinek biztonságos rögzítéséhez beton alap szükséges.",
+      "textBlocks": [
+        {
+          "id": "tb_polifix_tech",
+          "title": "Műszaki adatok",
+          "content": "- Profilok: esővízgyűjtő, merevítő gerenda 19×15 cm; tetőtartó gerenda 6×12 cm; oszlop 11×14 cm\n- A szerkezet általános falvastagsága 3-4 mm\n- Választható polikarbonát színek: opál, víztiszta, bronz, antracit\n- Szerkezet alapszíne: antracit (RAL 7016 matt), egyéb RAL színek felár ellenében\n- Szélállóság: EN 13561 szerinti legmagasabb, 6. osztály, orkán erejű szélnek is ellenáll (119 km/h)",
+          "position": "before_photos"
+        },
+        {
+          "id": "tb_polifix_after",
+          "title": "",
+          "content": "+ Opcionálisan rendelhető kiegészítők (később is építhetők a szerkezethez):\n- fix polikarbonát oldalfal (opál vagy víztiszta)\n- keret nélküli, elcsúsztatható üvegfalrendszer\n- oldalsó árnyékoló\n- tetőárnyékoló (a tető alá vagy fölé)\n- dekor lamellák",
+          "position": "after_table"
+        }
+      ],
       "photos": [
         {
           "id": "sphoto_legacy_polifix_1",
@@ -25034,6 +25184,50 @@
           "captionBelow": "Víztiszta polikarbonát",
           "widthPct": 75,
           "align": "center"
+        },
+        {
+          "id": "ph_offer_polifix_1",
+          "imageUrl": "/uploads/offers/polifix/polifix-01.jpg",
+          "titleAbove": "",
+          "captionBelow": "POLIFIX LED-világítással és keret nélküli üvegfalakkal",
+          "widthPct": 75,
+          "align": "center",
+          "subPhotos": [
+            {
+              "id": "ph_offer_polifix_1_1",
+              "imageUrl": "/uploads/offers/polifix/polifix-11.jpg",
+              "titleAbove": "",
+              "captionBelow": "Falhoz rögzítve, elöl lábakkal",
+              "widthPct": 50,
+              "align": "center"
+            },
+            {
+              "id": "ph_offer_polifix_1_2",
+              "imageUrl": "/uploads/offers/polifix/polifix-12.jpg",
+              "titleAbove": "",
+              "captionBelow": "Antracit szerkezet, opál polikarbonát tetővel",
+              "widthPct": 50,
+              "align": "center"
+            }
+          ]
+        },
+        {
+          "id": "ph_offer_polifix_2",
+          "imageUrl": "/uploads/offers/polifix/polifix-02.jpg",
+          "titleAbove": "",
+          "captionBelow": "Oldalsó ZIP árnyékolóval",
+          "widthPct": 75,
+          "align": "center",
+          "subPhotos": [
+            {
+              "id": "ph_offer_polifix_2_1",
+              "imageUrl": "/uploads/offers/polifix/polifix-21.jpg",
+              "titleAbove": "",
+              "captionBelow": "Fix polikarbonát oldalfallal",
+              "widthPct": 50,
+              "align": "center"
+            }
+          ]
         }
       ],
       "materials": [
@@ -26879,6 +27073,49 @@
           ]
         },
         {
+          "id": "x_polifix_sandwich",
+          "name": "Szendvicspanel tető (40 mm, fehér) a polikarbonát tető helyett",
+          "description": "A szerkezet árának 8,5%-a",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "percentage",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 1,
+          "unitPrice": 1,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 8.5,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [
+            {
+              "id": "ph_offer_sandwich_1",
+              "imageUrl": "/uploads/offers/sandwich/sandwich-01.jpg",
+              "titleAbove": "",
+              "captionBelow": "POLIFIX 40 mm-es szendvicspanel tetővel",
+              "widthPct": 75,
+              "align": "center",
+              "subPhotos": [
+                {
+                  "id": "ph_offer_sandwich_1_1",
+                  "imageUrl": "/uploads/offers/sandwich/sandwich-11.jpg",
+                  "titleAbove": "",
+                  "captionBelow": "Szendvicspanel tető alulnézetből",
+                  "widthPct": 50,
+                  "align": "center"
+                }
+              ]
+            }
+          ],
+          "excludeFromPercentBase": false
+        },
+        {
           "description": "",
           "itemRole": "optional",
           "defaultSelected": false,
@@ -26926,7 +27163,7 @@
         }
       ],
       "createdAt": "2026-10-19T08:32:48.167Z",
-      "updatedAt": "2026-10-21T11:54:57.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "moduleSplits": [
         {
           "axis": "width",
@@ -26948,7 +27185,10 @@
           "maxHeightCm": 250
         }
       ],
-      "alsoInCategoryIds": []
+      "alsoInCategoryIds": [
+        "cat_kocsibeallo"
+      ],
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a szerkezetre 10 év; a tetőre 5 év\n• Átfutási idő a visszaigazolástól számítva: 10-30 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
     },
     {
       "id": "tpl_legacy_glassfix",
@@ -26978,7 +27218,7 @@
         "assemblyPerM2Eur": 0
       },
       "introText": "A GLASSFIX ({{meret}}) fix tetejű alumínium pergola 10 mm vastag, edzett-laminált biztonsági üvegtetővel (opál vagy víztiszta). Télen-nyáron használható, az üvegtetőn át elegendő fény jut a tető alá; később üvegfallal, oldalsó és tetőárnyékolóval bővíthető.",
-      "closingText": "Hóterhelés: üvegtető max. 120 kg/m², szerkezet 200 kg/m². Garancia: szerkezet és üveg 10 év, vásznak 5 év, motorok, érzékelők 3 év. Átfutási idő 30-60 nap. A lábak rögzítéséhez beton alap szükséges.",
+      "closingText": "Hóterhelés: üvegtető max. 120 kg/m², szerkezet 200 kg/m². A lábak rögzítéséhez beton alap szükséges.",
       "textBlocks": [],
       "photos": [
         {
@@ -28987,7 +29227,7 @@
         }
       ],
       "createdAt": "2026-10-19T08:32:48.167Z",
-      "updatedAt": "2026-10-21T11:54:57.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "moduleSplits": [
         {
           "axis": "width",
@@ -29009,7 +29249,8 @@
           "maxHeightCm": 250
         }
       ],
-      "alsoInCategoryIds": []
+      "alsoInCategoryIds": [],
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a szerkezetre és az üvegre 10 év; a vásznakra 5 év; a motorokra, érzékelőkre 3 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
     },
     {
       "id": "tpl_legacy_uvegfal_spanyol",
@@ -29035,9 +29276,16 @@
         "assemblyFixedEur": 0,
         "assemblyPerM2Eur": 0
       },
-      "introText": "Meglévő terasz vagy pergola beépítése keret nélküli, síneken csúszó LINE GLASS üvegfalrendszerrel: 1 db {{szelesseg}}×{{magassag}} cm-es és 1 db {{kinyulas}}×{{magassag}} cm-es oldal. A táblák mozgatás közben csatlakoznak egymáshoz; belső biztonsági zár és levehető szilikon profil az alapár része.",
-      "closingText": "Szélállóság EN 13561 6. osztály (119 km/h). Garancia az üvegfalrendszerre 3 év. Átfutási idő 30-60 nap. Az árajánlat a helyszíni felmérés után módosulhat.",
-      "textBlocks": [],
+      "introText": "A LINE GLASS keret nélküli, elcsúsztatható üvegfalrendszer, amely síneken csúszó üvegtáblákból áll: könnyen telepíthető, és keret nélküli üvegfalaival zavartalan kilátást, exkluzív megjelenést biztosít. Ideális megoldás a pergola oldalainak vagy a meglévő terasz beépítésére, így a belső tér védett a széltől, esőtől és zajtól; belső térelválasztóként is kitűnő választás. Üvegfalrendszereinkkel megmaradnak a természetes fény pozitív hatásai, amelyek nagyban befolyásolják a hangulatot és a jó közérzetet.\n\nAz üvegek 10 mm vastag edzett biztonsági üvegek. A táblák elhúzás közben csatlakoznak egymáshoz, így az első üveg mozgatja a többit is. Az alapár része a belső biztonsági zár (kívülről az üvegfalak nem húzhatók el) és a táblák végére szerelt vékony, kefés alumínium huzatgátló profil.\n\nBeépítendő oldalak: 1 db {{szelesseg}}×{{magassag}} cm-es és 1 db {{kinyulas}}×{{magassag}} cm-es oldal.",
+      "closingText": "",
+      "textBlocks": [
+        {
+          "id": "tb_lineglass_tech",
+          "title": "Műszaki adatok",
+          "content": "- Szélállóság: EN 13561 szerinti legmagasabb, 6. osztály, orkán erejű szélnek is ellenáll (119 km/h)\n- Az alumínium profilok (zárószelvény, sínek, üvegfogadók) RAL 7016 matt vagy egyéb szürke színben; egyedi RAL szín felár ellenében",
+          "position": "before_photos"
+        }
+      ],
       "photos": [
         {
           "id": "sphoto_legacy_uvegfal_spanyol_6",
@@ -29084,6 +29332,14 @@
           "imageUrl": "/uploads/legacy/uvegfalas/image_05.jpg",
           "titleAbove": "",
           "captionBelow": "",
+          "widthPct": 75,
+          "align": "center"
+        },
+        {
+          "id": "ph_offer_lineglass_1",
+          "imageUrl": "/uploads/offers/lineglass/lineglass-01.jpg",
+          "titleAbove": "",
+          "captionBelow": "A termékek tanúsítványai",
           "widthPct": 75,
           "align": "center"
         }
@@ -29224,11 +29480,12 @@
         }
       ],
       "createdAt": "2026-10-19T08:18:53.225Z",
-      "updatedAt": "2026-10-20T20:55:09.835376Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "moduleSplits": [],
       "mountTypes": [],
       "alsoInCategoryIds": [],
-      "sizeRules": []
+      "sizeRules": [],
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a termékekre 3 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
     },
     {
       "id": "tpl_legacy_uvegfal_lengyel",
@@ -29254,9 +29511,16 @@
         "assemblyFixedEur": 0,
         "assemblyPerM2Eur": 0
       },
-      "introText": "Meglévő terasz vagy pergola beépítése keret nélküli, síneken csúszó SLIDING DOORS üvegfalrendszerrel: 1 db {{szelesseg}}×{{magassag}} cm-es és 1 db {{kinyulas}}×{{magassag}} cm-es oldal. 10 mm edzett biztonsági üveg, a táblák elhúzás közben csatlakoznak egymáshoz.",
-      "closingText": "Szélállóság EN 13561 6. osztály (119 km/h). Garancia az üvegfalrendszerre 3 év. Átfutási idő 30-60 nap. Az árajánlat a helyszíni felmérés után módosulhat.",
-      "textBlocks": [],
+      "introText": "A SLIDING DOORS keret nélküli, elcsúsztatható üvegfalrendszer, amely síneken csúszó üvegtáblákból áll: könnyen telepíthető, és keret nélküli üvegfalaival zavartalan kilátást, exkluzív megjelenést biztosít. Ideális megoldás a pergola oldalainak vagy a meglévő terasz beépítésére, így a belső tér védett a széltől, esőtől és zajtól; belső térelválasztóként is kitűnő választás. Üvegfalrendszereinkkel megmaradnak a természetes fény pozitív hatásai, amelyek nagyban befolyásolják a hangulatot és a jó közérzetet.\n\nAz üvegek 10 mm vastag edzett biztonsági üvegek, a táblák elhúzás közben csatlakoznak egymáshoz, így az első üveg mozgatja a többit is. Opcionálisan kérhető belső biztonsági zár és kefés alumínium huzatgátló profil.\n\nBeépítendő oldalak: 1 db {{szelesseg}}×{{magassag}} cm-es és 1 db {{kinyulas}}×{{magassag}} cm-es oldal.",
+      "closingText": "",
+      "textBlocks": [
+        {
+          "id": "tb_slidingdoors_tech",
+          "title": "Műszaki adatok",
+          "content": "- Szélállóság: EN 13561 szerinti legmagasabb, 6. osztály, orkán erejű szélnek is ellenáll (119 km/h)",
+          "position": "before_photos"
+        }
+      ],
       "photos": [
         {
           "id": "sphoto_legacy_uvegfal_lengyel_2",
@@ -29419,11 +29683,12 @@
         }
       ],
       "createdAt": "2026-10-19T08:18:53.225Z",
-      "updatedAt": "2026-10-20T20:55:09.835376Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "moduleSplits": [],
       "mountTypes": [],
       "alsoInCategoryIds": [],
-      "sizeRules": []
+      "sizeRules": [],
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a termékekre 3 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
     },
     {
       "id": "tpl_legacy_refleksol_zip",
@@ -29453,9 +29718,16 @@
         "assemblyFixedEur": 0,
         "assemblyPerM2Eur": 0
       },
-      "introText": "Meglévő terasz beépítése oldalsó ZIP árnyékolóval: 1 db {{szelesseg}}×{{magassag}} cm-es és 1 db {{kinyulas}}×{{magassag}} cm-es vertikális árnyékoló, motoros működéssel. A ponyvára hegesztett zipzár miatt a napháló mindig feszes, szúnyoghálóként is működik; szélállóság EN 13561 6. osztály (119 km/h).",
-      "closingText": "Garancia: ponyvákra 5 év, motorokra és érzékelőkre 3 év. Átfutási idő 30-60 nap. Az árajánlat a helyszíni felmérés után módosulhat.",
-      "textBlocks": [],
+      "introText": "Meglévő terasz vagy pergola beépítése oldalsó ZIP árnyékolóval: 1 db {{szelesseg}}×{{magassag}} cm-es és 1 db {{kinyulas}}×{{magassag}} cm-es vertikális árnyékoló, motoros működéssel. Szélállóság: EN 13561 szerinti legmagasabb, 6. osztály, orkán erejű szélnek is ellenáll (119 km/h).\n\nA SCREENY GPZ család oldalsó árnyékolóinál a napháló megvezetése speciális oldalsó megvezetésben történik. A ponyva mindkét oldalára zipzár van hegesztve, így a ponyva mindig feszes (ráncmentes) marad, és végig az oldalsó megvezető profilokban mozog. Mivel a ponyva nem tud kijutni a megvezető profilokból, nagyobb széllökéseknek is ellenáll, és a szúnyogháló feladatát is teljes mértékben ellátja. Egymodulos és többmodulos változatban is kapható.\n\nEz a termékcsalád csak motoros vezérléssel szerelhető; a motorok a távirányítón kívül okosotthon-vezérlővel (applikáción keresztül) is vezérelhetők.",
+      "closingText": "",
+      "textBlocks": [
+        {
+          "id": "tb_refleksol_after",
+          "title": "",
+          "content": "+ Opcionálisan rendelhető:\n- okosotthon vezérlő\n- automatizálási funkciók: eső-, fény- és szélérzékelők",
+          "position": "after_table"
+        }
+      ],
       "photos": [
         {
           "id": "sphoto_legacy_refleksol_zip_5",
@@ -30753,7 +31025,7 @@
         }
       ],
       "createdAt": "2026-10-19T08:32:48.167Z",
-      "updatedAt": "2026-10-21T11:54:57.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "mountTypes": [],
       "moduleSplits": [
         {
@@ -30763,7 +31035,8 @@
         }
       ],
       "sizeRules": [],
-      "alsoInCategoryIds": []
+      "alsoInCategoryIds": [],
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a ponyvákra, vásznakra 5 év; a motorokra, érzékelőkre 3 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
     },
     {
       "id": "tpl_legacy_vertica_zip",
@@ -30794,8 +31067,15 @@
         "assemblyPerM2Eur": 0
       },
       "introText": "A Vertica PRIME ZIP a pergola (pl. Kedry Skylife) gerendájába rejtve integrálható prémium motoros ZIP árnyékoló Soltis 92 mikroperforált textillel: 1 db {{szelesseg}}×{{magassag}} cm-es és 1 db {{kinyulas}}×{{magassag}} cm-es oldal. Távirányítóval vagy okostelefonról vezérelhető.",
-      "closingText": "Garancia: ponyvákra 5 év, motorokra és érzékelőkre 3 év. Átfutási idő 30-60 nap. Az árajánlat a helyszíni felmérés után módosulhat.",
-      "textBlocks": [],
+      "closingText": "",
+      "textBlocks": [
+        {
+          "id": "tb_vertica_after",
+          "title": "",
+          "content": "+ Opcionálisan rendelhető:\n- okosotthon vezérlő\n- automatizálási funkciók: eső-, fény- és szélérzékelők",
+          "position": "after_table"
+        }
+      ],
       "photos": [
         {
           "id": "sphoto_legacy_vertica_zip_1",
@@ -31190,11 +31470,12 @@
         }
       ],
       "createdAt": "2026-10-19T08:32:48.167Z",
-      "updatedAt": "2026-10-19T08:35:15.381Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "moduleSplits": [],
       "mountTypes": [],
       "alsoInCategoryIds": [],
-      "sizeRules": []
+      "sizeRules": [],
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a ponyvákra, vásznakra 5 év; a motorokra, érzékelőkre 3 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
     },
     {
       "id": "tpl_kedry_neos",
@@ -31202,7 +31483,7 @@
       "enabled": true,
       "status": "active",
       "introText": "A KEDRY NEOS ({{meret}}, {{beepites}}) letisztult, minimalista bioklimatikus pergola forgatható alumínium lamellákkal. A lamellák dőlésszögével a bejutó fény és a szellőzés szabályozható, zárt állásban a tető vízzáró, az esővíz a rejtett ereszcsatornán és az oszlopokon át távozik. Később üvegfallal és oldalsó árnyékolóval télikertté bővíthető.",
-      "closingText": "Ha a hónap végéig megrendeli az alapszerkezetet, az infrafűtést és az eső-/szélérzékelőt ajándékba adjuk. Garancia: a szerkezetre 10 év, a vásznakra/ponyvákra 5 év, a motorokra és érzékelőkre 3 év. Átfutási idő a visszaigazolástól számítva 30-60 nap. Az árajánlat a helyszíni felmérés és a műszaki tartalom pontosítása után módosulhat.",
+      "closingText": "Ha a hónap végéig megrendeli az alapszerkezetet, az infrafűtést és az eső-/szélérzékelőt ajándékba adjuk.",
       "textBlocks": [],
       "photos": [
         {
@@ -32431,7 +32712,7 @@
           "minPrice": 1,
           "multiplier": 0.7,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_neos_free_1",
@@ -32851,7 +33132,7 @@
           "minPrice": 1,
           "multiplier": 0.7,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_neos_free_2w",
@@ -33271,7 +33552,7 @@
           "minPrice": 1,
           "multiplier": 0.7,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_neos_free_2p",
@@ -33607,7 +33888,7 @@
           "minPrice": 1,
           "multiplier": 0.7,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_neos_nolegs_1",
@@ -35336,7 +35617,7 @@
         "pdfFile": "LISTINO BIOCLIMATICA 10_EN.pdf",
         "pages": "97. o. (1L A (mounted to wall on SP side)); 101. o. (2P - placed against wall on SP side); 97. o. (1L); 101. o. (2P); 99. o. (2L); 105. o. (1T); 99. o. (2L - falhoz rögzítve)"
       },
-      "updatedAt": "2026-10-21T11:54:57.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "alsoInCategoryIds": []
     },
     {
@@ -35344,9 +35625,22 @@
       "subtitle": "Elhúzható PVC vásznas tető, nagy fesztávokra, rejtett ereszcsatornával",
       "enabled": true,
       "status": "seasonal",
-      "introText": "Az ISOLA 3 ({{meret}}, {{beepites}}) elhúzható, PVC vásznas tetejű prémium pergola nagy, akár több modulos lefedésekhez. A vászon motorral nyitható és zárható, az esővíz a rejtett ereszcsatornán és az oszlopokon át távozik.",
-      "closingText": "Hóesésben a termék használata nem ajánlott. Garancia: a szerkezetre 10 év, a vásznakra/ponyvákra 5 év, a motorokra és érzékelőkre 3 év. Átfutási idő a visszaigazolástól számítva 30-60 nap. Az árajánlat a helyszíni felmérés és a műszaki tartalom pontosítása után módosulhat.",
-      "textBlocks": [],
+      "introText": "Az ISOLA 3 ({{meret}}, {{beepites}}) prémium kategóriás, sík tetejű, elhúzható PVC ponyvás pergola a GENNIUS termékcsaládból: tökéletesen ötvözi az eleganciát és a dizájnt a rugalmassággal és a modularitással. Négy évszakos, minden körülmény között használható, zárt ponyva esetén teljesen vízzáró; falra szerelhető és szabadon álló változatban is kapható, nagy, akár több modulos lefedésekhez is.\n\nA ponyva keresztirányú profiljai a mozgó sínhez vannak rögzítve, így a rendszer lehetővé teszi a vízszintes csúsztatást; az esővíz a rejtett ereszcsatornán és az oszlopokon át távozik. A kényelmet korszerű automatizálás biztosítja: okostelefonos és táblagépes alkalmazással bármilyen időjárás-változás esetén bezárhatja vagy kinyithatja a tetőt, és mozgathatja az oldalsó napvédő rolókat, amelyek felhúzott állapotban teljesen eltűnnek a szerkezet profiljában.",
+      "closingText": "Hóesésben a termék használata nem ajánlott.",
+      "textBlocks": [
+        {
+          "id": "tb_isola3_tech",
+          "title": "Műszaki adatok",
+          "content": "- Profilok: gerenda 23×16 cm, oszlop 16×16 cm\n- Szélállóság: EN 13561 szerinti legmagasabb, 6. osztály, orkán erejű szélnek is ellenáll (119 km/h)",
+          "position": "before_photos"
+        },
+        {
+          "id": "tb_isola3_after",
+          "title": "",
+          "content": "A tartó szerkezetek alapszínei: RAL 9010, RAL 9006, RAL 9005, RAL 7016 matt és FSM 71319. Szövet választék katalógusból.\n\n+ Opcionálisan rendelhető a termékhez:\n- egyedi RAL színek\n- üvegfalrendszer\n- oldalsó árnyékoló\n- LED világítás a vásznat tartó és mozgató keresztprofilokban\n- okosotthon vezérlő\n- audio csomag",
+          "position": "after_table"
+        }
+      ],
       "photos": [
         {
           "id": "ph_cat2026_isola-3_0",
@@ -36314,7 +36608,7 @@
           "minPrice": 1,
           "multiplier": 0.75,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_isola3_free_1",
@@ -36541,7 +36835,7 @@
           "minPrice": 1,
           "multiplier": 0.75,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_isola3_free_2w",
@@ -36768,7 +37062,7 @@
           "minPrice": 1,
           "multiplier": 0.75,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_isola3_free_2p",
@@ -36995,7 +37289,7 @@
           "minPrice": 1,
           "multiplier": 0.75,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_isola3_free_4",
@@ -39424,7 +39718,7 @@
         "pdfFile": "LISTINO BIOCLIMATICA 10_EN.pdf",
         "pages": "35. o. (1L); 37. o. (2L); 39. o. (2 P); 45. o. (4)"
       },
-      "updatedAt": "2026-10-21T11:54:57.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "alsoInCategoryIds": []
     },
     {
@@ -39433,7 +39727,7 @@
       "enabled": true,
       "status": "active",
       "introText": "Az XTESA ({{meret}}, {{beepites}}) falhoz rögzített, elhúzható, feszített vásznas tetejű pergola. A vászon motorral nyitható és zárható, feszítve stabil és esztétikus, az esővíz az elülső ereszcsatornán át távozik.",
-      "closingText": "Hóesésben nem használható. Garancia: a szerkezetre 10 év, a vásznakra/ponyvákra 5 év, a motorokra és érzékelőkre 3 év. Átfutási idő a visszaigazolástól számítva 30-60 nap. Az árajánlat a helyszíni felmérés és a műszaki tartalom pontosítása után módosulhat.",
+      "closingText": "Hóesésben nem használható.",
       "textBlocks": [],
       "photos": [
         {
@@ -39478,7 +39772,7 @@
           "minPrice": 1,
           "multiplier": 0.8,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_xtesa_1",
@@ -39633,7 +39927,7 @@
           "minPrice": 1,
           "multiplier": 0.8,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_xtesa_2m",
@@ -39831,7 +40125,7 @@
           "minPrice": 1,
           "multiplier": 0.8,
           "extraDiscountPct": 0,
-          "fixedSurcharge": 0.0,
+          "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
           "id": "mat_xtesa_3m",
@@ -41418,7 +41712,7 @@
         "productAlias": "KE Xtesa Plain",
         "note": "Árképző (docx 2026-10): (katalógusár + a szélességi oszlop 13. sora [Hood]) - 20%, a motort tartalmazza; távirányító 100 EUR, szerelés 800 / 1500 / 2100 EUR (1 / 2 / 3 modul); ajándék szélérzékelő. Modulhatár: 400 / 800 / 1200 cm."
       },
-      "updatedAt": "2026-10-21T11:54:57.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "alsoInCategoryIds": []
     },
     {
@@ -41427,8 +41721,15 @@
       "enabled": true,
       "status": "active",
       "introText": "A MADEIRA ({{meret}}) teljesen zárt kazettás karos napellenző motoros működtetéssel. Behúzott állapotban a vászon és a karok a kazettában védve vannak az időjárástól.",
-      "closingText": "Garancia: ponyvákra 5 év, motorokra és érzékelőkre 3 év. Átfutási idő 30-60 nap. Az árajánlat a helyszíni felmérés után módosulhat.",
-      "textBlocks": [],
+      "closingText": "",
+      "textBlocks": [
+        {
+          "id": "tb_madeira_after",
+          "title": "",
+          "content": "Szövet- és színválaszték katalógusból.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi szövetek és színek (felár ellenében)\n- szél- és napérzékelő, okosotthon vezérlő\n- LED-világítás",
+          "position": "after_table"
+        }
+      ],
       "photos": [],
       "materials": [
         {
@@ -42050,18 +42351,59 @@
         "pdfFile": "Price list 2026_27_Új.pdf",
         "pages": "96. o. (MADEIRA)"
       },
-      "updatedAt": "2026-10-21T11:54:57.000Z",
-      "alsoInCategoryIds": []
+      "updatedAt": "2026-10-30T12:00:00.000Z",
+      "alsoInCategoryIds": [],
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a motorokra, vezérlőkre 3 év; a szövetekre 5 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
     },
     {
       "id": "tpl_corsica",
       "subtitle": "Kazettás karos napellenző, Somfy IO motorral",
       "enabled": true,
       "status": "active",
-      "introText": "A CORSICA ({{meret}}) teljesen zárt kazettás karos napellenző motoros működtetéssel. Behúzott állapotban a vászon és a karok a kazettában védve vannak az időjárástól.",
-      "closingText": "Garancia: ponyvákra 5 év, motorokra és érzékelőkre 3 év. Átfutási idő 30-60 nap. Az árajánlat a helyszíni felmérés után módosulhat.",
-      "textBlocks": [],
-      "photos": [],
+      "introText": "A CORSICA ({{meret}}) összecsukható kazettás karos napellenző, fal- és mennyezetszereléssel egyaránt kérhető. Zárt szerkezet: becsukott állapotban a szövetet nem érik az időjárás károsító hatásai (napfény, fagy, eső). Jó minőségű, jó ár-érték arányú lengyel termék, teljesen automatizált működéssel (szél- és napérzékelővel) is választható; a kazetta alsó síkjába LED-világítás is kérhető.",
+      "closingText": "",
+      "textBlocks": [
+        {
+          "id": "tb_corsica_tech",
+          "title": "Műszaki adatok",
+          "content": "- Maximális kinyúlás: 360 cm\n- Videó a termékről: https://www.youtube.com/watch?v=bAPz7HxCXFI",
+          "position": "before_photos"
+        },
+        {
+          "id": "tb_corsica_after",
+          "title": "",
+          "content": "Szövet- és színválaszték katalógusból.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi szövetek és színek (felár ellenében)\n- szél- és napérzékelő, okosotthon vezérlő\n- LED-világítás",
+          "position": "after_table"
+        }
+      ],
+      "photos": [
+        {
+          "id": "ph_offer_corsica_1",
+          "imageUrl": "/uploads/offers/corsica/corsica-01.jpg",
+          "titleAbove": "",
+          "captionBelow": "CORSICA kazettás karos napellenző",
+          "widthPct": 75,
+          "align": "center",
+          "subPhotos": [
+            {
+              "id": "ph_offer_corsica_1_1",
+              "imageUrl": "/uploads/offers/corsica/corsica-11.jpg",
+              "titleAbove": "",
+              "captionBelow": "Kazettás kivitel",
+              "widthPct": 50,
+              "align": "center"
+            },
+            {
+              "id": "ph_offer_corsica_1_2",
+              "imageUrl": "/uploads/offers/corsica/corsica-12.jpg",
+              "titleAbove": "",
+              "captionBelow": "Fali, mennyezeti és szarufára szerelés",
+              "widthPct": 50,
+              "align": "center"
+            }
+          ]
+        }
+      ],
       "materials": [
         {
           "description": "Alumínium szerkezet, összecsukható karok.",
@@ -42688,8 +43030,9 @@
         "pdfFile": "Price list 2026_27_Új.pdf",
         "pages": "96. o. (CORSICA CASSETTE)"
       },
-      "updatedAt": "2026-10-21T11:54:57.000Z",
-      "alsoInCategoryIds": []
+      "updatedAt": "2026-10-30T12:00:00.000Z",
+      "alsoInCategoryIds": [],
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a motorokra, vezérlőkre 3 év; a szövetekre 5 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
     },
     {
       "id": "tpl_jamaica",
@@ -42697,8 +43040,15 @@
       "enabled": true,
       "status": "active",
       "introText": "A JAMAICA ({{meret}}) kazetta nélküli karos napellenző motoros működtetéssel. Behúzott állapotban a vászon és a karok a falon kompaktan helyezkednek el.",
-      "closingText": "Garancia: ponyvákra 5 év, motorokra és érzékelőkre 3 év. Átfutási idő 30-60 nap. Az árajánlat a helyszíni felmérés után módosulhat.",
-      "textBlocks": [],
+      "closingText": "",
+      "textBlocks": [
+        {
+          "id": "tb_jamaica_after",
+          "title": "",
+          "content": "Szövet- és színválaszték katalógusból.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi szövetek és színek (felár ellenében)\n- szél- és napérzékelő, okosotthon vezérlő\n- LED-világítás",
+          "position": "after_table"
+        }
+      ],
       "photos": [],
       "materials": [
         {
@@ -43303,18 +43653,53 @@
         "pdfFile": "Price list 2026_27_Új.pdf",
         "pages": "96. o. (JAMAICA*)"
       },
-      "updatedAt": "2026-10-21T11:54:57.000Z",
-      "alsoInCategoryIds": []
+      "updatedAt": "2026-10-30T12:00:00.000Z",
+      "alsoInCategoryIds": [],
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a motorokra, vezérlőkre 3 év; a szövetekre 5 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
     },
     {
       "id": "tpl_australia",
       "subtitle": "Kazetta nélküli karos napellenző, Somfy IO motorral",
       "enabled": true,
       "status": "active",
-      "introText": "A AUSTRALIA ({{meret}}) kazetta nélküli karos napellenző motoros működtetéssel. Behúzott állapotban a vászon és a karok a falon kompaktan helyezkednek el.",
-      "closingText": "Garancia: ponyvákra 5 év, motorokra és érzékelőkre 3 év. Átfutási idő 30-60 nap. Az árajánlat a helyszíni felmérés után módosulhat.",
-      "textBlocks": [],
-      "photos": [],
+      "introText": "Az AUSTRALIA ({{meret}}) kazetta nélküli karos napellenző, középkategóriás, jó ár-érték arányú lengyel termék. Motoros működtetéssel, szél- és fényérzékelővel is kérhető. Behúzott állapotban a vászon és a karok a falon kompaktan helyezkednek el.",
+      "closingText": "",
+      "textBlocks": [
+        {
+          "id": "tb_australia_after",
+          "title": "",
+          "content": "Szövet- és színválaszték katalógusból.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi szövetek és színek (felár ellenében)\n- szél- és napérzékelő, okosotthon vezérlő\n- LED-világítás",
+          "position": "after_table"
+        }
+      ],
+      "photos": [
+        {
+          "id": "ph_offer_australia_1",
+          "imageUrl": "/uploads/offers/australia/australia-01.jpg",
+          "titleAbove": "",
+          "captionBelow": "AUSTRALIA karos napellenző",
+          "widthPct": 75,
+          "align": "center",
+          "subPhotos": [
+            {
+              "id": "ph_offer_australia_1_1",
+              "imageUrl": "/uploads/offers/australia/australia-11.jpg",
+              "titleAbove": "",
+              "captionBelow": "Kazetta nélküli kivitel",
+              "widthPct": 50,
+              "align": "center"
+            },
+            {
+              "id": "ph_offer_australia_1_2",
+              "imageUrl": "/uploads/offers/australia/australia-12.jpg",
+              "titleAbove": "",
+              "captionBelow": "Fali, mennyezeti és szarufára szerelés",
+              "widthPct": 50,
+              "align": "center"
+            }
+          ]
+        }
+      ],
       "materials": [
         {
           "description": "Alumínium szerkezet, összecsukható karok.",
@@ -43920,18 +44305,45 @@
         "pdfFile": "Price list 2026_27_Új.pdf",
         "pages": "96. o. (AUSTRALIA)"
       },
-      "updatedAt": "2026-10-21T11:54:57.000Z",
-      "alsoInCategoryIds": []
+      "updatedAt": "2026-10-30T12:00:00.000Z",
+      "alsoInCategoryIds": [],
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a motorokra, vezérlőkre 3 év; a szövetekre 5 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
     },
     {
       "id": "tpl_thermo_glass",
       "subtitle": "Hőszigetelt üvegezésű, eltolható üvegfalrendszer",
       "enabled": false,
       "status": "inactive",
-      "introText": "",
+      "introText": "A THERMO GLASS rendszer síneken csúszó, hőszigetelt üvegtáblákból áll: könnyen telepíthető, és hűvösebb időben is kényelmes környezetet biztosít a teraszon, erkélyen. Ideális megoldás a pergola oldalainak vagy a meglévő terasz beépítésére, így a belső tér védett a széltől, esőtől, hidegtől és zajtól.\n\nA táblák elhúzás közben csatlakoznak egymáshoz, így az első üveg mozgatja a többit is; az alapár része a belső biztonsági zár. Alumínium keretes, zárható, sorolható kivitel, jobbról balra vagy balról jobbra is nyitható. Az összes alumínium profil és keretrendszer RAL színkód alapján kérhető.",
       "closingText": "",
-      "textBlocks": [],
-      "photos": [],
+      "textBlocks": [
+        {
+          "id": "tb_thermo_tech",
+          "title": "Műszaki adatok",
+          "content": "- Üvegezés: 20 mm (4.12.4): külső réteg 4 mm edzett (ESG) üveg, 12 mm légrés, belső réteg Low-e bevonatos 4 mm edzett (ESG) üveg",
+          "position": "before_photos"
+        }
+      ],
+      "photos": [
+        {
+          "id": "ph_offer_thermo_1",
+          "imageUrl": "/uploads/offers/thermo/thermo-01.jpg",
+          "titleAbove": "",
+          "captionBelow": "THERMO GLASS hőszigetelt üvegfalak",
+          "widthPct": 75,
+          "align": "center",
+          "subPhotos": [
+            {
+              "id": "ph_offer_thermo_1_1",
+              "imageUrl": "/uploads/offers/thermo/thermo-11.jpg",
+              "titleAbove": "",
+              "captionBelow": "Pergola körbeépítve hőszigetelt üvegfalakkal",
+              "widthPct": 50,
+              "align": "center"
+            }
+          ]
+        }
+      ],
       "materials": [
         {
           "description": "",
@@ -44000,9 +44412,10 @@
       "catalogRef": {
         "note": "Nincs ár a kapott anyagokban - add meg a m² árat (sávosan), majd állítsd aktívra."
       },
-      "updatedAt": "2026-10-20T20:55:09.835376Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "moduleSplits": [],
-      "alsoInCategoryIds": []
+      "alsoInCategoryIds": [],
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a termékekre 3 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
     },
     {
       "id": "tpl_guillotine_vertica",
@@ -44081,9 +44494,2168 @@
       "catalogRef": {
         "note": "Nincs ár a kapott anyagokban - add meg a m² árat (sávosan), majd állítsd aktívra."
       },
-      "updatedAt": "2026-10-20T20:55:09.835376Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
       "moduleSplits": [],
-      "alsoInCategoryIds": []
+      "alsoInCategoryIds": [],
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a termékekre 3 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
+    },
+    {
+      "id": "tpl_dakar",
+      "subtitle": "Kazettás karos napellenző, Somfy IO motorral - jó ár-érték arány",
+      "enabled": true,
+      "status": "active",
+      "introText": "A DAKAR ({{meret}}) összecsukható kazettás karos napellenző, fal- és mennyezetszereléssel egyaránt kérhető. Zárt szerkezet: becsukott állapotban a szövetet nem érik az időjárás károsító hatásai (napfény, fagy, eső). Jó minőségű, jó ár-érték arányú lengyel termék, teljesen automatizált működéssel (szél- és esőérzékelővel) is választható.",
+      "closingText": "",
+      "textBlocks": [
+        {
+          "id": "tb_dakar_tech",
+          "title": "Műszaki adatok",
+          "content": "- Maximális kinyúlás: 360 cm\n- Videó a termékről: https://www.youtube.com/watch?v=sEQI3ieaaxU",
+          "position": "before_photos"
+        },
+        {
+          "id": "tb_dakar_after",
+          "title": "",
+          "content": "Szövet- és színválaszték katalógusból.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi szövetek és színek (felár ellenében)\n- szél- és napérzékelő, okosotthon vezérlő\n- LED-világítás",
+          "position": "after_table"
+        }
+      ],
+      "photos": [
+        {
+          "id": "ph_offer_dakar_1",
+          "imageUrl": "/uploads/offers/dakar/dakar-01.jpg",
+          "titleAbove": "",
+          "captionBelow": "DAKAR kazettás karos napellenző",
+          "widthPct": 75,
+          "align": "center",
+          "subPhotos": [
+            {
+              "id": "ph_offer_dakar_1_1",
+              "imageUrl": "/uploads/offers/dakar/dakar-11.jpg",
+              "titleAbove": "",
+              "captionBelow": "Kazettás kivitel",
+              "widthPct": 50,
+              "align": "center"
+            },
+            {
+              "id": "ph_offer_dakar_1_2",
+              "imageUrl": "/uploads/offers/dakar/dakar-12.jpg",
+              "titleAbove": "",
+              "captionBelow": "Fali, mennyezeti és szarufára szerelés",
+              "widthPct": 50,
+              "align": "center"
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "description": "Alumínium szerkezet, összecsukható karok.",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "matrix_cm",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 1,
+          "unitPrice": 1,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 142,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "id": "mat_dakar_base",
+          "name": "DAKAR kazettás karos napellenző - kazettás, falra szerelve",
+          "matrixTable": {
+            "rowLabel": "Kinyúlás (cm)",
+            "colLabel": "Szélesség (cm)",
+            "rows": [
+              160,
+              210,
+              260,
+              310,
+              360
+            ],
+            "cols": [
+              290,
+              350,
+              410,
+              470,
+              530,
+              600
+            ],
+            "values": {
+              "160": {
+                "290": 1100,
+                "350": 1195,
+                "410": 1305,
+                "470": 1520,
+                "530": 1620,
+                "600": 1710
+              },
+              "210": {
+                "290": 1155,
+                "350": 1325,
+                "410": 1450,
+                "470": 1670,
+                "530": 1810,
+                "600": 1880
+              },
+              "260": {
+                "350": 1385,
+                "410": 1530,
+                "470": 1730,
+                "530": 1890,
+                "600": 2075
+              },
+              "310": {
+                "410": 1670,
+                "470": 1885,
+                "530": 2055,
+                "600": 2090
+              },
+              "360": {
+                "410": 1780,
+                "470": 1970,
+                "530": 2120,
+                "600": 2190
+              }
+            }
+          },
+          "matrixRowAxis": "projection",
+          "matrixColAxis": "width",
+          "mountTypes": [
+            "Épülethez rögzített"
+          ],
+          "splitByModule": true,
+          "colorOptions": [
+            {
+              "id": "col_dakar_std_0",
+              "code": "RAL 9010",
+              "name": "Pure White",
+              "hex": "#f7f9ef"
+            },
+            {
+              "id": "col_dakar_std_1",
+              "code": "RAL 1015",
+              "name": "Light Ivory",
+              "hex": "#e6d2b5"
+            },
+            {
+              "id": "col_dakar_std_2",
+              "code": "VSR 240 SATIN",
+              "name": "Beige",
+              "hex": "#d8c7a6"
+            },
+            {
+              "id": "col_dakar_std_3",
+              "code": "RAL 9006",
+              "name": "White Aluminium",
+              "hex": "#a5a8a6"
+            },
+            {
+              "id": "col_dakar_std_4",
+              "code": "FSM 71319",
+              "name": "Structural Graphite",
+              "hex": "#3c3f42"
+            },
+            {
+              "id": "col_dakar_std_5",
+              "code": "RAL 8014",
+              "name": "Sepia Brown",
+              "hex": "#4a3526"
+            },
+            {
+              "id": "col_dakar_std_6",
+              "code": "RAL 7016",
+              "name": "Anthracite Structure, struktúrált",
+              "hex": "#383e42"
+            },
+            {
+              "id": "col_dakar_std_7",
+              "code": "RAL 9005",
+              "name": "Jet Black Structure, struktúrált",
+              "hex": "#0a0a0d"
+            },
+            {
+              "id": "col_dakar_std_8",
+              "code": "RAL 8003",
+              "name": "Clay Brown Structure, struktúrált",
+              "hex": "#80542f"
+            }
+          ],
+          "colorTitle": "Alapszínek (felár nélkül)"
+        },
+        {
+          "id": "mat_dakar_motor",
+          "name": "Motor - Somfy NEMO IO (SUNEA IO) 40 Nm (modulonként 1 db)",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 415,
+          "unitPrice": 415,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": true,
+          "perModule": true
+        },
+        {
+          "id": "mat_dakar_remote",
+          "name": "Távirányító",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 100,
+          "unitPrice": 100,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "mat_dakar_install",
+          "name": "Szerelés, programozás",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 600,
+          "unitPrice": 600,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "mat_dakar_gift_sensor",
+          "name": "Szélérzékelő",
+          "description": "",
+          "itemRole": "gift",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 200,
+          "unitPrice": 200,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1,
+          "defaultNote": "Ajándék",
+          "photos": []
+        },
+        {
+          "description": "A szerkezet árának 20%-a",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "percentage",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 1,
+          "unitPrice": 1,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 20,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "id": "x_dakar_ral",
+          "name": "Egyedi szín a gyári színkártyáról (+20% felár)",
+          "colorOptions": [
+            {
+              "id": "col_dakar_x_0",
+              "code": "RAL 9001",
+              "name": "Cream",
+              "hex": "#efebdc"
+            },
+            {
+              "id": "col_dakar_x_1",
+              "code": "RAL 9016",
+              "name": "Traffic White",
+              "hex": "#f7fbf5"
+            },
+            {
+              "id": "col_dakar_x_2",
+              "code": "RAL 1013",
+              "name": "Oyster White",
+              "hex": "#e3d9c6"
+            },
+            {
+              "id": "col_dakar_x_3",
+              "code": "RAL 7001",
+              "name": "Silver Grey",
+              "hex": "#8c969d"
+            },
+            {
+              "id": "col_dakar_x_4",
+              "code": "RAL 7012",
+              "name": "Basalt Grey",
+              "hex": "#4e5754"
+            },
+            {
+              "id": "col_dakar_x_5",
+              "code": "RAL 7015",
+              "name": "Slate Grey",
+              "hex": "#51565c"
+            },
+            {
+              "id": "col_dakar_x_6",
+              "code": "RAL 7016",
+              "name": "Anthracite Grey",
+              "hex": "#383e42"
+            },
+            {
+              "id": "col_dakar_x_7",
+              "code": "RAL 7021",
+              "name": "Black Grey",
+              "hex": "#2e3234"
+            },
+            {
+              "id": "col_dakar_x_8",
+              "code": "RAL 7024",
+              "name": "Graphite Grey",
+              "hex": "#474a50"
+            },
+            {
+              "id": "col_dakar_x_9",
+              "code": "RAL 7035",
+              "name": "Light Grey",
+              "hex": "#cbd0cc"
+            },
+            {
+              "id": "col_dakar_x_10",
+              "code": "RAL 7037",
+              "name": "Dust Grey",
+              "hex": "#7a7b7a"
+            },
+            {
+              "id": "col_dakar_x_11",
+              "code": "RAL 9007",
+              "name": "Grey Aluminium",
+              "hex": "#8f8f8c"
+            },
+            {
+              "id": "col_dakar_x_12",
+              "code": "RAL 9005",
+              "name": "Jet Black",
+              "hex": "#0a0a0d"
+            },
+            {
+              "id": "col_dakar_x_13",
+              "code": "VSR 780",
+              "name": "Pearl Brown",
+              "hex": "#5a4636"
+            },
+            {
+              "id": "col_dakar_x_14",
+              "code": "RAL 8016",
+              "name": "Mahogany Brown",
+              "hex": "#4c2b20"
+            },
+            {
+              "id": "col_dakar_x_15",
+              "code": "DB 703",
+              "name": "Metallic Gray",
+              "hex": "#5f6264"
+            },
+            {
+              "id": "col_dakar_x_16",
+              "code": "RAL 7022",
+              "name": "Umbra Grey",
+              "hex": "#4b4d46"
+            },
+            {
+              "id": "col_dakar_x_17",
+              "code": "RAL 7039",
+              "name": "Quartz Grey",
+              "hex": "#6c6960"
+            },
+            {
+              "id": "col_dakar_x_18",
+              "code": "RAL 7043",
+              "name": "Traffic Grey B",
+              "hex": "#4e5451"
+            },
+            {
+              "id": "col_dakar_x_19",
+              "code": "RAL 8003",
+              "name": "Clay Brown",
+              "hex": "#80542f"
+            },
+            {
+              "id": "col_dakar_x_20",
+              "code": "RAL 7021",
+              "name": "Black Grey Structure, struktúrált",
+              "hex": "#2e3234"
+            },
+            {
+              "id": "col_dakar_x_21",
+              "code": "RAL 9010",
+              "name": "Pure White Structure, struktúrált",
+              "hex": "#f7f9ef"
+            },
+            {
+              "id": "col_dakar_x_22",
+              "code": "RAL 7038",
+              "name": "Grey",
+              "hex": "#b4b8b0"
+            },
+            {
+              "id": "col_dakar_x_23",
+              "code": "RAL 7048",
+              "name": "Mouse Grey",
+              "hex": "#7e7b70"
+            },
+            {
+              "id": "col_dakar_x_24",
+              "code": "Wood 26",
+              "name": "Mahogany",
+              "hex": "#6b2e1f"
+            },
+            {
+              "id": "col_dakar_x_25",
+              "code": "Wood 27",
+              "name": "Cherry",
+              "hex": "#7b3a2a"
+            },
+            {
+              "id": "col_dakar_x_26",
+              "code": "Wood 28",
+              "name": "Walnut",
+              "hex": "#5a3a26"
+            },
+            {
+              "id": "col_dakar_x_27",
+              "code": "Wood 30",
+              "name": "Golden Oak",
+              "hex": "#a86b32"
+            },
+            {
+              "id": "col_dakar_x_28",
+              "code": "Wood 49",
+              "name": "Malt Oak",
+              "hex": "#8c6a47"
+            },
+            {
+              "id": "col_dakar_x_29",
+              "code": "Wood 52",
+              "name": "Winchester",
+              "hex": "#7a5536"
+            }
+          ],
+          "colorTitle": "Felárral választható színek",
+          "photos": [
+            {
+              "id": "ph_cat2026_x_dakar_ral",
+              "imageUrl": "/uploads/catalog-2026/colours-aluprof/colours-1.jpg",
+              "titleAbove": "",
+              "captionBelow": "Aluprof pergola színek (RAL)",
+              "widthPct": 75,
+              "align": "center"
+            }
+          ]
+        },
+        {
+          "description": "",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 500,
+          "unitPrice": 500,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "id": "x_dakar_led_arms",
+          "name": "LED világítás a vásznat mozgató karokban (szabályozható, COB LED-szalag, meleg fehér)",
+          "excludeFromPercentBase": true,
+          "photos": [
+            {
+              "id": "ph_cat2026_x_dakar_led_arms",
+              "imageUrl": "/uploads/catalog-2026/led/photo-1.jpg",
+              "titleAbove": "",
+              "captionBelow": "Napellenző LED-világítással (Aluprof)",
+              "widthPct": 75,
+              "align": "center"
+            }
+          ]
+        },
+        {
+          "description": "",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 250,
+          "unitPrice": 250,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "id": "x_dakar_rain",
+          "name": "Esőérzékelő",
+          "excludeFromPercentBase": true,
+          "group": "Érzékelők és vezérlés",
+          "choiceGroup": "Érzékelők",
+          "choiceMulti": true,
+          "choiceLabel": "Eső"
+        },
+        {
+          "description": "",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 200,
+          "unitPrice": 200,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "id": "x_dakar_sun",
+          "name": "Napfényérzékelő",
+          "excludeFromPercentBase": true,
+          "group": "Érzékelők és vezérlés",
+          "choiceGroup": "Érzékelők",
+          "choiceMulti": true,
+          "choiceLabel": "Napfény"
+        },
+        {
+          "description": "Somfy TaHoma vagy BleBox applikációval",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 300,
+          "unitPrice": 300,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "id": "x_dakar_smart",
+          "name": "Okosotthon vezérlő",
+          "excludeFromPercentBase": true,
+          "group": "Érzékelők és vezérlés"
+        }
+      ],
+      "createdAt": "2026-10-30T12:00:00.000Z",
+      "categoryId": "cat_1792391983812_seed",
+      "name": "DAKAR kazettás karos napellenző",
+      "order": 3,
+      "mountTypes": [
+        "Épülethez rögzített"
+      ],
+      "moduleSplits": [],
+      "sizeLimits": {
+        "minWidthCm": 200,
+        "maxWidthCm": 600,
+        "minProjectionCm": 150,
+        "maxProjectionCm": 360
+      },
+      "sizeRules": [],
+      "catalogRef": {
+        "productAlias": "Aluprof Dakar",
+        "pdfFile": "Price list 2026_27_Új.pdf",
+        "pages": "DAKAR CASSETTE AWNING",
+        "note": "Árképzés a többi Aluprof napellenzővel azonos (docx 2026-10): katalógusár + 142 EUR; motor 415 EUR, távirányító 100 EUR, szerelés 600 EUR; ajándék szélérzékelő. Mérettábla: Aluprof árlista, DAKAR kazettás napellenző."
+      },
+      "updatedAt": "2026-10-30T12:00:00.000Z",
+      "alsoInCategoryIds": [],
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a motorokra, vezérlőkre 3 év; a szövetekre 5 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
+    },
+    {
+      "id": "tpl_elegancy",
+      "categoryId": "cat_legacy_elhuzhato",
+      "name": "ELEGANCY elhúzható PVC ponyvás pergola",
+      "subtitle": "Ferde tetős, négy évszakos, előtetővel - jó ár-érték arány",
+      "enabled": true,
+      "status": "test",
+      "order": 20,
+      "introText": "Az ELEGANCY ({{meret}}) ferde tetős, elhúzható PVC ponyvás pergola előtetővel, jó ár-érték arányú termék. Négy évszakos, minden körülmény között használható, zárt ponyva esetén teljesen vízzáró. A szerkezetet falhoz rögzítve, elöl lábakkal építjük; a középső láb pozíciója változtatható.",
+      "closingText": "",
+      "textBlocks": [
+        {
+          "id": "tb_elegancy_tech",
+          "title": "Műszaki adatok",
+          "content": "- Profilok: gerenda 14×13 cm, oszlop 13×8 cm\n- Videó a termékről: https://tarasola.co.uk/products/elegancy/",
+          "position": "before_photos"
+        },
+        {
+          "id": "tb_elegancy_after",
+          "title": "",
+          "content": "Szövet választék katalógusból.\n\n+ Opcionálisan rendelhető a termékhez:\n- egyedi RAL színek\n- üvegfalrendszer\n- oldalsó árnyékoló\n- LED világítás a vásznat tartó és mozgató keresztprofilokban\n- okosotthon vezérlő",
+          "position": "after_table"
+        }
+      ],
+      "photos": [
+        {
+          "id": "ph_offer_elegancy_1",
+          "imageUrl": "/uploads/offers/elegancy/elegancy-01.jpg",
+          "titleAbove": "",
+          "captionBelow": "ELEGANCY elhúzható PVC ponyvás pergola",
+          "widthPct": 75,
+          "align": "center",
+          "subPhotos": [
+            {
+              "id": "ph_offer_elegancy_1_1",
+              "imageUrl": "/uploads/offers/elegancy/elegancy-11.jpg",
+              "titleAbove": "",
+              "captionBelow": "LED-világítással esti hangulatban",
+              "widthPct": 50,
+              "align": "center"
+            },
+            {
+              "id": "ph_offer_elegancy_1_2",
+              "imageUrl": "/uploads/offers/elegancy/elegancy-12.jpg",
+              "titleAbove": "",
+              "captionBelow": "LED spotok a gerendában",
+              "widthPct": 50,
+              "align": "center"
+            },
+            {
+              "id": "ph_offer_elegancy_1_3",
+              "imageUrl": "/uploads/offers/elegancy/elegancy-13.jpg",
+              "titleAbove": "",
+              "captionBelow": "Oldalsó árnyékolókkal",
+              "widthPct": 50,
+              "align": "center"
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "id": "mat_elegancy_base",
+          "name": "ELEGANCY elhúzható PVC ponyvás pergola előtetővel, Opatex Flat szövettel",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 0,
+          "unitPrice": 0,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": false
+        },
+        {
+          "id": "mat_elegancy_motor",
+          "name": "Motor - Somfy IO",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 600,
+          "unitPrice": 600,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "mat_elegancy_remote",
+          "name": "Távirányító",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 100,
+          "unitPrice": 100,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "mat_elegancy_install",
+          "name": "Szerelés, programozás",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 0,
+          "unitPrice": 0,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "mat_elegancy_gift_rain",
+          "name": "Esőérzékelő",
+          "description": "",
+          "itemRole": "gift",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 160,
+          "unitPrice": 160,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Ajándék",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "x_elegancy_led",
+          "name": "LED világítás a felső gerendák belső oldalain (2 gerendában összesen 6 db szabályozható LED-box, spot)",
+          "description": "",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 500,
+          "unitPrice": 500,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "x_elegancy_smart",
+          "name": "Okosotthon vezérlő",
+          "description": "Somfy TaHoma vagy BleBox applikációval",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 300,
+          "unitPrice": 300,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true,
+          "group": "Érzékelők és vezérlés"
+        }
+      ],
+      "sizeLimits": {},
+      "moduleSplits": [],
+      "mountTypes": [],
+      "sizeRules": [],
+      "alsoInCategoryIds": [],
+      "catalogRef": {
+        "note": "Teszt: a kapott anyagokban nincs mérettábla. Az alapszerkezet és a szerelés árát kézzel add meg az ajánlatban (vagy töltsd ki itt), majd állítsd aktívra. A kiegészítők ára Balázs ajánlataiból: motor 600, távirányító 100, LED spotok 500 EUR (430×230 cm-es ajánlat)."
+      },
+      "createdAt": "2026-10-30T12:00:00.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z"
+    },
+    {
+      "id": "tpl_cubic",
+      "categoryId": "cat_legacy_elhuzhato",
+      "name": "CUBIC elhúzható PVC ponyvás pergola",
+      "subtitle": "Prémium, sík tető, dupla rétegű ponyva - lengyel termék",
+      "enabled": true,
+      "status": "test",
+      "order": 21,
+      "introText": "A CUBIC ({{meret}}, {{beepites}}) prémium kategóriás, sík tetejű, elhúzható PVC ponyvás pergola, lengyel termék. Négy évszakos, minden körülmény között használható, zárt ponyva esetén teljesen vízzáró. Dupla rétegű (kétoldali) ponyvával készül: a felső réteg hatékony védelmet nyújt az időjárás elemeivel szemben, az alsó réteg esztétikus megjelenést biztosít.\n\nA ponyva keresztirányú profiljai a mozgó sínhez vannak rögzítve, így a rendszer lehetővé teszi a vízszintes csúsztatást. A tető mozgatását villanymotor végzi, amelyet távirányítóval vagy okostelefonnal vezérelhetünk.",
+      "closingText": "",
+      "textBlocks": [
+        {
+          "id": "tb_cubic_tech",
+          "title": "Műszaki adatok",
+          "content": "- Profilok: gerenda 22×13 cm, oszlop 8×13 cm",
+          "position": "before_photos"
+        },
+        {
+          "id": "tb_cubic_after",
+          "title": "",
+          "content": "Szövet választék katalógusból.\n\n+ Opcionálisan rendelhető a termékhez:\n- egyedi RAL színek\n- üvegfalrendszer\n- oldalsó árnyékoló\n- LED világítás a vásznat tartó és mozgató keresztprofilokban\n- okosotthon vezérlő",
+          "position": "after_table"
+        }
+      ],
+      "photos": [
+        {
+          "id": "ph_offer_cubic_1",
+          "imageUrl": "/uploads/offers/cubic/cubic-01.jpg",
+          "titleAbove": "",
+          "captionBelow": "CUBIC elhúzható PVC ponyvás pergola",
+          "widthPct": 75,
+          "align": "center",
+          "subPhotos": [
+            {
+              "id": "ph_offer_cubic_1_1",
+              "imageUrl": "/uploads/offers/cubic/cubic-11.jpg",
+              "titleAbove": "",
+              "captionBelow": "Esti hangulat LED-világítással",
+              "widthPct": 50,
+              "align": "center"
+            },
+            {
+              "id": "ph_offer_cubic_1_2",
+              "imageUrl": "/uploads/offers/cubic/cubic-12.jpg",
+              "titleAbove": "",
+              "captionBelow": "Nyitott tetővel",
+              "widthPct": 50,
+              "align": "center"
+            }
+          ]
+        },
+        {
+          "id": "ph_offer_cubic_2",
+          "imageUrl": "/uploads/offers/cubic/cubic-02.jpg",
+          "titleAbove": "Választható színek:",
+          "captionBelow": "",
+          "widthPct": 75,
+          "align": "center"
+        }
+      ],
+      "materials": [
+        {
+          "id": "mat_cubic_base",
+          "name": "CUBIC elhúzható pergola kétoldali PVC ponyvával",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 0,
+          "unitPrice": 0,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": false
+        },
+        {
+          "id": "mat_cubic_motor",
+          "name": "Motor - Somfy IO",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 500,
+          "unitPrice": 500,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "mat_cubic_remote",
+          "name": "Távirányító",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 100,
+          "unitPrice": 100,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "mat_cubic_install",
+          "name": "Szerelés, programozás",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 0,
+          "unitPrice": 0,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "mat_cubic_gift_sensor",
+          "name": "Eső- és szélérzékelő",
+          "description": "",
+          "itemRole": "gift",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 160,
+          "unitPrice": 160,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Ajándék",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "mat_cubic_gift_infra",
+          "name": "Infrafűtés",
+          "description": "",
+          "itemRole": "gift",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 240,
+          "unitPrice": 240,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Ajándék",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "x_cubic_led",
+          "name": "LED világítás a ponyvát mozgató felső keresztartókban (3 db szabályozható, meleg fehér LED-szalag)",
+          "description": "",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 1000,
+          "unitPrice": 1000,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "x_cubic_smart",
+          "name": "Okosotthon vezérlő",
+          "description": "Somfy TaHoma vagy BleBox applikációval",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 300,
+          "unitPrice": 300,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true,
+          "group": "Érzékelők és vezérlés"
+        }
+      ],
+      "sizeLimits": {},
+      "moduleSplits": [],
+      "mountTypes": [],
+      "sizeRules": [],
+      "alsoInCategoryIds": [],
+      "catalogRef": {
+        "note": "Teszt: a kapott anyagokban nincs mérettábla. Az alapszerkezet és a szerelés árát kézzel add meg az ajánlatban (vagy töltsd ki itt), majd állítsd aktívra. A kiegészítők ára Balázs ajánlataiból: motor 500, távirányító 100, LED 1000 EUR (400×550 cm-es ajánlat)."
+      },
+      "createdAt": "2026-10-30T12:00:00.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z"
+    },
+    {
+      "id": "tpl_qubica_plumb",
+      "categoryId": "cat_1792391983812_seed",
+      "name": "QUBICA PLUMB B52 kazettás karos napellenző",
+      "subtitle": "Olasz prémium kazettás napellenző, csak motoros kivitel",
+      "enabled": true,
+      "status": "test",
+      "order": 10,
+      "introText": "A QUBICA kazettás karos napellenzők a legmodernebb technológiával készült, prémium kategóriás olasz termékek: letisztult formavilág, rejtett csavarok és csatlakozási pontok jellemzik őket. Zárt szerkezet: becsukott állapotban a szövetet nem érik az időjárás károsító hatásai (napfény, fagy, eső).\n\nA QUBICA PLUMB ({{meret}}) tökéletesen ötvözi a magas műszaki technológiát és az olasz dizájnt. Vízszintesen behúzható napellenző, opcionálisan LED-szalagkészlettel, exkluzív megjelenéssel. AKI karral is választható, amely tökéletesíti a nagy teljesítményű áttételeket és mozgásokat. Csak motoros kivitelben kapható; teljesen automatizált működéssel (szél- és napérzékelővel), illetve okostelefonnal vagy táblagéppel is működtethető.",
+      "closingText": "",
+      "textBlocks": [
+        {
+          "id": "tb_qplumb_tech",
+          "title": "Műszaki adatok",
+          "content": "- Maximális kinyúlás: 435 cm\n- 4 különböző szín kombinálható, így 16 különböző konfiguráció áll rendelkezésre",
+          "position": "before_photos"
+        },
+        {
+          "id": "tb_qplumb_after",
+          "title": "",
+          "content": "Szövet- és színválaszték katalógusból.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi szövetek és színek (felár ellenében)\n- szél- és napérzékelő, okosotthon vezérlő\n- LED-világítás",
+          "position": "after_table"
+        }
+      ],
+      "photos": [
+        {
+          "id": "ph_offer_qubica-plumb_1",
+          "imageUrl": "/uploads/offers/qubica-plumb/qubica-plumb-01.jpg",
+          "titleAbove": "",
+          "captionBelow": "QUBICA PLUMB LED-világítással a karokban",
+          "widthPct": 75,
+          "align": "center",
+          "subPhotos": [
+            {
+              "id": "ph_offer_qubica-plumb_1_1",
+              "imageUrl": "/uploads/offers/qubica-plumb/qubica-plumb-11.jpg",
+              "titleAbove": "",
+              "captionBelow": "A zárt kazetta közelről",
+              "widthPct": 50,
+              "align": "center"
+            }
+          ]
+        },
+        {
+          "id": "ph_offer_qubica-plumb_2",
+          "imageUrl": "/uploads/offers/qubica-plumb/qubica-plumb-02.jpg",
+          "titleAbove": "Qubica kazettás napellenzők választható, variálható színei:",
+          "captionBelow": "",
+          "widthPct": 75,
+          "align": "center"
+        }
+      ],
+      "materials": [
+        {
+          "id": "mat_qplumb_base",
+          "name": "QUBICA PLUMB B52 kazettás karos napellenző",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 0,
+          "unitPrice": 0,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": false
+        },
+        {
+          "id": "mat_qplumb_motor",
+          "name": "Motor - Somfy IO 50 Nm",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 600,
+          "unitPrice": 600,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "mat_qplumb_remote",
+          "name": "Távirányító",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 100,
+          "unitPrice": 100,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "mat_qplumb_install",
+          "name": "Szerelés, programozás",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 0,
+          "unitPrice": 0,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "mat_qplumb_gift_sensor",
+          "name": "Szélérzékelő",
+          "description": "",
+          "itemRole": "gift",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 200,
+          "unitPrice": 200,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1,
+          "defaultNote": "Ajándék",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "x_qplumb_led_arms",
+          "name": "LED világítás a karokban (2 db szabályozható LED-szalag)",
+          "description": "",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 600,
+          "unitPrice": 600,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "x_qplumb_sun",
+          "name": "Napfényérzékelő",
+          "description": "",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 200,
+          "unitPrice": 200,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true,
+          "group": "Érzékelők és vezérlés"
+        },
+        {
+          "id": "x_qplumb_smart",
+          "name": "Okosotthon vezérlő",
+          "description": "Somfy TaHoma vagy BleBox applikációval",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 300,
+          "unitPrice": 300,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true,
+          "group": "Érzékelők és vezérlés"
+        }
+      ],
+      "sizeLimits": {
+        "maxProjectionCm": 435
+      },
+      "moduleSplits": [],
+      "mountTypes": [
+        "Épülethez rögzített"
+      ],
+      "sizeRules": [],
+      "alsoInCategoryIds": [],
+      "catalogRef": {
+        "note": "Teszt: a kapott anyagokban nincs mérettábla. Az alapszerkezet és a szerelés árát kézzel add meg az ajánlatban (vagy töltsd ki itt), majd állítsd aktívra. A kiegészítők ára Balázs ajánlataiból: motor 600, távirányító 100, LED a karokban 600, napfényérzékelő 200 EUR."
+      },
+      "createdAt": "2026-10-30T12:00:00.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a motorokra, vezérlőkre 3 év; a szövetekre 5 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
+    },
+    {
+      "id": "tpl_qubica_light",
+      "categoryId": "cat_1792391983812_seed",
+      "name": "QUBICA LIGHT B51 kazettás karos napellenző",
+      "subtitle": "Olasz kazettás napellenző, falra vagy mennyezetre, csak motoros",
+      "enabled": true,
+      "status": "test",
+      "order": 11,
+      "introText": "A QUBICA kazettás karos napellenzők a legmodernebb technológiával készült, prémium kategóriás olasz termékek: letisztult formavilág, rejtett csavarok és csatlakozási pontok jellemzik őket. Zárt szerkezet: becsukott állapotban a szövetet nem érik az időjárás károsító hatásai (napfény, fagy, eső).\n\nA QUBICA LIGHT ({{meret}}) összecsukható kazettás napellenző, amelyet az alapvető és tiszta vonalak jellemeznek. Falra és mennyezetre egyaránt felszerelhető, nagy dőlésszöget biztosít. AKI karral is választható, amely tökéletesíti a nagy teljesítményű áttételeket és mozgásokat. Csak motoros kivitelben kapható; teljesen automatizált működéssel (szél- és napérzékelővel), illetve okostelefonnal vagy táblagéppel is működtethető.",
+      "closingText": "",
+      "textBlocks": [
+        {
+          "id": "tb_qlight_tech",
+          "title": "Műszaki adatok",
+          "content": "- Maximális kinyúlás: 360 cm\n- 4 különböző szín kombinálható, így 16 különböző konfiguráció áll rendelkezésre",
+          "position": "before_photos"
+        },
+        {
+          "id": "tb_qlight_after",
+          "title": "",
+          "content": "Szövet- és színválaszték katalógusból.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi szövetek és színek (felár ellenében)\n- szél- és napérzékelő, okosotthon vezérlő\n- LED-világítás",
+          "position": "after_table"
+        }
+      ],
+      "photos": [
+        {
+          "id": "ph_offer_qubica-light_1",
+          "imageUrl": "/uploads/offers/qubica-light/qubica-light-01.jpg",
+          "titleAbove": "",
+          "captionBelow": "QUBICA LIGHT kazettás karos napellenző",
+          "widthPct": 75,
+          "align": "center"
+        },
+        {
+          "id": "ph_offer_qubica-light_2",
+          "imageUrl": "/uploads/offers/qubica-light/qubica-light-02.jpg",
+          "titleAbove": "Qubica kazettás napellenzők választható, variálható színei:",
+          "captionBelow": "",
+          "widthPct": 75,
+          "align": "center"
+        }
+      ],
+      "materials": [
+        {
+          "id": "mat_qlight_base",
+          "name": "QUBICA LIGHT B51 kazettás karos napellenző",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 0,
+          "unitPrice": 0,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": false
+        },
+        {
+          "id": "mat_qlight_motor",
+          "name": "Motor - Somfy IO 50 Nm",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 600,
+          "unitPrice": 600,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "mat_qlight_remote",
+          "name": "Távirányító",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 100,
+          "unitPrice": 100,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "mat_qlight_install",
+          "name": "Szerelés, programozás",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 0,
+          "unitPrice": 0,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "mat_qlight_gift_sensor",
+          "name": "Szélérzékelő",
+          "description": "",
+          "itemRole": "gift",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 200,
+          "unitPrice": 200,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1,
+          "defaultNote": "Ajándék",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "x_qlight_led_arms",
+          "name": "LED világítás a karokban (2 db szabályozható LED-szalag)",
+          "description": "",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 600,
+          "unitPrice": 600,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "x_qlight_sun",
+          "name": "Napfényérzékelő",
+          "description": "",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 200,
+          "unitPrice": 200,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true,
+          "group": "Érzékelők és vezérlés"
+        },
+        {
+          "id": "x_qlight_smart",
+          "name": "Okosotthon vezérlő",
+          "description": "Somfy TaHoma vagy BleBox applikációval",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 300,
+          "unitPrice": 300,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true,
+          "group": "Érzékelők és vezérlés"
+        }
+      ],
+      "sizeLimits": {
+        "maxProjectionCm": 360
+      },
+      "moduleSplits": [],
+      "mountTypes": [
+        "Épülethez rögzített"
+      ],
+      "sizeRules": [],
+      "alsoInCategoryIds": [],
+      "catalogRef": {
+        "note": "Teszt: a kapott anyagokban nincs mérettábla. Az alapszerkezet és a szerelés árát kézzel add meg az ajánlatban (vagy töltsd ki itt), majd állítsd aktívra. A kiegészítők ára Balázs ajánlataiból: motor 600, távirányító 100, LED a karokban 600, napfényérzékelő 200 EUR."
+      },
+      "createdAt": "2026-10-30T12:00:00.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a motorokra, vezérlőkre 3 év; a szövetekre 5 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
+    },
+    {
+      "id": "tpl_run_glass",
+      "categoryId": "cat_1792346155886_2odc",
+      "name": "RUN 2 / RUN 3 spanyol prémium üvegfal",
+      "subtitle": "Keret nélküli, elcsúsztatható 10 mm edzett üvegfal - prémium",
+      "enabled": true,
+      "status": "test",
+      "order": 4,
+      "introText": "Spanyol, egyedi méretre gyártott, keret nélküli, elcsúsztatható prémium üvegfalrendszer 10 mm vastag edzett biztonsági üvegekkel; zárható, mindkét irányba sorolható. A megújult üvegfalak elhúzás közben csatlakoznak egymáshoz, így az első üveg mozgatja a többit is. Az alapár része a belső biztonsági zár (üvegfalrendszerenként 2 db, alul), így kívülről az üvegfalak nem húzhatók el; kulcsos záras megoldással is kérhető. A táblák között eltávolítható, átlátszó, huzat elleni szilikon profilok vannak. Süllyesztett alsó sínrendszerrel is kérhető.\n\nA RUN 3 rendszer a RUN 2-höz képest: cserélhető acélszalag minden alsó sín tetején; dupla csapágyas kocsik mozgatják a táblákat a még halkabb és könnyebb mozgásért; motorosan mozgatható üvegtáblákkal is kérhető; a felső megvezető profilokba LED-világítás is kérhető.\n\nBeépítendő oldalak: 1 db {{szelesseg}}×{{magassag}} cm-es és 1 db {{kinyulas}}×{{magassag}} cm-es oldal.",
+      "closingText": "",
+      "textBlocks": [
+        {
+          "id": "tb_run_tech",
+          "title": "Műszaki adatok",
+          "content": "- Szélállóság: EN 13561 szerinti legmagasabb, 6. osztály, orkán erejű szélnek is ellenáll (119 km/h)\n- Az alumínium profilok RAL 7016 matt vagy egyéb szürke színben",
+          "position": "before_photos"
+        }
+      ],
+      "photos": [
+        {
+          "id": "ph_offer_run_1",
+          "imageUrl": "/uploads/offers/run/run-01.jpg",
+          "titleAbove": "",
+          "captionBelow": "Keret nélküli prémium üvegfalrendszer",
+          "widthPct": 75,
+          "align": "center",
+          "subPhotos": [
+            {
+              "id": "ph_offer_run_1_1",
+              "imageUrl": "/uploads/offers/run/run-11.jpg",
+              "titleAbove": "",
+              "captionBelow": "Belső tér üvegfallal",
+              "widthPct": 50,
+              "align": "center"
+            },
+            {
+              "id": "ph_offer_run_1_2",
+              "imageUrl": "/uploads/offers/run/run-12.jpg",
+              "titleAbove": "",
+              "captionBelow": "Keret nélküli üvegtáblák",
+              "widthPct": 50,
+              "align": "center"
+            },
+            {
+              "id": "ph_offer_run_1_3",
+              "imageUrl": "/uploads/offers/run/run-13.jpg",
+              "titleAbove": "",
+              "captionBelow": "Pergola körbeépítve",
+              "widthPct": 50,
+              "align": "center"
+            }
+          ]
+        },
+        {
+          "id": "ph_offer_run_2",
+          "imageUrl": "/uploads/offers/run/run-02.jpg",
+          "titleAbove": "",
+          "captionBelow": "Szél és eső ellen: átlátszó, levehető szilikon profil (alapár része)",
+          "widthPct": 75,
+          "align": "center",
+          "subPhotos": [
+            {
+              "id": "ph_offer_run_2_1",
+              "imageUrl": "/uploads/offers/run/run-21.jpg",
+              "titleAbove": "",
+              "captionBelow": "Kilincstípusok (RUN 2)",
+              "widthPct": 50,
+              "align": "center"
+            },
+            {
+              "id": "ph_offer_run_2_2",
+              "imageUrl": "/uploads/offers/run/run-22.jpg",
+              "titleAbove": "",
+              "captionBelow": "Kilincstípusok (RUN 3)",
+              "widthPct": 50,
+              "align": "center"
+            },
+            {
+              "id": "ph_offer_run_2_3",
+              "imageUrl": "/uploads/offers/run/run-23.jpg",
+              "titleAbove": "",
+              "captionBelow": "Kulcsos zár",
+              "widthPct": 50,
+              "align": "center"
+            }
+          ]
+        },
+        {
+          "id": "ph_offer_run_3",
+          "imageUrl": "/uploads/offers/run/run-03.jpg",
+          "titleAbove": "",
+          "captionBelow": "RUN 3: LED-világítás a felső profilban",
+          "widthPct": 75,
+          "align": "center",
+          "subPhotos": [
+            {
+              "id": "ph_offer_run_3_1",
+              "imageUrl": "/uploads/offers/run/run-31.jpg",
+              "titleAbove": "",
+              "captionBelow": "RUN 3: cserélhető acélszalag az alsó sínen",
+              "widthPct": 50,
+              "align": "center"
+            },
+            {
+              "id": "ph_offer_run_3_2",
+              "imageUrl": "/uploads/offers/run/run-32.jpg",
+              "titleAbove": "",
+              "captionBelow": "RUN 3: dupla csapágyas kocsik",
+              "widthPct": 50,
+              "align": "center"
+            },
+            {
+              "id": "ph_offer_run_3_3",
+              "imageUrl": "/uploads/offers/run/run-33.jpg",
+              "titleAbove": "",
+              "captionBelow": "RUN 3: motoros mozgatás",
+              "widthPct": 50,
+              "align": "center"
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "id": "mat_run_base",
+          "name": "Keret nélküli, prémium elcsúsztatható üvegfalrendszer RUN 2 / RUN 3, RAL színben",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "tiered_m2",
+          "currency": "EUR",
+          "dimensionSource": "front_wall",
+          "basePrice": 1,
+          "unitPrice": 1,
+          "defaultQuantity": 1,
+          "unitLabel": "m²",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": false
+        },
+        {
+          "id": "x_run_led",
+          "name": "LED világítás a felső sínrendszerek belső oldalain (2 db szabályozható, meleg vagy hideg fehér LED-szalag)",
+          "description": "",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 400,
+          "unitPrice": 400,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true
+        }
+      ],
+      "sizeLimits": {
+        "maxHeightCm": 300
+      },
+      "moduleSplits": [],
+      "mountTypes": [],
+      "sizeRules": [],
+      "alsoInCategoryIds": [],
+      "catalogRef": {
+        "note": "Teszt: nincs m² ár a kapott anyagokban (egy ajánlatban: RUN 2 4800×2700 mm 4233 EUR, 3300×2700 mm 3700 EUR; RUN 3 4590 és 4050 EUR kedvezményes ár). Add meg a m² árat (sávosan), majd állítsd aktívra."
+      },
+      "createdAt": "2026-10-30T12:00:00.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a termékekre 3 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
+    },
+    {
+      "id": "tpl_kolibrie",
+      "categoryId": "cat_napvitorla",
+      "name": "KOLIBRIE árnyékoló vitorla",
+      "subtitle": "Egyoszlopos, 360°-ban forgatható napvitorla, kézi vagy motoros vezérléssel",
+      "enabled": true,
+      "status": "test",
+      "order": 1,
+      "introText": "A KOLIBRIE ({{meret}}) a stílusos vitorla-árnyékolás: sokoldalúság, elegancia, praktikum és minőség jellemzi. Egyetlen, rozsdamentes acélból készült oszlopa van, 360°-os elforgatásra képes talpazattal. A kezelés lehet kézi vagy motoros; motoros vezérlésnél távirányítóval vagy az érzékelők jelzése alapján teljesen automatizáltan mozgatható. A légáteresztő szövet jobban ellenáll a szél okozta mozgásnak, UV-állósága 90%.\n\nRögzítési lehetőségek:\n- falhoz rögzítve, 1 db fali konzollal\n- a földhöz rögzítve, talpkonzollal\n- mobil, egyedi, 123×123 cm-es, elektropolírozott rozsdamentes acél bázisalappal (a bázisalap súlyként szolgál, nincs rögzítés a talajhoz)",
+      "closingText": "",
+      "textBlocks": [
+        {
+          "id": "tb_kolibrie_tech",
+          "title": "Műszaki adatok",
+          "content": "- Szélállóság: EN 13561 szerinti 1. osztály, mérsékelt, élénk szélnek ellenáll (15-30 km/h)\n- Motoros vezérlés esetén 3 × 1,5-ös, 230 V-os kábel szükséges a motorhoz\n- Motoros vezérlésnél ajándék szélérzékelő: nagy szélsebességnél automatikusan betekeri a vásznat",
+          "position": "before_photos"
+        },
+        {
+          "id": "tb_kolibrie_after",
+          "title": "",
+          "content": "+ Opcionálisan rendelhető:\n- LED-világítás az árbóc gerendában\n- nap- és szélérzékelő automatika\n- okosotthon vezérlő\n- rozsdamentes acél bázisalap",
+          "position": "after_table"
+        }
+      ],
+      "photos": [
+        {
+          "id": "ph_offer_kolibrie_1",
+          "imageUrl": "/uploads/offers/kolibrie/kolibrie-01.jpg",
+          "titleAbove": "",
+          "captionBelow": "KOLIBRIE árnyékoló vitorla falhoz rögzítve",
+          "widthPct": 75,
+          "align": "center",
+          "subPhotos": [
+            {
+              "id": "ph_offer_kolibrie_1_1",
+              "imageUrl": "/uploads/offers/kolibrie/kolibrie-11.jpg",
+              "titleAbove": "",
+              "captionBelow": "A rozsdamentes acél árbóc és mozgató szerkezet",
+              "widthPct": 50,
+              "align": "center"
+            },
+            {
+              "id": "ph_offer_kolibrie_1_2",
+              "imageUrl": "/uploads/offers/kolibrie/kolibrie-12.jpg",
+              "titleAbove": "",
+              "captionBelow": "360°-ban forgatható talpazat",
+              "widthPct": 50,
+              "align": "center"
+            }
+          ]
+        },
+        {
+          "id": "ph_offer_kolibrie_2",
+          "imageUrl": "/uploads/offers/kolibrie/kolibrie-02.jpg",
+          "titleAbove": "",
+          "captionBelow": "Falhoz rögzített kivitel méretei",
+          "widthPct": 75,
+          "align": "center",
+          "subPhotos": [
+            {
+              "id": "ph_offer_kolibrie_2_1",
+              "imageUrl": "/uploads/offers/kolibrie/kolibrie-21.jpg",
+              "titleAbove": "",
+              "captionBelow": "Földhöz vagy bázisalaphoz rögzített kivitel méretei",
+              "widthPct": 50,
+              "align": "center"
+            }
+          ]
+        }
+      ],
+      "materials": [
+        {
+          "id": "mat_kolibrie_base",
+          "name": "KOLIBRIE árnyékoló vitorla, White Dacron szövettel",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 0,
+          "unitPrice": 0,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": false
+        },
+        {
+          "id": "mat_kolibrie_install",
+          "name": "Szerelés, programozás",
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 0,
+          "unitPrice": 0,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1,
+          "defaultNote": "",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "mat_kolibrie_gift_cover",
+          "name": "Ponyvatakaró",
+          "description": "",
+          "itemRole": "gift",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 160,
+          "unitPrice": 160,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Ajándék",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "x_kolibrie_motor",
+          "name": "Motoros vezérlés - Somfy CSI RTS motor",
+          "description": "",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 300,
+          "unitPrice": 300,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "x_kolibrie_remote",
+          "name": "Távirányító",
+          "description": "",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 100,
+          "unitPrice": 100,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "x_kolibrie_sensor",
+          "name": "Nap- és szélérzékelő automatika",
+          "description": "",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 380,
+          "unitPrice": 380,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true,
+          "group": "Érzékelők és vezérlés"
+        },
+        {
+          "id": "x_kolibrie_led",
+          "name": "LED világítás az árbóc gerendában (szabályozható LED-szalag)",
+          "description": "",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 500,
+          "unitPrice": 500,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "x_kolibrie_base_plate",
+          "name": "Rozsdamentes, elektropolírozott acél bázisalap (123×123 cm)",
+          "description": "",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 800,
+          "unitPrice": 800,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "id": "x_kolibrie_smart",
+          "name": "Okosotthon vezérlő",
+          "description": "Somfy TaHoma vagy BleBox applikációval",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 300,
+          "unitPrice": 300,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 0,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true,
+          "group": "Érzékelők és vezérlés"
+        }
+      ],
+      "sizeLimits": {
+        "minWidthCm": 320,
+        "maxWidthCm": 380,
+        "minProjectionCm": 320,
+        "maxProjectionCm": 380
+      },
+      "moduleSplits": [],
+      "mountTypes": [],
+      "sizeRules": [],
+      "alsoInCategoryIds": [],
+      "catalogRef": {
+        "note": "Teszt: a kapott anyagokban nincs mérettábla. Az alapszerkezet és a szerelés árát kézzel add meg az ajánlatban (vagy töltsd ki itt), majd állítsd aktívra. A kiegészítők ára Balázs ajánlataiból: motor 300, távirányító 100, érzékelő automatika 380, LED 500, bázisalap 800 EUR (380×380 cm-es ajánlat; alapár ott 7880 EUR, szerelés 867-911 EUR)."
+      },
+      "createdAt": "2026-10-30T12:00:00.000Z",
+      "updatedAt": "2026-10-30T12:00:00.000Z",
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a szerkezetre 10 év; a vásznakra 5 év; a motorokra, érzékelőkre 2 év\n• Átfutási idő a visszaigazolástól számítva: 60-90 nap\n• Fizetés: szerződéskötéskor 70%, átvételkor a maradék 30%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
     }
   ],
   "quotes": [
@@ -47099,5 +49671,5 @@
     }
   ],
   "trackingEvents": [],
-  "dataRevision": 1
+  "dataRevision": 2
 }

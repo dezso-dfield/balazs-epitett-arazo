@@ -330,6 +330,8 @@ export interface QuoteTemplate {
   introText: string;          // Sablon bevezető szövegdoboz
   closingText: string;        // Sablon záró / összegzés alatti szövegdoboz
   textBlocks: CustomTextBlock[]; // További külön szövegdobozok
+  // Saját "Információ" blokk (pl. más garancia, átfutási idő); üres = a Beállításokban megadott általános szöveg
+  infoText?: string;
   // Sablonhoz tartozó fotók + alájuk írható szövegdobozok
   photos: PhotoCaptionBlock[];
   // Sablonhoz tartozó termékek, anyagok, opciók és munkadíjak

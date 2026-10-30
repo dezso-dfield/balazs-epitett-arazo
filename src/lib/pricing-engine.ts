@@ -123,6 +123,13 @@ export function createDefaultMaterialAlgorithm(
   };
 }
 
+// Még ár nélküli tétel (új termék, amíg nincs mérettábla): 0-val számol, az ajánlatban kézzel kell megadni
+function hasNoPrice(m: TemplateMaterialItem): boolean {
+  if (m.pricingMode === 'fixed') return !Number(m.basePrice) && !Number(m.unitPrice);
+  if (m.pricingMode === 'tiered_m2') return !(m.m2Tiers || []).length;
+  return false;
+}
+
 function lookupTieredM2Price(
   m2: number,
   tiers: M2PriceTier[]
@@ -510,6 +517,11 @@ export function checkTemplateFit(
       reasons.push(`„${m.name}” mérettáblája nem fedi le ezt a méretet`);
     }
   }
+  for (const m of template.materials || []) {
+    if (m.itemRole !== 'base' || !hasNoPrice(m)) continue;
+    if (mountType && m.mountTypes?.length && !m.mountTypes.includes(mountType)) continue;
+    reasons.push(`„${m.name}” ára még nincs megadva (az ajánlatban kézzel add meg)`);
+  }
 
   if (reasons.length > 0) return { status: 'out_of_range', reasons };
   const hasAnyLimit =
@@ -706,7 +718,11 @@ export function calculateTemplateRows(
     let formulaSummary = '';
     let outOfRange = false;
 
-    switch (item.pricingMode) {
+    if (hasNoPrice(item)) {
+      quantityLabel =
+        item.pricingMode === 'tiered_m2' ? dim.formatted : `${qty} ${item.unitLabel || 'db'}`;
+      formulaSummary = 'Nincs ár megadva - add meg kézzel';
+    } else switch (item.pricingMode) {
       case 'fixed': {
         const unitBase = Math.max(
           1,
@@ -803,12 +819,14 @@ export function calculateTemplateRows(
       }
     }
 
-    const modifiedPrice = applyModifiers(rawPrice, item);
-    const costInEur =
-      item.currency === 'HUF'
+    const noPrice = hasNoPrice(item);
+    const modifiedPrice = noPrice ? 0 : applyModifiers(rawPrice, item);
+    const costInEur = noPrice
+      ? 0
+      : item.currency === 'HUF'
         ? Math.max(1, Math.round(modifiedPrice / rate))
         : Math.max(1, modifiedPrice);
-    const priceInEur = applyPercentProfit(costInEur, formula);
+    const priceInEur = noPrice ? 0 : applyPercentProfit(costInEur, formula);
 
     const listMult =
       item.listPriceMultiplier && item.listPriceMultiplier > 0
@@ -1266,9 +1284,10 @@ export function buildFullQuoteDocumentBlocks(params: {
     );
   });
 
-  // 3. Záró Információs Szövegdoboz Blokk
+  // 3. Záró Információs Szövegdoboz Blokk (az első termék saját feltételei, ha vannak)
   const closingText = replaceTemplateVariables(
-    config.defaultClosingInfoTemplate ||
+    selectedTemplates[0]?.infoText?.trim() ||
+      config.defaultClosingInfoTemplate ||
       'Információk és feltételek:\n• Az árajánlat érvényessége: 30 nap\n• Szállítás ({{telepules}}): {{szallitas}} (+Áfa)',
     varCtx
   );

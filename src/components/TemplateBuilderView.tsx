@@ -162,6 +162,7 @@ export function TemplateBuilderView({
   const [tplIntroText, setTplIntroText] = useState('');
   const [tplClosingText, setTplClosingText] = useState('');
   const [tplTextBlocks, setTplTextBlocks] = useState<CustomTextBlock[]>([]);
+  const [tplInfoText, setTplInfoText] = useState('');
   const [tplPhotos, setTplPhotos] = useState<PhotoCaptionBlock[]>([]);
   const [tplMaterials, setTplMaterials] = useState<TemplateMaterialItem[]>([]);
   const [tplStatus, setTplStatus] = useState<TemplateStatus>('active');
@@ -291,6 +292,7 @@ export function TemplateBuilderView({
       'A fenti összegek tartalmazzák a gyártást és a választott műszaki tartalmat.'
     );
     setTplTextBlocks([]);
+    setTplInfoText('');
     setTplPhotos([]);
     setTplStatus('active');
     setTplOrder(undefined);
@@ -320,6 +322,7 @@ export function TemplateBuilderView({
     setTplSubtitle(tpl.subtitle || '');
     setTplIntroText(tpl.introText || '');
     setTplClosingText(tpl.closingText || '');
+    setTplInfoText(tpl.infoText || '');
     setTplTextBlocks(
       (tpl.textBlocks || []).map((tb) => ({ ...tb }))
     );
@@ -485,18 +488,23 @@ export function TemplateBuilderView({
         introText: tplIntroText,
         closingText: tplClosingText,
         textBlocks: tplTextBlocks,
+        infoText: tplInfoText.trim() ? tplInfoText : undefined,
         photos: tplPhotos,
-        materials: tplMaterials.map((m, i) => ({
+        materials: tplMaterials.map((m, i) => {
+          // Fix tételnél a 0 ár = "még nincs ár", ezt nem írjuk felül alapértékkel
+          const noPrice = m.pricingMode === 'fixed' && !Number(m.basePrice) && !Number(m.unitPrice);
+          return {
           ...m,
           pricingMode:
             !hasNonPctBase && i === 0 && m.pricingMode === 'percentage'
               ? 'per_m2'
               : m.pricingMode,
-          basePrice: Math.max(1, Number(m.basePrice) || 1500),
-          unitPrice: Math.max(1, Number(m.unitPrice) || 350),
+          basePrice: noPrice ? 0 : Math.max(1, Number(m.basePrice) || 1500),
+          unitPrice: noPrice ? 0 : Math.max(1, Number(m.unitPrice) || 350),
           minPrice: Math.max(1, Number(m.minPrice) || 300),
           name: m.name.trim() || `${i + 1}. Termék / Anyag tétel`,
-        })),
+          };
+        }),
         createdAt: now,
         updatedAt: now,
       };
@@ -3483,6 +3491,24 @@ export function TemplateBuilderView({
                       value={tplClosingText}
                       onChange={(e) => setTplClosingText(e.target.value)}
                       placeholder="pl. A tartószerkezetek RAL alapszínei felár nélkül választhatóak..."
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[13px] font-medium text-slate-700 mb-1">
+                      Saját „Információ” blokk (nem kötelező)
+                    </label>
+                    <p className="text-xs text-slate-500 mb-1.5">
+                      Ha kitöltöd, és ez a termék az ajánlat első terméke, az ajánlat végén a
+                      Beállításokban megadott általános feltételek helyett ez jelenik meg
+                      (pl. más garancia, átfutási idő vagy fizetési feltétel). Üresen hagyva az
+                      általános szöveg marad.
+                    </p>
+                    <AutoTextarea
+                      value={tplInfoText}
+                      onChange={(e) => setTplInfoText(e.target.value)}
+                      placeholder="pl. • Garancia: a motorokra, vezérlőkre 3 év; a szövetekre 5 év"
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm"
                     />
                   </div>
