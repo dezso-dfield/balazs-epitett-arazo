@@ -5,6 +5,7 @@ import fontkit from '@pdf-lib/fontkit';
 import { PDFDocument, PDFFont, PDFImage, PDFPage, rgb } from 'pdf-lib';
 import { formatDotNumber, replaceTemplateVariables } from './constants';
 import { getDb, SAVED_PDFS_DIR } from './db';
+import { blobEnabled, readUploadFromBlob } from './blob-store';
 import { computeBlockTotals } from './pricing-engine';
 import {
   ColorOption,
@@ -51,6 +52,23 @@ async function embedImageFromSource(
 ): Promise<PDFImage | null> {
   if (!urlOrData) return null;
   const trimmed = urlOrData.trim();
+
+  // 0. Tartós tárolóba (Vercel Blob) feltöltött kép: /api/media/<fájlnév>
+  const mediaMatch = trimmed.split('?')[0].match(/^\/api\/media\/([^/]+)$/);
+  if (mediaMatch && blobEnabled()) {
+    try {
+      const file = await readUploadFromBlob(decodeURIComponent(mediaMatch[1]));
+      if (!file) return null;
+      const bytes = Buffer.from(file.bytes);
+      try {
+        return file.contentType.includes('png') ? await pdfDoc.embedPng(bytes) : await pdfDoc.embedJpg(bytes);
+      } catch {
+        return await pdfDoc.embedPng(bytes).catch(() => pdfDoc.embedJpg(bytes));
+      }
+    } catch {
+      return null;
+    }
+  }
 
   // 1. Base64 Data URL
   if (trimmed.startsWith('data:image/')) {

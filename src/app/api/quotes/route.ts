@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { nextQuoteNumber } from '@/lib/constants';
-import { getDb, saveDb } from '@/lib/db';
+import { loadDb, persistDb } from '@/lib/db';
 import { generateAndSaveQuotePdf } from '@/lib/pdf-generator';
 import { QuoteRecord } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  const db = getDb();
+  const db = await loadDb();
   return NextResponse.json({
     ok: true,
     quotes: db.quotes,
@@ -17,7 +17,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const db = getDb();
+    const db = await loadDb();
 
     const now = new Date();
     // A Beállításokban megadott előtag és formátum szerint (alapból OSP-ÉÉÉÉ-NNN)
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     newQuote.filename = filename;
 
     db.quotes = [newQuote, ...(db.quotes || [])];
-    saveDb(db);
+    await persistDb(db);
 
     return NextResponse.json({
       ok: true,

@@ -8,6 +8,7 @@ import {
   DEFAULT_SYSTEM_CONFIG,
 } from './constants';
 import { resolvePriceSources } from './pricing-engine';
+import { blobEnabled, readDbFromBlob, writeDbToBlob } from './blob-store';
 import {
   DatabaseSchema,
   EmailSettings,
@@ -138,6 +139,7 @@ function normalizeDatabase(raw: any): DatabaseSchema {
     quotes: Array.isArray(raw.quotes) ? raw.quotes : [],
     mediaLibrary: Array.isArray(raw.mediaLibrary) ? raw.mediaLibrary : [],
     trackingEvents: Array.isArray(raw.trackingEvents) ? raw.trackingEvents : [],
+    dataRevision: Number(raw.dataRevision) || 0,
   };
 }
 
@@ -198,5 +200,59 @@ export function saveDb(data: DatabaseSchema): void {
     fs.writeFileSync(TMP_DB_PATH, serialized, 'utf-8');
   } catch (e) {
     console.error('Failed to persist db.json:', e);
+  }
+}
+
+function readBundledDb(): DatabaseSchema | null {
+  try {
+    return normalizeDatabase(JSON.parse(fs.readFileSync(BUNDLED_DB_PATH, 'utf-8')));
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Az API route-ok elején: Vercelen a tartós tárolóból (Blob) frissen betölti az adatokat, így
+ * minden szerverpéldány ugyanazt látja. Ha a telepítés újabb katalógust hoz (dataRevision),
+ * a menük, kategóriák és termékek frissülnek, az ajánlatok, képek és beállítások maradnak.
+ */
+export async function loadDb(): Promise<DatabaseSchema> {
+  if (!blobEnabled()) return getDb();
+  const bundled = readBundledDb();
+  let stored: DatabaseSchema | null = null;
+  try {
+    const raw = await readDbFromBlob();
+    stored = raw ? normalizeDatabase(raw) : null;
+  } catch (e) {
+    console.error('Blob read failed:', e);
+    if (globalThis.__customPricerDbCache) return globalThis.__customPricerDbCache;
+  }
+  if (!stored) {
+    const seed = bundled || createEmptyDatabase();
+    globalThis.__customPricerDbCache = seed;
+    await persistDb(seed);
+    return seed;
+  }
+  if (bundled && (bundled.dataRevision || 0) > (stored.dataRevision || 0)) {
+    const merged = normalizeDatabase({
+      ...stored,
+      menus: bundled.menus,
+      categories: bundled.categories,
+      templates: bundled.templates,
+      dataRevision: bundled.dataRevision,
+    });
+    globalThis.__customPricerDbCache = merged;
+    await persistDb(merged);
+    return merged;
+  }
+  globalThis.__customPricerDbCache = stored;
+  return stored;
+}
+
+/** Mentés; Vercelen a tartós tárolóba is (meg kell várni, különben a függvény leállhat előtte) */
+export async function persistDb(data: DatabaseSchema): Promise<void> {
+  saveDb(data);
+  if (blobEnabled()) {
+    await writeDbToBlob(JSON.stringify(globalThis.__customPricerDbCache, null, 2));
   }
 }

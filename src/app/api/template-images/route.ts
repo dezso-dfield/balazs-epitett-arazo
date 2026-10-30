@@ -1,14 +1,14 @@
 import fs from 'fs';
-import os from 'os';
 import path from 'path';
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb, saveDb } from '@/lib/db';
+import { loadDb, persistDb } from '@/lib/db';
 import { UploadedMediaItem } from '@/lib/types';
+import { blobEnabled, deleteUploadFromBlob, writeUploadToBlob } from '@/lib/blob-store';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  const db = getDb();
+  const db = await loadDb();
   return NextResponse.json({
     ok: true,
     images: db.mediaLibrary || [],
@@ -66,24 +66,17 @@ export async function POST(req: NextRequest) {
       .slice(0, 40);
 
     const uniqueName = `${Date.now()}_${baseSafe || 'foto'}${ext}`;
-    const publicUploadsDir = path.join(process.cwd(), 'public', 'uploads');
-    const tmpUploadsDir = path.join(os.tmpdir(), 'custom-pricer-uploads');
 
-    try {
+    let url: string;
+    if (blobEnabled()) {
+      // Vercelen a public mappa csak olvasható: a kép a tartós tárolóba kerül
+      url = await writeUploadToBlob(uniqueName, buffer, mimeType);
+    } else {
+      const publicUploadsDir = path.join(process.cwd(), 'public', 'uploads');
       fs.mkdirSync(publicUploadsDir, { recursive: true });
       fs.writeFileSync(path.join(publicUploadsDir, uniqueName), buffer);
-    } catch {
-      // fallback
+      url = `/uploads/${uniqueName}`;
     }
-
-    try {
-      fs.mkdirSync(tmpUploadsDir, { recursive: true });
-      fs.writeFileSync(path.join(tmpUploadsDir, uniqueName), buffer);
-    } catch {
-      // ignore
-    }
-
-    const url = `/uploads/${uniqueName}`;
     const item: UploadedMediaItem = {
       id: `media_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
       filename: uniqueName,
@@ -92,9 +85,9 @@ export async function POST(req: NextRequest) {
       uploadedAt: new Date().toISOString(),
     };
 
-    const db = getDb();
+    const db = await loadDb();
     db.mediaLibrary = [item, ...(db.mediaLibrary || [])];
-    saveDb(db);
+    await persistDb(db);
 
     return NextResponse.json({
       ok: true,
@@ -115,9 +108,11 @@ export async function DELETE(req: NextRequest) {
   if (!id) {
     return NextResponse.json({ ok: false, error: 'Hiányzó ID' }, { status: 400 });
   }
-  const db = getDb();
+  const db = await loadDb();
   const target = (db.mediaLibrary || []).find((m) => m.id === id);
-  if (target) {
+  if (target && blobEnabled()) {
+    await deleteUploadFromBlob(target.filename).catch(() => undefined);
+  } else if (target) {
     const pubPath = path.join(process.cwd(), 'public', 'uploads', target.filename);
     try {
       if (fs.existsSync(pubPath)) fs.unlinkSync(pubPath);
@@ -126,6 +121,6 @@ export async function DELETE(req: NextRequest) {
     }
   }
   db.mediaLibrary = (db.mediaLibrary || []).filter((m) => m.id !== id);
-  saveDb(db);
+  await persistDb(db);
   return NextResponse.json({ ok: true, mediaLibrary: db.mediaLibrary });
 }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb, saveDb } from '@/lib/db';
+import { loadDb, persistDb } from '@/lib/db';
 import {
   ProductCategory,
   ProductMenu,
@@ -10,7 +10,7 @@ import {
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  const db = getDb();
+  const db = await loadDb();
   return NextResponse.json({
     ok: true,
     config: db.config,
@@ -23,7 +23,7 @@ export async function GET() {
 export async function PUT(req: NextRequest) {
   try {
     const body = await req.json();
-    const db = getDb();
+    const db = await loadDb();
 
     if (body.config && typeof body.config === 'object') {
       db.config = {
@@ -79,7 +79,7 @@ export async function PUT(req: NextRequest) {
       db.templates = db.templates.filter((t) => t.id !== delId);
     }
 
-    saveDb(db);
+    await persistDb(db);
 
     return NextResponse.json({
       ok: true,

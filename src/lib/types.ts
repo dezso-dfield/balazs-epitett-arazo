@@ -570,4 +570,7 @@ export interface DatabaseSchema {
   quotes: QuoteRecord[];
   mediaLibrary: UploadedMediaItem[];
   trackingEvents: TrackingEvent[];
+  // A katalógus (menük, kategóriák, termékek) változata: ha egy telepítés nagyobbat hoz, a
+  // tartós tárolóban lévő katalógus frissül belőle (az ajánlatok és beállítások maradnak)
+  dataRevision?: number;
 }

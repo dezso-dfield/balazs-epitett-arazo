@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb, saveDb } from '@/lib/db';
+import { loadDb, persistDb } from '@/lib/db';
 import { generateAndSaveQuotePdf } from '@/lib/pdf-generator';
 import { QuoteRecord } from '@/lib/types';
 
@@ -10,7 +10,7 @@ export async function GET(
   context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
-  const db = getDb();
+  const db = await loadDb();
   const quote = db.quotes.find((q) => q.id === id);
   if (!quote) {
     return NextResponse.json({ ok: false, error: 'Nem található' }, { status: 404 });
@@ -25,7 +25,7 @@ export async function PUT(
   try {
     const { id } = await context.params;
     const body = await req.json();
-    const db = getDb();
+    const db = await loadDb();
     const idx = db.quotes.findIndex((q) => q.id === id);
 
     if (idx === -1) {
@@ -75,7 +75,7 @@ export async function PUT(
     updated.filename = filename;
 
     db.quotes[idx] = updated;
-    saveDb(db);
+    await persistDb(db);
 
     return NextResponse.json({
       ok: true,
@@ -95,8 +95,8 @@ export async function DELETE(
   context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
-  const db = getDb();
+  const db = await loadDb();
   db.quotes = db.quotes.filter((q) => q.id !== id);
-  saveDb(db);
+  await persistDb(db);
   return NextResponse.json({ ok: true });
 }

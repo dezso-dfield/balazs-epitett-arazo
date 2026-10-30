@@ -33,3 +33,4 @@ yarn-error.log*
 # python
 __pycache__/
 *.pyc
+.env*

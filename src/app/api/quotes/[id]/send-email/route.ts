@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { suggestEmailTemplate } from '@/lib/constants';
-import { getDb, saveDb } from '@/lib/db';
+import { loadDb, persistDb } from '@/lib/db';
 import { buildEmailHtml, fillEmailTemplate } from '@/lib/email';
 import { renderEditableQuotePdfBytes, sanitizeFilenamePart } from '@/lib/pdf-generator';
 
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
   try {
     const { id } = await context.params;
     const body = await req.json();
-    const db = getDb();
+    const db = await loadDb();
     const quote = db.quotes.find((q) => q.id === id);
     if (!quote) {
       return NextResponse.json({ ok: false, error: 'Az ajánlat nem található.' }, { status: 404 });
@@ -86,7 +86,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     quote.sentCount = (quote.sentCount || 0) + 1;
     quote.updatedAt = now;
     if (quote.status === 'piszkozat') quote.status = 'kikuldve';
-    saveDb(db);
+    await persistDb(db);
 
     return NextResponse.json({ ok: true, sent: !body.markOnly, quote });
   } catch (err: any) {

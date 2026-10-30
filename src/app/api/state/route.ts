@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { createEmptyDatabase, getDb, saveDb } from '@/lib/db';
+import { createEmptyDatabase, loadDb, persistDb } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  const db = getDb();
+  const db = await loadDb();
   return NextResponse.json({
     ok: true,
     config: db.config,
@@ -19,7 +19,7 @@ export async function GET() {
 
 export async function DELETE() {
   const empty = createEmptyDatabase();
-  saveDb(empty);
+  await persistDb(empty);
   return NextResponse.json({
     ok: true,
     ...empty,

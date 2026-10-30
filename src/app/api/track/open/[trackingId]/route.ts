@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb, saveDb } from '@/lib/db';
+import { loadDb, persistDb } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,7 +14,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ trackin
   const { trackingId } = await context.params;
   const cleanId = trackingId.replace(/\.(gif|png)$/i, '');
   try {
-    const db = getDb();
+    const db = await loadDb();
     const quote = db.quotes.find((q) => q.trackingId === cleanId);
     if (quote && (quote.sentCount || 0) > 0 && quote.sentToEmail) {
       const now = new Date().toISOString();
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ trackin
         userAgent: req.headers.get('user-agent') || '',
       });
       db.trackingEvents = db.trackingEvents.slice(0, 500);
-      saveDb(db);
+      await persistDb(db);
     }
   } catch (e) {
     console.error('Tracking pixel error:', e);

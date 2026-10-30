@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
+import { loadDb } from '@/lib/db';
 import { renderEditableQuotePdfBytes } from '@/lib/pdf-generator';
 
 export const dynamic = 'force-dynamic';
@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const db = getDb();
+    const db = await loadDb();
     const pdfBytes = await renderEditableQuotePdfBytes(body, db.config);
 
     // A szerkesztő bináris PDF-et kér (harmadával kisebb, mint a base64 JSON)

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
+import { loadDb } from '@/lib/db';
 import {
   renderEditableQuotePdfBytes,
   sanitizeFilenamePart,
@@ -16,7 +16,7 @@ export async function GET(
     const { searchParams } = new URL(req.url);
     const download = searchParams.get('download') === '1';
 
-    const db = getDb();
+    const db = await loadDb();
     const quote = db.quotes.find((q) => q.id === id);
 
     if (!quote) {
