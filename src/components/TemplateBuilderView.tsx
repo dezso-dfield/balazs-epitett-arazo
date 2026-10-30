@@ -2207,6 +2207,31 @@ export function TemplateBuilderView({
 
                         )}
                         {itemTab === 'pricing' && (<>
+                        {currentMaterial.priceSource && (() => {
+                          const srcTpl = templates.find((t) => t.id === currentMaterial.priceSource!.templateId);
+                          const srcMat = srcTpl?.materials.find((m) => m.id === currentMaterial.priceSource!.materialId);
+                          return (
+                            <div className="rounded-xl border border-sky-200 bg-sky-50 p-3 text-[13px] text-slate-700 space-y-1.5">
+                              <div className="font-semibold text-slate-950">Az ár egy másik termékből jön</div>
+                              <p>
+                                Forrás: <b>{srcTpl?.name || 'ismeretlen termék'}</b>
+                                {srcMat ? <> → {srcMat.name}</> : null}. Ugyanazzal a táblázattal és szerelési
+                                százalékkal számol, mint az önálló termék, így mindenhol ugyanazt az árat adja.
+                                A táblázatot a forrásterméknél frissítsd.
+                              </p>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (window.confirm('Leválasztod? Ezután ez a tétel saját árazással számol.'))
+                                    updateMaterial(activeMaterialIdx, { priceSource: undefined });
+                                }}
+                                className="text-xs underline text-slate-600 hover:text-slate-950"
+                              >
+                                Leválasztás (saját árazás)
+                              </button>
+                            </div>
+                          );
+                        })()}
                         {/* Pricing Mode Selector */}
                         <div>
                           <label className="block text-[13px] font-medium text-slate-700 mb-1.5">
@@ -3171,94 +3196,142 @@ export function TemplateBuilderView({
                       Új Fotó Feltöltése” gombra!
                     </div>
                   ) : (
-                    <div className="space-y-4">
-                      {tplPhotos.map((ph, idx) => (
-                        <div
-                          key={ph.id}
-                          className="p-4 rounded-2xl border border-slate-200 bg-white flex flex-col md:flex-row gap-4 shadow-sm"
-                        >
-                          <div className="w-full md:w-56 shrink-0">
-                            <img
-                              src={thumbUrl(ph.imageUrl)}
-                              loading="lazy"
-                              decoding="async"
-                              alt=""
-                              className="w-full h-36 object-cover rounded-xl border border-slate-200"
-                            />
-                            <div className="mt-2 flex items-center justify-between text-xs text-slate-600">
-                              <span>Méret a PDF-ben: {ph.widthPct || 75}%</span>
-                              <input
-                                type="range"
-                                min={35}
-                                max={100}
-                                value={ph.widthPct || 75}
-                                onChange={(e) => {
-                                  const next = [...tplPhotos];
-                                  next[idx] = {
-                                    ...next[idx],
-                                    widthPct: Number(e.target.value),
-                                  };
-                                  setTplPhotos(next);
-                                }}
-                                className="w-24"
+                    <div className="space-y-3">
+                      {tplPhotos.map((ph, idx) => {
+                        const patch = (p: Partial<typeof ph>) =>
+                          setTplPhotos((prev) => prev.map((x, i) => (i === idx ? { ...x, ...p } : x)));
+                        const move = (dir: -1 | 1) =>
+                          setTplPhotos((prev) => {
+                            const j = idx + dir;
+                            if (j < 0 || j >= prev.length) return prev;
+                            const next = [...prev];
+                            [next[idx], next[j]] = [next[j], next[idx]];
+                            return next;
+                          });
+                        const subs = ph.subPhotos || [];
+                        return (
+                          <div key={ph.id} className="p-3 sm:p-4 rounded-2xl border border-slate-200 bg-white space-y-3">
+                            <div className="flex flex-col sm:flex-row gap-3">
+                              <img
+                                src={thumbUrl(ph.imageUrl)}
+                                loading="lazy"
+                                decoding="async"
+                                alt=""
+                                className="w-full sm:w-48 h-36 object-cover rounded-xl border border-slate-200 shrink-0"
                               />
+                              <div className="min-w-0 flex-1 space-y-2">
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className="text-sm font-semibold text-slate-950">
+                                    {idx === 0 ? '1. fotó (borítókép)' : `${idx + 1}. fotó`}
+                                  </span>
+                                  <div className="flex items-center gap-1">
+                                    <button type="button" onClick={() => move(-1)} disabled={idx === 0} className={btn.ghost} title="Feljebb">
+                                      ↑
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => move(1)}
+                                      disabled={idx === tplPhotos.length - 1}
+                                      className={btn.ghost}
+                                      title="Lejjebb"
+                                    >
+                                      ↓
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        if (window.confirm('Törlöd ezt a fotót (a részletképeivel együtt)?'))
+                                          setTplPhotos((prev) => prev.filter((_, i) => i !== idx));
+                                      }}
+                                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-sm text-rose-600 hover:bg-rose-50"
+                                    >
+                                      <Trash2 className="w-4 h-4" />
+                                      Törlés
+                                    </button>
+                                  </div>
+                                </div>
+                                <input
+                                  type="text"
+                                  value={ph.titleAbove || ''}
+                                  onChange={(e) => patch({ titleAbove: e.target.value })}
+                                  placeholder="Cím a fotó felett (nem kötelező)"
+                                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm"
+                                />
+                                <AutoTextarea
+                                  value={ph.captionBelow || ''}
+                                  onChange={(e) => patch({ captionBelow: e.target.value })}
+                                  placeholder="Szöveg a fotó alatt (nem kötelező)"
+                                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm"
+                                />
+                                <label className="flex items-center gap-2 text-xs text-slate-600">
+                                  Méret a PDF-ben: {ph.widthPct || 75}%
+                                  <input
+                                    type="range"
+                                    min={35}
+                                    max={100}
+                                    value={ph.widthPct || 75}
+                                    onChange={(e) => patch({ widthPct: Number(e.target.value) })}
+                                    className="w-28"
+                                  />
+                                </label>
+                              </div>
+                            </div>
+                            {/* Részletképek a fotó alatt (pl. LED, műszaki rajz, színek) */}
+                            <div className="border-t border-slate-100 pt-3">
+                              <div className="text-xs font-medium text-slate-500 mb-2">
+                                Részletképek a fotó alatt ({subs.length})
+                              </div>
+                              <div className="flex flex-wrap gap-2">
+                                {subs.map((sp, si) => (
+                                  <div key={sp.id || si} className="relative w-24">
+                                    <img
+                                      src={thumbUrl(sp.imageUrl)}
+                                      loading="lazy"
+                                      alt=""
+                                      className="w-24 h-16 object-cover rounded-lg border border-slate-200"
+                                    />
+                                    <button
+                                      type="button"
+                                      onClick={() => patch({ subPhotos: subs.filter((_, i) => i !== si) })}
+                                      className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-white border border-slate-300 text-rose-600 grid place-items-center shadow-sm hover:bg-rose-50"
+                                      title="Részletkép törlése"
+                                      aria-label="Részletkép törlése"
+                                    >
+                                      <X className="w-3.5 h-3.5" />
+                                    </button>
+                                    {sp.captionBelow && (
+                                      <div className="mt-1 text-[11px] text-slate-500 leading-tight line-clamp-2">{sp.captionBelow}</div>
+                                    )}
+                                  </div>
+                                ))}
+                                <label className="w-24 h-16 rounded-lg border-2 border-dashed border-slate-300 text-slate-500 text-xs grid place-items-center cursor-pointer hover:border-slate-500 text-center px-1">
+                                  + Részletkép
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={async (e) => {
+                                      const file = e.target.files?.[0];
+                                      if (!file) return;
+                                      setUploadingPhoto(true);
+                                      try {
+                                        const url = await onUploadImage(file);
+                                        if (url)
+                                          patch({
+                                            subPhotos: [...subs, { id: `sub_${Date.now()}`, imageUrl: url, captionBelow: '' }],
+                                          });
+                                      } finally {
+                                        setUploadingPhoto(false);
+                                        e.target.value = '';
+                                      }
+                                    }}
+                                  />
+                                </label>
+                              </div>
                             </div>
                           </div>
-
-                          <div className="flex-1 space-y-3">
-                            <div>
-                              <label className="block text-xs font-bold text-slate-700 mb-1">
-                                {idx + 1}. Fotó feletti cím / kiemelés (opcionális szövegdoboz)
-                              </label>
-                              <input
-                                type="text"
-                                value={ph.titleAbove || ''}
-                                onChange={(e) => {
-                                  const next = [...tplPhotos];
-                                  next[idx] = {
-                                    ...next[idx],
-                                    titleAbove: e.target.value,
-                                  };
-                                  setTplPhotos(next);
-                                }}
-                                placeholder="pl. Prémium kivitel és rejtett vízelvezetés"
-                                className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-xs font-bold text-slate-700 mb-1">
-                                {idx + 1}. Fotó alatti szövegdoboz (Képaláírás / Műszaki leírás)
-                              </label>
-                              <textarea
-                                rows={3}
-                                value={ph.captionBelow}
-                                onChange={(e) => {
-                                  const next = [...tplPhotos];
-                                  next[idx] = {
-                                    ...next[idx],
-                                    captionBelow: e.target.value,
-                                  };
-                                  setTplPhotos(next);
-                                }}
-                                placeholder="Írd ide a fotó alatt megjelenő szöveget..."
-                                className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm"
-                              />
-                            </div>
-                          </div>
-
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setTplPhotos((prev) =>
-                                prev.filter((_, i) => i !== idx)
-                              )
-                            }
-                            className="p-2 rounded-xl text-rose-600 hover:bg-rose-50 self-start"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>

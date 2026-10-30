@@ -167,7 +167,7 @@ export function GuidedQuoteWizardView({
       materials: (tpl.materials || []).map((m) => {
         let next = m.perSide ? { ...m, defaultQuantity: getSides(tpl.id, m.id) } : m;
         if (next.itemRole === 'optional' && selected.includes(next.id)) {
-          next = { ...next, itemRole: 'base', defaultNote: '' };
+          next = { ...next, itemRole: 'base', defaultNote: '', chosenExtra: true };
         }
         return next;
       }),
@@ -1115,9 +1115,15 @@ export function GuidedQuoteWizardView({
                       className="px-2 py-1 rounded-lg border border-slate-300 bg-white text-sm"
                       title="Hány oldalra kéri"
                     >
-                      {[1, 2, 3, 4].map((n) => (
+                      {Array.from({ length: Math.max(1, mat.maxSides || 4) }, (_, i) => i + 1).map((n) => (
                         <option key={n} value={n}>
-                          {n === 4 ? 'mind a 4 oldal' : `${n} oldal`}
+                          {mat.maxSides === 2
+                            ? n === 2
+                              ? 'mindkét oldal'
+                              : '1 oldal'
+                            : n === 4
+                            ? 'mind a 4 oldal'
+                            : `${n} oldal`}
                         </option>
                       ))}
                     </select>

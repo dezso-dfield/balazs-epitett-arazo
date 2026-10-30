@@ -677,14 +677,19 @@ export async function renderEditableQuotePdfBytes(
       const eurRate = Number(quote.eurHufRate || config.defaultEurHufRate || 400);
       const blockTotals = computeBlockTotals(block, eurRate);
       const baseRows = activeRows.filter((r) => r.itemRole === 'base' || r.itemRole === 'gift');
+      // Szerkezet (alaptételek, ajándékok) és a kiválasztott extrák külön csoportban
+      const structureRows = baseRows.filter((r) => !r.chosenExtra);
+      const chosenExtraRows = baseRows.filter((r) => r.chosenExtra);
       const optionalRows = activeRows.filter((r) => r.itemRole === 'optional');
       // A vevő elől rejtett árkorrekció az első alaptétel árába olvad bele
-      const hiddenAdjTargetId = baseRows.find((r) => r.itemRole === 'base' && r.discountPriceEur > 0)?.id;
+      const hiddenAdjTargetId = (structureRows.length ? structureRows : baseRows).find(
+        (r) => r.itemRole === 'base' && r.discountPriceEur > 0
+      )?.id;
 
       current.y -= 4;
       drawTableHeader();
 
-      for (const r of baseRows) {
+      const drawBaseRow = (r: (typeof baseRows)[number]) => {
         const hiddenAdj = r.id === hiddenAdjTargetId ? blockTotals.hiddenAdjustmentsEur : 0;
         const price = (Number(r.discountPriceEur) || 0) + hiddenAdj;
         const list =
@@ -702,7 +707,27 @@ export async function renderEditableQuotePdfBytes(
           // Az általános kedvezménycímke már a fejlécben van, nem ismételjük soronként
           note: note && note !== discountLabel && !/aj[aá]nd[eé]k/i.test(note) ? note : undefined,
         });
+      };
+      const rowPrice = (r: (typeof baseRows)[number]) =>
+        (Number(r.discountPriceEur) || 0) + (r.id === hiddenAdjTargetId ? blockTotals.hiddenAdjustmentsEur : 0);
+
+      structureRows.forEach(drawBaseRow);
+
+      // Részösszeg a szerkezetre, ha vannak kiválasztott extrák
+      if (chosenExtraRows.length > 0 && structureRows.length > 0) {
+        const sub = structureRows.reduce((sum, r) => sum + (r.itemRole === 'gift' ? 0 : rowPrice(r)), 0);
+        ensureSpace(40);
+        const top = current.y;
+        current.page.drawText('Szerkezet összesen', { x: MARGIN_X, y: top - 17, size: 10, font: fontBold, color: C.ink });
+        drawRight(current.page, `${formatDotNumber(sub)} EUR`, top - 17, 11, fontBold, C.ink);
+        current.y = top - 28;
+        hLine(current.page, current.y, 0.9, C.ink);
+        current.y -= 14;
+        drawHeading('Kiválasztott extrák', 11);
+        current.y -= 2;
+        drawTableHeader();
       }
+      chosenExtraRows.forEach(drawBaseRow);
 
       for (const adj of (block.adjustments || []).filter((a) => a.visibleToCustomer && Number(a.amountEur) !== 0)) {
         const amount = Number(adj.amountEur) || 0;
@@ -720,11 +745,11 @@ export async function renderEditableQuotePdfBytes(
       hLine(current.page, current.y, 1.4, C.ink);
       const totalTop = current.y;
       current.page.drawText('Összesen', { x: MARGIN_X, y: totalTop - 22, size: 12, font: fontBold, color: C.ink });
-      current.page.drawText(`nettó ár, + Áfa  ·  ${eurRate} Ft/EUR`, {
+      current.page.drawText(`nettó ár  ·  ${eurRate} Ft/EUR`, {
         x: MARGIN_X, y: totalTop - 36, size: 8.5, font: fontRegular, color: C.muted,
       });
-      drawRight(current.page, `${formatDotNumber(blockTotals.totalEur)} EUR`, totalTop - 24, 18, fontBold, C.ink);
-      drawRight(current.page, `${formatDotNumber(blockTotals.totalHuf)} Ft`, totalTop - 38, 9.5, fontRegular, C.muted);
+      drawRight(current.page, `${formatDotNumber(blockTotals.totalEur)} EUR (+ ÁFA)`, totalTop - 24, 18, fontBold, C.ink);
+      drawRight(current.page, `${formatDotNumber(blockTotals.totalHuf)} Ft (+ ÁFA)`, totalTop - 38, 9.5, fontRegular, C.muted);
       current.y = totalTop - 56;
 
       // ---- Választható extrák ----

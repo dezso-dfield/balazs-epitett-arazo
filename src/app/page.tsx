@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import {
   CheckCircle2,
@@ -20,6 +20,7 @@ import { DashboardView } from '@/components/DashboardView';
 import { LoginView } from '@/components/LoginView';
 import { NoticeItem, NotificationsHelp } from '@/components/NotificationsHelp';
 import { DEFAULT_SYSTEM_CONFIG } from '@/lib/constants';
+import { resolvePriceSources } from '@/lib/pricing-engine';
 import {
   ProductCategory,
   ProductMenu,
@@ -69,6 +70,11 @@ export default function CustomPricerAppPage() {
     null
   );
   const [templates, setTemplates] = useState<QuoteTemplate[]>([]);
+  // Árforrások azonnal: ha a forrástermék (pl. Refleksol ZIP) ára változik, az extrák is követik
+  const pricedTemplates = useMemo(
+    () => resolvePriceSources(JSON.parse(JSON.stringify(templates)) as QuoteTemplate[]),
+    [templates]
+  );
   const [quotes, setQuotes] = useState<QuoteRecord[]>([]);
   const [mediaLibrary, setMediaLibrary] = useState<UploadedMediaItem[]>([]);
   const [trackingEvents, setTrackingEvents] = useState<TrackingEvent[]>([]);
@@ -680,7 +686,7 @@ export default function CustomPricerAppPage() {
               <CatalogManagerView
                 menus={menus}
                 categories={categories}
-                templates={templates}
+                templates={pricedTemplates}
                 onSave={handleSaveCatalogStructure}
                 onEditTemplate={(tplId) => {
                   setTemplateToEditId(tplId);
@@ -699,7 +705,7 @@ export default function CustomPricerAppPage() {
                 config={config}
                 menus={menus}
                 categories={categories}
-                templates={templates}
+                templates={pricedTemplates}
                 mediaLibrary={mediaLibrary}
                 onSaveCategory={handleSaveCategory}
                 onDeleteCategory={handleDeleteCategory}
@@ -719,7 +725,7 @@ export default function CustomPricerAppPage() {
                 config={config}
                 menus={menus}
                 categories={categories}
-                templates={templates}
+                templates={pricedTemplates}
                 onOpenTemplateBuilder={() =>
                   setActiveModule('catalog_manager')
                 }
@@ -736,13 +742,14 @@ export default function CustomPricerAppPage() {
                 knownCustomers={knownCustomers}
                 config={config}
                 categories={categories}
-                templates={templates}
+                templates={pricedTemplates}
                 mediaLibrary={mediaLibrary}
                 initialQuote={activeDraftOrSavedQuote}
                 onUploadImage={handleUploadImage}
                 onSaveQuoteAndGeneratePdf={handleSaveQuoteAndGeneratePdf}
                 onBackToWizard={() => setActiveModule('guided_wizard')}
                 onSendQuote={(saved) => setQuoteToSend(saved)}
+                onSaveTemplate={handleSaveTemplate}
               />
             )}
 

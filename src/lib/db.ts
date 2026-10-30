@@ -7,6 +7,7 @@ import {
   DEFAULT_PRICING_FORMULA,
   DEFAULT_SYSTEM_CONFIG,
 } from './constants';
+import { resolvePriceSources } from './pricing-engine';
 import {
   DatabaseSchema,
   EmailSettings,
@@ -130,8 +131,9 @@ function normalizeDatabase(raw: any): DatabaseSchema {
     },
     menus,
     categories,
-    templates: (Array.isArray(raw.templates) ? raw.templates : []).map(
-      normalizeTemplate
+    // Az árforrásra hivatkozó extrák (pl. pergolához kért ZIP) a forrástermék árát kapják
+    templates: resolvePriceSources(
+      (Array.isArray(raw.templates) ? raw.templates : []).map(normalizeTemplate)
     ),
     quotes: Array.isArray(raw.quotes) ? raw.quotes : [],
     mediaLibrary: Array.isArray(raw.mediaLibrary) ? raw.mediaLibrary : [],

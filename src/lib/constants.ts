@@ -583,6 +583,21 @@ export function getOrderDeadline(today: Date = new Date()): string {
   return `${HU_MONTHS[target.getMonth()]} ${target.getDate()}`;
 }
 
+/**
+ * A replaceTemplateVariables fordítottja: a konkrét ügyféladatokat (név, méret, település stb.)
+ * visszacseréli {{...}} jelölőkre, hogy egy ajánlatban átírt szöveg sablonként menthető legyen.
+ */
+export function toTemplateText(text: string, ctx: VariableReplacementContext): string {
+  if (!text) return '';
+  const pairs = TEMPLATE_VARIABLES_HELP.map((v) => [replaceTemplateVariables(v.token, ctx), v.token] as const)
+    // csak szám (pl. árfolyam 400) nem cserélhető vissza: a „SOLARE 400” is 400-at tartalmaz
+    .filter(([value, token]) => value && value !== token && value.trim().length >= 3 && !/^[\d\s.,]+$/.test(value))
+    .sort((a, b) => b[0].length - a[0].length);
+  let out = text;
+  for (const [value, token] of pairs) out = out.split(value).join(token);
+  return out;
+}
+
 export function replaceTemplateVariables(
   text: string | undefined,
   ctx: VariableReplacementContext

@@ -272,7 +272,73 @@ function effectiveDims(
     dims.widthCm = Math.ceil(dims.widthCm / modules.width);
     dims.projectionCm = Math.ceil(dims.projectionCm / modules.projection);
   }
+  const n = ownSplitCount(item, widthCm, projectionCm, heightCm);
+  if (n > 1 && item.ownSplit) {
+    const key = `${item.ownSplit.axis}Cm` as 'widthCm' | 'projectionCm' | 'heightCm';
+    dims[key] = Math.ceil(dims[key] / n);
+  }
   return dims;
+}
+
+/** Hány darabra bomlik a tétel a saját (forrástermék szerinti) modulszabálya alapján */
+function ownSplitCount(item: TemplateMaterialItem, widthCm: number, projectionCm: number, heightCm: number): number {
+  if (!item.ownSplit || !(item.ownSplit.maxCm > 0)) return 1;
+  const off = item.dimOffsets || {};
+  const v =
+    item.ownSplit.axis === 'width'
+      ? widthCm + (Number(off.widthCm) || 0)
+      : item.ownSplit.axis === 'projection'
+      ? projectionCm + (Number(off.projectionCm) || 0)
+      : heightCm + (Number(off.heightCm) || 0);
+  return Math.max(1, Math.ceil(v / item.ownSplit.maxCm));
+}
+
+/**
+ * Árforrás feloldása: a priceSource-szal hivatkozott tétel árazási mezőit átveszi a forrásból,
+ * és hozzáadja a forrástermék szerelési százalékát (a pergolába kért extra sorában benne van a
+ * szerelés, az önálló terméknél külön sor). Így ugyanaz a méret mindenhol ugyanazt az árat adja.
+ */
+export function resolvePriceSources<T extends QuoteTemplate>(templates: T[]): T[] {
+  const byId = new Map(templates.map((t) => [t.id, t]));
+  for (const t of templates) {
+    for (const m of t.materials || []) {
+      if (!m.priceSource) continue;
+      const srcTpl = byId.get(m.priceSource.templateId);
+      const src = srcTpl?.materials?.find((x) => x.id === m.priceSource!.materialId);
+      if (!srcTpl || !src || src.priceSource) continue;
+      const install = (srcTpl.materials || []).find(
+        (x) => x.itemRole === 'base' && x.pricingMode === 'percentage' && /szerel/i.test(x.name)
+      );
+      const pct = install ? Number(install.percentageTiers?.[0]?.percent ?? install.percentageRate) || 0 : 0;
+      const k = 1 + pct / 100;
+      const widthSplit = src.splitByModule
+        ? (srcTpl.moduleSplits || []).find((s) => s.axis === 'width')
+        : undefined;
+      Object.assign(m, {
+        pricingMode: src.pricingMode,
+        currency: src.currency,
+        dimensionSource: src.dimensionSource,
+        matrixTable: src.matrixTable,
+        matrixRowAxis: src.matrixRowAxis,
+        matrixColAxis: src.matrixColAxis,
+        matrixRowSnap: src.matrixRowSnap,
+        matrixColSnap: src.matrixColSnap,
+        m2Tiers: src.m2Tiers,
+        unitPrice: src.unitPrice,
+        basePrice: src.basePrice,
+        minPrice: src.minPrice,
+        listPriceMultiplier: src.listPriceMultiplier,
+        multiplier: Math.round((Number(src.multiplier) || 1) * k * 10000) / 10000,
+        fixedSurcharge: Math.round((Number(src.fixedSurcharge) || 0) * k * 100) / 100,
+        extraDiscountPct: src.extraDiscountPct || 0,
+        dimOffsets: src.dimOffsets,
+        // ha a forrásnak van saját modulszabálya, az érvényes; különben marad a pergola modulja
+        splitByModule: widthSplit?.maxCm ? false : m.splitByModule,
+        ownSplit: widthSplit?.maxCm ? { axis: 'width' as SizeAxis, maxCm: widthSplit.maxCm } : m.ownSplit,
+      });
+    }
+  }
+  return templates;
 }
 
 const axisValue = (
@@ -622,7 +688,10 @@ export function calculateTemplateRows(
 
     const moduleMult =
       (item.splitByModule ? modules.total : 1) * (item.perModule ? modules.total : 1);
-    const qty = Math.max(1, Number(item.defaultQuantity) || 1) * moduleMult;
+    const qty =
+      Math.max(1, Number(item.defaultQuantity) || 1) *
+      moduleMult *
+      ownSplitCount(item, widthCm, projectionCm, heightCm);
     const ed = effectiveDims(item, modules, widthCm, projectionCm, heightCm);
     const dim = computeDimensionValue(
       item.dimensionSource || 'roof',
@@ -706,12 +775,18 @@ export function calculateTemplateRows(
         const effectiveMatrixPrice =
           matrixLookup.price > 0 ? matrixLookup.price : fallbackM2Price;
         rawPrice = effectiveMatrixPrice * qty;
-        quantityLabel =
-          item.splitByModule && modules.total > 1
-            ? `${modules.total} modul × ${ed.widthCm}×${ed.projectionCm} cm`
-            : `${ed.widthCm}×${ed.projectionCm} cm${
-                modules.total > 1 ? ` (${modules.total} modul)` : ''
-              }${qty > 1 ? ` (${qty} db)` : ''}`;
+        {
+          // A Méret oszlopban azok a méretek, amelyekkel a táblázatból az ár jön (pl. ZIP: szélesség × magasság)
+          const used = (['width', 'projection', 'height'] as SizeAxis[]).filter(
+            (a) => a === (item.matrixRowAxis || 'projection') || a === (item.matrixColAxis || 'width')
+          );
+          const size = used.map((a) => axisValue(a, a, ed)).join('×') + ' cm';
+          const sides = Math.max(1, Number(item.defaultQuantity) || 1);
+          const parts = qty / sides;
+          quantityLabel =
+            (parts > 1 ? `${parts} × ${size}` : size) +
+            (item.perSide && sides > 1 ? ` (${sides} oldal)` : qty > 1 && parts === 1 ? ` (${qty} db)` : '');
+        }
         formulaSummary = `Mérettábla algoritmus (${matrixLookup.matchedCol}×${matrixLookup.matchedRow} cm): ${effectiveMatrixPrice} ${curr} × ${qty} db${
           matrixLookup.outOfRange
             ? ' ⚠ A kért méret nagyobb, mint a táblázat - kézi ellenőrzés szükséges!'
@@ -754,6 +829,7 @@ export function calculateTemplateRows(
     rowsById[item.id] = {
       id: `row_${item.id}_${Math.random().toString(36).slice(2, 6)}`,
       materialId: item.id,
+      chosenExtra: item.chosenExtra || undefined,
       name: item.name,
       description: item.description || '',
       quantityLabel,
@@ -831,6 +907,7 @@ export function calculateTemplateRows(
     rowsById[item.id] = {
       id: `row_${item.id}_${Math.random().toString(36).slice(2, 6)}`,
       materialId: item.id,
+      chosenExtra: item.chosenExtra || undefined,
       name: item.name,
       description: item.description || '',
       quantityLabel: `${pct}%`,

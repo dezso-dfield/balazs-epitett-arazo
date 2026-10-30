@@ -1988,7 +1988,7 @@
         {
           "id": "mat_sb400_zip_a",
           "name": "Oldalsó ZIP árnyékoló a szélesség oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: szélesség − 30 cm × magasság. Az ár tartalmazza a 8% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -2425,15 +2425,16 @@
           },
           "matrixRowAxis": "height",
           "matrixColAxis": "width",
-          "dimOffsets": {
-            "widthCm": -30
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_a"
+          }
         },
         {
           "id": "mat_sb400_zip_b_wall",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 8.5 cm × magasság. Az ár tartalmazza a 8% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -2442,7 +2443,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -2873,15 +2874,22 @@
           ],
           "matrixRowAxis": "height",
           "matrixColAxis": "projection",
-          "dimOffsets": {
-            "projectionCm": -8.5
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 700
+          }
         },
         {
           "id": "mat_sb400_zip_b_free",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 17 cm × magasság. Az ár tartalmazza a 8% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -2890,7 +2898,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -3321,15 +3329,22 @@
           ],
           "matrixRowAxis": "height",
           "matrixColAxis": "projection",
-          "dimOffsets": {
-            "projectionCm": -17
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 700
+          }
         },
         {
           "id": "mat_sb400_glass_a",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a szélesség oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó szélesség − 30 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -3378,15 +3393,16 @@
               "align": "center"
             }
           ],
-          "dimOffsets": {
-            "widthCm": -30
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_a"
+          }
         },
         {
           "id": "mat_sb400_glass_b_wall",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 8.5 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -3395,7 +3411,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -3438,15 +3454,18 @@
           "mountTypes": [
             "Épülethez rögzített"
           ],
-          "dimOffsets": {
-            "projectionCm": -8.5
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         },
         {
           "id": "mat_sb400_glass_b_free",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 17 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -3455,7 +3474,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -3498,10 +3517,13 @@
           "mountTypes": [
             "Szabadon álló"
           ],
-          "dimOffsets": {
-            "projectionCm": -17
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         },
         {
           "description": "",
@@ -3991,7 +4013,7 @@
         {
           "id": "mat_seesky_zip_a",
           "name": "Oldalsó ZIP árnyékoló a szélesség oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: szélesség − 32 cm × magasság. Az ár tartalmazza a 8% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -4428,15 +4450,16 @@
           },
           "matrixRowAxis": "height",
           "matrixColAxis": "width",
-          "dimOffsets": {
-            "widthCm": -32
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_a"
+          }
         },
         {
           "id": "mat_seesky_zip_b_wall",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 16 cm × magasság. Az ár tartalmazza a 8% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -4445,7 +4468,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -4876,15 +4899,22 @@
           ],
           "matrixRowAxis": "height",
           "matrixColAxis": "projection",
-          "dimOffsets": {
-            "projectionCm": -16
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 700
+          }
         },
         {
           "id": "mat_seesky_zip_b_free",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 32 cm × magasság. Az ár tartalmazza a 8% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -4893,7 +4923,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -5324,15 +5354,22 @@
           ],
           "matrixRowAxis": "height",
           "matrixColAxis": "projection",
-          "dimOffsets": {
-            "projectionCm": -32
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 700
+          }
         },
         {
           "id": "mat_seesky_glass_a",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a szélesség oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó szélesség − 32 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -5381,15 +5418,16 @@
               "align": "center"
             }
           ],
-          "dimOffsets": {
-            "widthCm": -32
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_a"
+          }
         },
         {
           "id": "mat_seesky_glass_b_wall",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 16 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -5398,7 +5436,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -5441,15 +5479,18 @@
           "mountTypes": [
             "Épülethez rögzített"
           ],
-          "dimOffsets": {
-            "projectionCm": -16
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         },
         {
           "id": "mat_seesky_glass_b_free",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 32 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -5458,7 +5499,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -5501,10 +5542,13 @@
           "mountTypes": [
             "Szabadon álló"
           ],
-          "dimOffsets": {
-            "projectionCm": -32
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         },
         {
           "description": "",
@@ -9159,7 +9203,7 @@
         {
           "id": "mat_kedry_zip_a",
           "name": "Gerendába integrált oldalsó ZIP árnyékoló a szélesség oldalára - Vertica PRIME ZIP, Soltis 92 ponyva, Somfy IO motor (szereléssel)",
-          "description": "Nettó méret: szélesség − 32 cm × magasság. Az ár tartalmazza a 8% szerelést, programozást.",
+          "description": "Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -9328,15 +9372,20 @@
           },
           "matrixRowAxis": "width",
           "matrixColAxis": "height",
-          "dimOffsets": {
-            "widthCm": -32
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_vertica_zip",
+            "materialId": "mat_vertica_a"
           },
-          "excludeFromPercentBase": true
+          "ownSplit": {
+            "axis": "width",
+            "maxCm": 600
+          }
         },
         {
           "id": "mat_kedry_zip_b_wall",
           "name": "Gerendába integrált oldalsó ZIP árnyékoló a kinyúlás oldalára - Vertica PRIME ZIP, Soltis 92 ponyva, Somfy IO motor (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 16 cm × magasság. Az ár tartalmazza a 8% szerelést, programozást.",
+          "description": "Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -9345,7 +9394,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -9508,15 +9557,22 @@
           ],
           "matrixRowAxis": "projection",
           "matrixColAxis": "height",
-          "dimOffsets": {
-            "projectionCm": -16
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_vertica_zip",
+            "materialId": "mat_vertica_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 600
+          }
         },
         {
           "id": "mat_kedry_zip_b_free",
           "name": "Gerendába integrált oldalsó ZIP árnyékoló a kinyúlás oldalára - Vertica PRIME ZIP, Soltis 92 ponyva, Somfy IO motor (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 32 cm × magasság. Az ár tartalmazza a 8% szerelést, programozást.",
+          "description": "Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -9525,7 +9581,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -9688,15 +9744,22 @@
           ],
           "matrixRowAxis": "projection",
           "matrixColAxis": "height",
-          "dimOffsets": {
-            "projectionCm": -32
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_vertica_zip",
+            "materialId": "mat_vertica_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 600
+          }
         },
         {
           "id": "mat_kedry_glass_a",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a szélesség oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó szélesség − 32 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -9745,15 +9808,16 @@
               "align": "center"
             }
           ],
-          "dimOffsets": {
-            "widthCm": -32
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_a"
+          }
         },
         {
           "id": "mat_kedry_glass_b_wall",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 16 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -9762,7 +9826,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -9805,15 +9869,18 @@
           "mountTypes": [
             "Épülethez rögzített"
           ],
-          "dimOffsets": {
-            "projectionCm": -16
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         },
         {
           "id": "mat_kedry_glass_b_free",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 32 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -9822,7 +9889,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -9865,10 +9932,13 @@
           "mountTypes": [
             "Szabadon álló"
           ],
-          "dimOffsets": {
-            "projectionCm": -32
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         },
         {
           "description": "",
@@ -10574,7 +10644,7 @@
         {
           "id": "mat_pvziip_zip_a",
           "name": "Oldalsó ZIP árnyékoló a szélesség oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: szélesség − 22 cm × magasság − 10 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -11011,16 +11081,16 @@
           },
           "matrixRowAxis": "height",
           "matrixColAxis": "width",
-          "dimOffsets": {
-            "widthCm": -22,
-            "heightCm": -10
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_a"
+          }
         },
         {
           "id": "mat_pvziip_zip_b_wall",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 11 cm × magasság − 10 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -11029,7 +11099,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -11460,11 +11530,17 @@
           ],
           "matrixRowAxis": "height",
           "matrixColAxis": "projection",
-          "dimOffsets": {
-            "projectionCm": -11,
-            "heightCm": -10
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 700
+          }
         },
         {
           "description": "",
@@ -12663,7 +12739,7 @@
         {
           "id": "mat_hydra_zip_a",
           "name": "Oldalsó ZIP árnyékoló a szélesség oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: szélesség − 22 cm × magasság − 10 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -13100,16 +13176,16 @@
           },
           "matrixRowAxis": "height",
           "matrixColAxis": "width",
-          "dimOffsets": {
-            "widthCm": -22,
-            "heightCm": -10
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_a"
+          }
         },
         {
           "id": "mat_hydra_zip_b_wall",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 11 cm × magasság − 10 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -13118,7 +13194,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -13549,11 +13625,17 @@
           ],
           "matrixRowAxis": "height",
           "matrixColAxis": "projection",
-          "dimOffsets": {
-            "projectionCm": -11,
-            "heightCm": -10
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 700
+          }
         },
         {
           "description": "",
@@ -13703,7 +13785,7 @@
         {
           "id": "x_hydra_glass_a",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a szélesség oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó szélesség − 30 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -13752,18 +13834,19 @@
               "align": "center"
             }
           ],
-          "dimOffsets": {
-            "widthCm": -30
-          },
           "excludeFromPercentBase": true,
           "mountTypes": [
             "Lábak nélkül"
-          ]
+          ],
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_a"
+          }
         },
         {
           "id": "x_hydra_glass_b",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 8.5 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -13772,7 +13855,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -13815,10 +13898,13 @@
           "mountTypes": [
             "Lábak nélkül"
           ],
-          "dimOffsets": {
-            "projectionCm": -8.5
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         }
       ],
       "createdAt": "2026-10-19T08:18:53.225Z",
@@ -14767,7 +14853,7 @@
         {
           "id": "mat_a100_zip_a",
           "name": "Oldalsó ZIP árnyékoló a szélesség oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: szélesség × magasság − 30 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -15204,15 +15290,16 @@
           },
           "matrixRowAxis": "height",
           "matrixColAxis": "width",
-          "dimOffsets": {
-            "heightCm": -30
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_a"
+          }
         },
         {
           "id": "mat_a100_zip_b",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 11 cm × magasság − 30 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -15221,7 +15308,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -15649,16 +15736,22 @@
           },
           "matrixRowAxis": "height",
           "matrixColAxis": "projection",
-          "dimOffsets": {
-            "projectionCm": -11,
-            "heightCm": -30
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 700
+          }
         },
         {
           "id": "mat_a100_glass_a",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a szélesség oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó szélesség − 18 cm × magasság − 30 cm, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -15707,16 +15800,16 @@
               "align": "center"
             }
           ],
-          "dimOffsets": {
-            "widthCm": -18,
-            "heightCm": -30
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_a"
+          }
         },
         {
           "id": "mat_a100_glass_b",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 11 cm × magasság − 30 cm, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -15725,7 +15818,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -15765,11 +15858,13 @@
               "align": "center"
             }
           ],
-          "dimOffsets": {
-            "projectionCm": -11,
-            "heightCm": -30
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         },
         {
           "description": "",
@@ -16659,7 +16754,7 @@
         {
           "id": "mat_keplan_zip_a",
           "name": "Oldalsó ZIP árnyékoló a szélesség oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: szélesség − 22 cm × magasság − 10 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -17096,16 +17191,16 @@
           },
           "matrixRowAxis": "height",
           "matrixColAxis": "width",
-          "dimOffsets": {
-            "widthCm": -22,
-            "heightCm": -10
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_a"
+          }
         },
         {
           "id": "mat_keplan_zip_b_wall",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 11 cm × magasság − 10 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -17114,7 +17209,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -17545,16 +17640,22 @@
           ],
           "matrixRowAxis": "height",
           "matrixColAxis": "projection",
-          "dimOffsets": {
-            "projectionCm": -11,
-            "heightCm": -10
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 700
+          }
         },
         {
           "id": "mat_keplan_zip_b_free",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 22 cm × magasság − 10 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -17563,7 +17664,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -17994,16 +18095,22 @@
           ],
           "matrixRowAxis": "height",
           "matrixColAxis": "projection",
-          "dimOffsets": {
-            "projectionCm": -22,
-            "heightCm": -10
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 700
+          }
         },
         {
           "id": "mat_keplan_glass_a",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a szélesség oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó szélesség − 22 cm × magasság − 10 cm, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -18052,16 +18159,16 @@
               "align": "center"
             }
           ],
-          "dimOffsets": {
-            "widthCm": -22,
-            "heightCm": -10
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_a"
+          }
         },
         {
           "id": "mat_keplan_glass_b_wall",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 11 cm × magasság − 10 cm, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -18070,7 +18177,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -18113,16 +18220,18 @@
           "mountTypes": [
             "Épülethez rögzített"
           ],
-          "dimOffsets": {
-            "projectionCm": -11,
-            "heightCm": -10
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         },
         {
           "id": "mat_keplan_glass_b_free",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 22 cm × magasság − 10 cm, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -18131,7 +18240,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -18174,11 +18283,13 @@
           "mountTypes": [
             "Szabadon álló"
           ],
-          "dimOffsets": {
-            "projectionCm": -22,
-            "heightCm": -10
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         },
         {
           "description": "",
@@ -19474,7 +19585,7 @@
         {
           "id": "mat_isola_zip_a",
           "name": "Oldalsó ZIP árnyékoló a szélesség oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: szélesség − 24 cm × magasság. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -19911,15 +20022,16 @@
           },
           "matrixRowAxis": "height",
           "matrixColAxis": "width",
-          "dimOffsets": {
-            "widthCm": -24
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_a"
+          }
         },
         {
           "id": "mat_isola_zip_b_wall",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 12 cm × magasság. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -19928,7 +20040,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -20359,15 +20471,22 @@
           ],
           "matrixRowAxis": "height",
           "matrixColAxis": "projection",
-          "dimOffsets": {
-            "projectionCm": -12
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 700
+          }
         },
         {
           "id": "mat_isola_zip_b_free",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 24 cm × magasság. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -20376,7 +20495,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -20807,15 +20926,22 @@
           ],
           "matrixRowAxis": "height",
           "matrixColAxis": "projection",
-          "dimOffsets": {
-            "projectionCm": -24
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 700
+          }
         },
         {
           "id": "mat_isola_glass_a",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a szélesség oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó szélesség − 24 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -20864,15 +20990,16 @@
               "align": "center"
             }
           ],
-          "dimOffsets": {
-            "widthCm": -24
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_a"
+          }
         },
         {
           "id": "mat_isola_glass_b_wall",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 12 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -20881,7 +21008,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -20924,15 +21051,18 @@
           "mountTypes": [
             "Épülethez rögzített"
           ],
-          "dimOffsets": {
-            "projectionCm": -12
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         },
         {
           "id": "mat_isola_glass_b_free",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 24 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -20941,7 +21071,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -20984,10 +21114,13 @@
           "mountTypes": [
             "Szabadon álló"
           ],
-          "dimOffsets": {
-            "projectionCm": -24
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         },
         {
           "description": "",
@@ -22091,7 +22224,7 @@
         {
           "id": "x_veranda_tens_zip_a",
           "name": "Oldalsó ZIP árnyékoló a szélesség oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: szélesség − 22 cm × magasság − 10 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -22528,16 +22661,16 @@
           },
           "matrixRowAxis": "height",
           "matrixColAxis": "width",
-          "dimOffsets": {
-            "widthCm": -22,
-            "heightCm": -10
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_a"
+          }
         },
         {
           "id": "x_veranda_tens_zip_b",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 11 cm × magasság − 10 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -22546,7 +22679,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -22974,16 +23107,22 @@
           },
           "matrixRowAxis": "height",
           "matrixColAxis": "projection",
-          "dimOffsets": {
-            "projectionCm": -11,
-            "heightCm": -10
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 700
+          }
         },
         {
           "id": "x_vtens_glass_a",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a szélesség oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó szélesség − 30 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -23032,15 +23171,16 @@
               "align": "center"
             }
           ],
-          "dimOffsets": {
-            "widthCm": -30
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_a"
+          }
         },
         {
           "id": "x_vtens_glass_b",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 8.5 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -23049,7 +23189,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -23089,10 +23229,13 @@
               "align": "center"
             }
           ],
-          "dimOffsets": {
-            "projectionCm": -8.5
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         }
       ],
       "createdAt": "2026-10-19T08:18:53.225Z",
@@ -23766,7 +23909,7 @@
         {
           "id": "x_veranda_vzip_zip_a",
           "name": "Oldalsó ZIP árnyékoló a szélesség oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: szélesség − 22 cm × magasság − 10 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -24203,16 +24346,16 @@
           },
           "matrixRowAxis": "height",
           "matrixColAxis": "width",
-          "dimOffsets": {
-            "widthCm": -22,
-            "heightCm": -10
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_a"
+          }
         },
         {
           "id": "x_veranda_vzip_zip_b",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 11 cm × magasság − 10 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -24221,7 +24364,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -24649,16 +24792,22 @@
           },
           "matrixRowAxis": "height",
           "matrixColAxis": "projection",
-          "dimOffsets": {
-            "projectionCm": -11,
-            "heightCm": -10
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 700
+          }
         },
         {
           "id": "x_vvzip_glass_a",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a szélesség oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó szélesség − 30 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -24707,15 +24856,16 @@
               "align": "center"
             }
           ],
-          "dimOffsets": {
-            "widthCm": -30
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_a"
+          }
         },
         {
           "id": "x_vvzip_glass_b",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 8.5 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -24724,7 +24874,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -24764,10 +24914,13 @@
               "align": "center"
             }
           ],
-          "dimOffsets": {
-            "projectionCm": -8.5
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         }
       ],
       "createdAt": "2026-10-19T08:18:53.225Z",
@@ -25124,7 +25277,7 @@
         {
           "id": "mat_polifix_zip_a",
           "name": "Oldalsó ZIP árnyékoló a szélesség oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: szélesség − 22 cm × magasság − 30 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -25561,16 +25714,16 @@
           },
           "matrixRowAxis": "height",
           "matrixColAxis": "width",
-          "dimOffsets": {
-            "widthCm": -22,
-            "heightCm": -30
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_a"
+          }
         },
         {
           "id": "mat_polifix_glass_a",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a szélesség oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó szélesség − 22 cm × magasság − 30 cm, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -25643,16 +25796,16 @@
               "align": "center"
             }
           ],
-          "dimOffsets": {
-            "widthCm": -22,
-            "heightCm": -30
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_a"
+          }
         },
         {
           "id": "mat_polifix_zip_b",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 14 cm × magasság − 30 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -25661,7 +25814,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -26089,16 +26242,22 @@
           },
           "matrixRowAxis": "height",
           "matrixColAxis": "projection",
-          "dimOffsets": {
-            "projectionCm": -14,
-            "heightCm": -30
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 700
+          }
         },
         {
           "id": "mat_polifix_glass_b",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 14 cm × magasság − 30 cm, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -26107,7 +26266,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -26171,11 +26330,13 @@
               "align": "center"
             }
           ],
-          "dimOffsets": {
-            "projectionCm": -14,
-            "heightCm": -30
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         },
         {
           "id": "mat_polifix_veranda",
@@ -27620,7 +27781,7 @@
         {
           "id": "mat_glassfix_zip_a_2lab",
           "name": "Oldalsó ZIP árnyékoló a szélesség oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: szélesség − 22 cm × magasság − 30 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -28057,18 +28218,16 @@
           },
           "matrixRowAxis": "height",
           "matrixColAxis": "width",
-          "dimOffsets": {
-            "widthCm": -22,
-            "heightCm": -30
-          },
-          "minModules": 1,
-          "maxModules": 1,
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_a"
+          }
         },
         {
           "id": "mat_glassfix_glass_a_2lab",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a szélesség oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó szélesség − 22 cm × magasság − 30 cm, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -28141,1082 +28300,16 @@
               "align": "center"
             }
           ],
-          "dimOffsets": {
-            "widthCm": -22,
-            "heightCm": -30
-          },
-          "minModules": 1,
-          "maxModules": 1,
-          "excludeFromPercentBase": true
-        },
-        {
-          "id": "mat_glassfix_zip_a_3lab",
-          "name": "Oldalsó ZIP árnyékoló a szélesség oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: szélesség − 33 cm × magasság − 30 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
-          "itemRole": "optional",
-          "defaultSelected": false,
-          "pricingMode": "matrix_cm",
-          "currency": "EUR",
-          "dimensionSource": "roof",
-          "basePrice": 1,
-          "unitPrice": 1,
-          "defaultQuantity": 1,
-          "unitLabel": "db",
-          "m2Tiers": [],
-          "percentageRate": 0,
-          "minPrice": 1,
-          "multiplier": 1.1,
-          "extraDiscountPct": 0,
-          "fixedSurcharge": 407,
-          "listPriceMultiplier": 1.25,
-          "defaultNote": "Opció",
-          "photos": [
-            {
-              "id": "iphoto_legacy_glassfix_zip_a_3lab_1",
-              "imageUrl": "/uploads/legacy/uvegtetos/image_14.png",
-              "titleAbove": "",
-              "captionBelow": "Oldalsó ZIP árnyékoló",
-              "widthPct": 75,
-              "align": "center"
-            },
-            {
-              "id": "iphoto_legacy_glassfix_zip_a_3lab_2",
-              "imageUrl": "/uploads/legacy/ZIPes/image_03.png",
-              "titleAbove": "",
-              "captionBelow": "",
-              "widthPct": 75,
-              "align": "center"
-            }
-          ],
-          "matrixTable": {
-            "rowLabel": "Magasság (cm)",
-            "colLabel": "Szélesség (cm)",
-            "rows": [
-              100,
-              125,
-              150,
-              175,
-              200,
-              225,
-              250,
-              275,
-              300,
-              325,
-              350,
-              375,
-              400
-            ],
-            "cols": [
-              100,
-              125,
-              150,
-              175,
-              200,
-              225,
-              250,
-              275,
-              300,
-              325,
-              350,
-              375,
-              400,
-              425,
-              450,
-              475,
-              500,
-              525,
-              550,
-              575,
-              600,
-              625,
-              650,
-              675,
-              700
-            ],
-            "values": {
-              "100": {
-                "100": 587,
-                "125": 617,
-                "150": 652,
-                "175": 687,
-                "200": 717,
-                "225": 752,
-                "250": 782,
-                "275": 817,
-                "300": 852,
-                "325": 882,
-                "350": 917,
-                "375": 952,
-                "400": 982,
-                "425": 1167,
-                "450": 1207,
-                "475": 1242,
-                "500": 1282,
-                "525": 1737,
-                "550": 1797,
-                "575": 1852,
-                "600": 1912,
-                "625": 1972,
-                "650": 2027,
-                "675": 2087,
-                "700": 2142
-              },
-              "125": {
-                "100": 617,
-                "125": 652,
-                "150": 687,
-                "175": 722,
-                "200": 757,
-                "225": 792,
-                "250": 832,
-                "275": 867,
-                "300": 902,
-                "325": 937,
-                "350": 972,
-                "375": 1007,
-                "400": 1042,
-                "425": 1242,
-                "450": 1282,
-                "475": 1322,
-                "500": 1367,
-                "525": 1812,
-                "550": 1872,
-                "575": 1932,
-                "600": 1992,
-                "625": 2052,
-                "650": 2112,
-                "675": 2172,
-                "700": 2232
-              },
-              "150": {
-                "100": 647,
-                "125": 687,
-                "150": 727,
-                "175": 762,
-                "200": 802,
-                "225": 837,
-                "250": 877,
-                "275": 912,
-                "300": 952,
-                "325": 987,
-                "350": 1027,
-                "375": 1067,
-                "400": 1102,
-                "425": 1317,
-                "450": 1362,
-                "475": 1407,
-                "500": 1452,
-                "525": 1882,
-                "550": 1942,
-                "575": 2007,
-                "600": 2067,
-                "625": 2132,
-                "650": 2192,
-                "675": 2257,
-                "700": 2317
-              },
-              "175": {
-                "100": 687,
-                "125": 727,
-                "150": 767,
-                "175": 807,
-                "200": 847,
-                "225": 887,
-                "250": 927,
-                "275": 967,
-                "300": 1007,
-                "325": 1047,
-                "350": 1087,
-                "375": 1127,
-                "400": 1167,
-                "425": 1392,
-                "450": 1442,
-                "475": 1492,
-                "500": 1542,
-                "525": 1957,
-                "550": 2022,
-                "575": 2087,
-                "600": 2152,
-                "625": 2217,
-                "650": 2282,
-                "675": 2347,
-                "700": 2412
-              },
-              "200": {
-                "100": 717,
-                "125": 757,
-                "150": 802,
-                "175": 842,
-                "200": 887,
-                "225": 927,
-                "250": 972,
-                "275": 1012,
-                "300": 1057,
-                "325": 1102,
-                "350": 1142,
-                "375": 1187,
-                "400": 1227,
-                "425": 1467,
-                "450": 1522,
-                "475": 1572,
-                "500": 1622,
-                "525": 2032,
-                "550": 2097,
-                "575": 2167,
-                "600": 2232,
-                "625": 2297,
-                "650": 2367,
-                "675": 2432,
-                "700": 2502
-              },
-              "225": {
-                "100": 747,
-                "125": 792,
-                "150": 837,
-                "175": 882,
-                "200": 927,
-                "225": 972,
-                "250": 1017,
-                "275": 1062,
-                "300": 1107,
-                "325": 1152,
-                "350": 1197,
-                "375": 1242,
-                "400": 1287,
-                "425": 1542,
-                "450": 1597,
-                "475": 1652,
-                "500": 1707,
-                "525": 2102,
-                "550": 2172,
-                "575": 2242,
-                "600": 2312,
-                "625": 2382,
-                "650": 2452,
-                "675": 2517,
-                "700": 2587
-              },
-              "250": {
-                "100": 782,
-                "125": 827,
-                "150": 877,
-                "175": 922,
-                "200": 972,
-                "225": 1017,
-                "250": 1062,
-                "275": 1112,
-                "300": 1157,
-                "325": 1207,
-                "350": 1252,
-                "375": 1302,
-                "400": 1347,
-                "425": 1622,
-                "450": 1677,
-                "475": 1732,
-                "500": 1792,
-                "525": 2172,
-                "550": 2247,
-                "575": 2317,
-                "600": 2387,
-                "625": 2462,
-                "650": 2532,
-                "675": 2607,
-                "700": 2677
-              },
-              "275": {
-                "100": 817,
-                "125": 867,
-                "150": 917,
-                "175": 967,
-                "200": 1012,
-                "225": 1062,
-                "250": 1112,
-                "275": 1162,
-                "300": 1212,
-                "325": 1262,
-                "350": 1312,
-                "375": 1362,
-                "400": 1412,
-                "425": 1697,
-                "450": 1757,
-                "475": 1817,
-                "500": 1877,
-                "525": 2247,
-                "550": 2322,
-                "575": 2397,
-                "600": 2472,
-                "625": 2547,
-                "650": 2622,
-                "675": 2692,
-                "700": 2767
-              },
-              "300": {
-                "100": 847,
-                "125": 902,
-                "150": 952,
-                "175": 1002,
-                "200": 1057,
-                "225": 1107,
-                "250": 1162,
-                "275": 1212,
-                "300": 1262,
-                "325": 1317,
-                "350": 1367,
-                "375": 1417,
-                "400": 1472,
-                "425": 1772,
-                "450": 1837,
-                "475": 1897,
-                "500": 1962,
-                "525": 2322,
-                "550": 2397,
-                "575": 2472,
-                "600": 2552,
-                "625": 2627,
-                "650": 2702,
-                "675": 2777,
-                "700": 2857
-              },
-              "325": {
-                "100": 882,
-                "125": 932,
-                "150": 987,
-                "175": 1042,
-                "200": 1097,
-                "225": 1152,
-                "250": 1207,
-                "275": 1262,
-                "300": 1312,
-                "325": 1367,
-                "350": 1422,
-                "375": 1477,
-                "400": 1532,
-                "425": 1917,
-                "450": 1982,
-                "475": 2047,
-                "500": 2112,
-                "525": 2392,
-                "550": 2472,
-                "575": 2547,
-                "600": 2627,
-                "625": 2707,
-                "650": 2787,
-                "675": 2862,
-                "700": 2942
-              },
-              "350": {
-                "100": 912,
-                "125": 967,
-                "150": 1027,
-                "175": 1082,
-                "200": 1137,
-                "225": 1197,
-                "250": 1252,
-                "275": 1307,
-                "300": 1367,
-                "325": 1422,
-                "350": 1477,
-                "375": 1537,
-                "400": 1592,
-                "425": 1992,
-                "450": 2062,
-                "475": 2132,
-                "500": 2197,
-                "525": 2462,
-                "550": 2547,
-                "575": 2627,
-                "600": 2707,
-                "625": 2792,
-                "650": 2872,
-                "675": 2952,
-                "700": 3037
-              },
-              "375": {
-                "100": 947,
-                "125": 1007,
-                "150": 1067,
-                "175": 1127,
-                "200": 1182,
-                "225": 1242,
-                "250": 1302,
-                "275": 1362,
-                "300": 1417,
-                "325": 1477,
-                "350": 1537,
-                "375": 1597,
-                "400": 1657,
-                "425": 2072,
-                "450": 2142,
-                "475": 2217,
-                "500": 2287,
-                "525": 2542,
-                "550": 2622,
-                "575": 2707,
-                "600": 2792,
-                "625": 2877,
-                "650": 2957,
-                "675": 3042,
-                "700": 3127
-              },
-              "400": {
-                "100": 977,
-                "125": 1042,
-                "150": 1102,
-                "175": 1162,
-                "200": 1227,
-                "225": 1287,
-                "250": 1347,
-                "275": 1407,
-                "300": 1472,
-                "325": 1532,
-                "350": 1592,
-                "375": 1652,
-                "400": 1717,
-                "425": 2147,
-                "450": 2222,
-                "475": 2297,
-                "500": 2367,
-                "525": 2612,
-                "550": 2697,
-                "575": 2782,
-                "600": 2867,
-                "625": 2957,
-                "650": 3042,
-                "675": 3127,
-                "700": 3212
-              }
-            }
-          },
-          "matrixRowAxis": "height",
-          "matrixColAxis": "width",
-          "dimOffsets": {
-            "widthCm": -33,
-            "heightCm": -30
-          },
-          "minModules": 2,
-          "maxModules": 2,
-          "excludeFromPercentBase": true
-        },
-        {
-          "id": "mat_glassfix_glass_a_3lab",
-          "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a szélesség oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó szélesség − 33 cm × magasság − 30 cm, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
-          "itemRole": "optional",
-          "defaultSelected": false,
-          "pricingMode": "tiered_m2",
-          "currency": "EUR",
-          "dimensionSource": "front_wall",
-          "basePrice": 1,
-          "unitPrice": 1,
-          "defaultQuantity": 1,
-          "unitLabel": "m²",
-          "m2Tiers": [
-            {
-              "maxM2": 8.5,
-              "pricePerM2": 257
-            },
-            {
-              "maxM2": 13.5,
-              "pricePerM2": 210
-            },
-            {
-              "maxM2": 999,
-              "pricePerM2": 200
-            }
-          ],
-          "percentageRate": 0,
-          "minPrice": 1,
-          "multiplier": 1.12,
-          "extraDiscountPct": 0,
-          "fixedSurcharge": 0,
-          "listPriceMultiplier": 1.25,
-          "defaultNote": "Opció",
-          "photos": [
-            {
-              "id": "iphoto_legacy_glassfix_glass_a_3lab_1",
-              "imageUrl": "/uploads/legacy/uvegtetos/image_10.jpg",
-              "titleAbove": "",
-              "captionBelow": "Keret nélküli üvegfal",
-              "widthPct": 75,
-              "align": "center"
-            },
-            {
-              "id": "iphoto_legacy_glassfix_glass_a_3lab_2",
-              "imageUrl": "/uploads/legacy/uvegtetos/image_11.jpg",
-              "titleAbove": "",
-              "captionBelow": "",
-              "widthPct": 75,
-              "align": "center"
-            },
-            {
-              "id": "iphoto_legacy_glassfix_glass_a_3lab_3",
-              "imageUrl": "/uploads/legacy/uvegtetos/image_12.jpg",
-              "titleAbove": "",
-              "captionBelow": "",
-              "widthPct": 75,
-              "align": "center"
-            },
-            {
-              "id": "iphoto_legacy_glassfix_glass_a_3lab_4",
-              "imageUrl": "/uploads/legacy/uvegtetos/image_13.jpg",
-              "titleAbove": "",
-              "captionBelow": "",
-              "widthPct": 75,
-              "align": "center"
-            },
-            {
-              "id": "iphoto_legacy_glassfix_glass_a_3lab_5",
-              "imageUrl": "/uploads/legacy/_cache/_uveg_rails.png",
-              "titleAbove": "",
-              "captionBelow": "Sínrendszer",
-              "widthPct": 75,
-              "align": "center"
-            }
-          ],
-          "dimOffsets": {
-            "widthCm": -33,
-            "heightCm": -30
-          },
-          "minModules": 2,
-          "maxModules": 2,
-          "excludeFromPercentBase": true
-        },
-        {
-          "id": "mat_glassfix_zip_a_4lab",
-          "name": "Oldalsó ZIP árnyékoló a szélesség oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: szélesség − 44 cm × magasság − 30 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
-          "itemRole": "optional",
-          "defaultSelected": false,
-          "pricingMode": "matrix_cm",
-          "currency": "EUR",
-          "dimensionSource": "roof",
-          "basePrice": 1,
-          "unitPrice": 1,
-          "defaultQuantity": 1,
-          "unitLabel": "db",
-          "m2Tiers": [],
-          "percentageRate": 0,
-          "minPrice": 1,
-          "multiplier": 1.1,
-          "extraDiscountPct": 0,
-          "fixedSurcharge": 407,
-          "listPriceMultiplier": 1.25,
-          "defaultNote": "Opció",
-          "photos": [
-            {
-              "id": "iphoto_legacy_glassfix_zip_a_4lab_1",
-              "imageUrl": "/uploads/legacy/uvegtetos/image_14.png",
-              "titleAbove": "",
-              "captionBelow": "Oldalsó ZIP árnyékoló",
-              "widthPct": 75,
-              "align": "center"
-            },
-            {
-              "id": "iphoto_legacy_glassfix_zip_a_4lab_2",
-              "imageUrl": "/uploads/legacy/ZIPes/image_03.png",
-              "titleAbove": "",
-              "captionBelow": "",
-              "widthPct": 75,
-              "align": "center"
-            }
-          ],
-          "matrixTable": {
-            "rowLabel": "Magasság (cm)",
-            "colLabel": "Szélesség (cm)",
-            "rows": [
-              100,
-              125,
-              150,
-              175,
-              200,
-              225,
-              250,
-              275,
-              300,
-              325,
-              350,
-              375,
-              400
-            ],
-            "cols": [
-              100,
-              125,
-              150,
-              175,
-              200,
-              225,
-              250,
-              275,
-              300,
-              325,
-              350,
-              375,
-              400,
-              425,
-              450,
-              475,
-              500,
-              525,
-              550,
-              575,
-              600,
-              625,
-              650,
-              675,
-              700
-            ],
-            "values": {
-              "100": {
-                "100": 587,
-                "125": 617,
-                "150": 652,
-                "175": 687,
-                "200": 717,
-                "225": 752,
-                "250": 782,
-                "275": 817,
-                "300": 852,
-                "325": 882,
-                "350": 917,
-                "375": 952,
-                "400": 982,
-                "425": 1167,
-                "450": 1207,
-                "475": 1242,
-                "500": 1282,
-                "525": 1737,
-                "550": 1797,
-                "575": 1852,
-                "600": 1912,
-                "625": 1972,
-                "650": 2027,
-                "675": 2087,
-                "700": 2142
-              },
-              "125": {
-                "100": 617,
-                "125": 652,
-                "150": 687,
-                "175": 722,
-                "200": 757,
-                "225": 792,
-                "250": 832,
-                "275": 867,
-                "300": 902,
-                "325": 937,
-                "350": 972,
-                "375": 1007,
-                "400": 1042,
-                "425": 1242,
-                "450": 1282,
-                "475": 1322,
-                "500": 1367,
-                "525": 1812,
-                "550": 1872,
-                "575": 1932,
-                "600": 1992,
-                "625": 2052,
-                "650": 2112,
-                "675": 2172,
-                "700": 2232
-              },
-              "150": {
-                "100": 647,
-                "125": 687,
-                "150": 727,
-                "175": 762,
-                "200": 802,
-                "225": 837,
-                "250": 877,
-                "275": 912,
-                "300": 952,
-                "325": 987,
-                "350": 1027,
-                "375": 1067,
-                "400": 1102,
-                "425": 1317,
-                "450": 1362,
-                "475": 1407,
-                "500": 1452,
-                "525": 1882,
-                "550": 1942,
-                "575": 2007,
-                "600": 2067,
-                "625": 2132,
-                "650": 2192,
-                "675": 2257,
-                "700": 2317
-              },
-              "175": {
-                "100": 687,
-                "125": 727,
-                "150": 767,
-                "175": 807,
-                "200": 847,
-                "225": 887,
-                "250": 927,
-                "275": 967,
-                "300": 1007,
-                "325": 1047,
-                "350": 1087,
-                "375": 1127,
-                "400": 1167,
-                "425": 1392,
-                "450": 1442,
-                "475": 1492,
-                "500": 1542,
-                "525": 1957,
-                "550": 2022,
-                "575": 2087,
-                "600": 2152,
-                "625": 2217,
-                "650": 2282,
-                "675": 2347,
-                "700": 2412
-              },
-              "200": {
-                "100": 717,
-                "125": 757,
-                "150": 802,
-                "175": 842,
-                "200": 887,
-                "225": 927,
-                "250": 972,
-                "275": 1012,
-                "300": 1057,
-                "325": 1102,
-                "350": 1142,
-                "375": 1187,
-                "400": 1227,
-                "425": 1467,
-                "450": 1522,
-                "475": 1572,
-                "500": 1622,
-                "525": 2032,
-                "550": 2097,
-                "575": 2167,
-                "600": 2232,
-                "625": 2297,
-                "650": 2367,
-                "675": 2432,
-                "700": 2502
-              },
-              "225": {
-                "100": 747,
-                "125": 792,
-                "150": 837,
-                "175": 882,
-                "200": 927,
-                "225": 972,
-                "250": 1017,
-                "275": 1062,
-                "300": 1107,
-                "325": 1152,
-                "350": 1197,
-                "375": 1242,
-                "400": 1287,
-                "425": 1542,
-                "450": 1597,
-                "475": 1652,
-                "500": 1707,
-                "525": 2102,
-                "550": 2172,
-                "575": 2242,
-                "600": 2312,
-                "625": 2382,
-                "650": 2452,
-                "675": 2517,
-                "700": 2587
-              },
-              "250": {
-                "100": 782,
-                "125": 827,
-                "150": 877,
-                "175": 922,
-                "200": 972,
-                "225": 1017,
-                "250": 1062,
-                "275": 1112,
-                "300": 1157,
-                "325": 1207,
-                "350": 1252,
-                "375": 1302,
-                "400": 1347,
-                "425": 1622,
-                "450": 1677,
-                "475": 1732,
-                "500": 1792,
-                "525": 2172,
-                "550": 2247,
-                "575": 2317,
-                "600": 2387,
-                "625": 2462,
-                "650": 2532,
-                "675": 2607,
-                "700": 2677
-              },
-              "275": {
-                "100": 817,
-                "125": 867,
-                "150": 917,
-                "175": 967,
-                "200": 1012,
-                "225": 1062,
-                "250": 1112,
-                "275": 1162,
-                "300": 1212,
-                "325": 1262,
-                "350": 1312,
-                "375": 1362,
-                "400": 1412,
-                "425": 1697,
-                "450": 1757,
-                "475": 1817,
-                "500": 1877,
-                "525": 2247,
-                "550": 2322,
-                "575": 2397,
-                "600": 2472,
-                "625": 2547,
-                "650": 2622,
-                "675": 2692,
-                "700": 2767
-              },
-              "300": {
-                "100": 847,
-                "125": 902,
-                "150": 952,
-                "175": 1002,
-                "200": 1057,
-                "225": 1107,
-                "250": 1162,
-                "275": 1212,
-                "300": 1262,
-                "325": 1317,
-                "350": 1367,
-                "375": 1417,
-                "400": 1472,
-                "425": 1772,
-                "450": 1837,
-                "475": 1897,
-                "500": 1962,
-                "525": 2322,
-                "550": 2397,
-                "575": 2472,
-                "600": 2552,
-                "625": 2627,
-                "650": 2702,
-                "675": 2777,
-                "700": 2857
-              },
-              "325": {
-                "100": 882,
-                "125": 932,
-                "150": 987,
-                "175": 1042,
-                "200": 1097,
-                "225": 1152,
-                "250": 1207,
-                "275": 1262,
-                "300": 1312,
-                "325": 1367,
-                "350": 1422,
-                "375": 1477,
-                "400": 1532,
-                "425": 1917,
-                "450": 1982,
-                "475": 2047,
-                "500": 2112,
-                "525": 2392,
-                "550": 2472,
-                "575": 2547,
-                "600": 2627,
-                "625": 2707,
-                "650": 2787,
-                "675": 2862,
-                "700": 2942
-              },
-              "350": {
-                "100": 912,
-                "125": 967,
-                "150": 1027,
-                "175": 1082,
-                "200": 1137,
-                "225": 1197,
-                "250": 1252,
-                "275": 1307,
-                "300": 1367,
-                "325": 1422,
-                "350": 1477,
-                "375": 1537,
-                "400": 1592,
-                "425": 1992,
-                "450": 2062,
-                "475": 2132,
-                "500": 2197,
-                "525": 2462,
-                "550": 2547,
-                "575": 2627,
-                "600": 2707,
-                "625": 2792,
-                "650": 2872,
-                "675": 2952,
-                "700": 3037
-              },
-              "375": {
-                "100": 947,
-                "125": 1007,
-                "150": 1067,
-                "175": 1127,
-                "200": 1182,
-                "225": 1242,
-                "250": 1302,
-                "275": 1362,
-                "300": 1417,
-                "325": 1477,
-                "350": 1537,
-                "375": 1597,
-                "400": 1657,
-                "425": 2072,
-                "450": 2142,
-                "475": 2217,
-                "500": 2287,
-                "525": 2542,
-                "550": 2622,
-                "575": 2707,
-                "600": 2792,
-                "625": 2877,
-                "650": 2957,
-                "675": 3042,
-                "700": 3127
-              },
-              "400": {
-                "100": 977,
-                "125": 1042,
-                "150": 1102,
-                "175": 1162,
-                "200": 1227,
-                "225": 1287,
-                "250": 1347,
-                "275": 1407,
-                "300": 1472,
-                "325": 1532,
-                "350": 1592,
-                "375": 1652,
-                "400": 1717,
-                "425": 2147,
-                "450": 2222,
-                "475": 2297,
-                "500": 2367,
-                "525": 2612,
-                "550": 2697,
-                "575": 2782,
-                "600": 2867,
-                "625": 2957,
-                "650": 3042,
-                "675": 3127,
-                "700": 3212
-              }
-            }
-          },
-          "matrixRowAxis": "height",
-          "matrixColAxis": "width",
-          "dimOffsets": {
-            "widthCm": -44,
-            "heightCm": -30
-          },
-          "minModules": 3,
-          "maxModules": 3,
-          "excludeFromPercentBase": true
-        },
-        {
-          "id": "mat_glassfix_glass_a_4lab",
-          "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a szélesség oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó szélesség − 44 cm × magasság − 30 cm, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
-          "itemRole": "optional",
-          "defaultSelected": false,
-          "pricingMode": "tiered_m2",
-          "currency": "EUR",
-          "dimensionSource": "front_wall",
-          "basePrice": 1,
-          "unitPrice": 1,
-          "defaultQuantity": 1,
-          "unitLabel": "m²",
-          "m2Tiers": [
-            {
-              "maxM2": 8.5,
-              "pricePerM2": 257
-            },
-            {
-              "maxM2": 13.5,
-              "pricePerM2": 210
-            },
-            {
-              "maxM2": 999,
-              "pricePerM2": 200
-            }
-          ],
-          "percentageRate": 0,
-          "minPrice": 1,
-          "multiplier": 1.12,
-          "extraDiscountPct": 0,
-          "fixedSurcharge": 0,
-          "listPriceMultiplier": 1.25,
-          "defaultNote": "Opció",
-          "photos": [
-            {
-              "id": "iphoto_legacy_glassfix_glass_a_4lab_1",
-              "imageUrl": "/uploads/legacy/uvegtetos/image_10.jpg",
-              "titleAbove": "",
-              "captionBelow": "Keret nélküli üvegfal",
-              "widthPct": 75,
-              "align": "center"
-            },
-            {
-              "id": "iphoto_legacy_glassfix_glass_a_4lab_2",
-              "imageUrl": "/uploads/legacy/uvegtetos/image_11.jpg",
-              "titleAbove": "",
-              "captionBelow": "",
-              "widthPct": 75,
-              "align": "center"
-            },
-            {
-              "id": "iphoto_legacy_glassfix_glass_a_4lab_3",
-              "imageUrl": "/uploads/legacy/uvegtetos/image_12.jpg",
-              "titleAbove": "",
-              "captionBelow": "",
-              "widthPct": 75,
-              "align": "center"
-            },
-            {
-              "id": "iphoto_legacy_glassfix_glass_a_4lab_4",
-              "imageUrl": "/uploads/legacy/uvegtetos/image_13.jpg",
-              "titleAbove": "",
-              "captionBelow": "",
-              "widthPct": 75,
-              "align": "center"
-            },
-            {
-              "id": "iphoto_legacy_glassfix_glass_a_4lab_5",
-              "imageUrl": "/uploads/legacy/_cache/_uveg_rails.png",
-              "titleAbove": "",
-              "captionBelow": "Sínrendszer",
-              "widthPct": 75,
-              "align": "center"
-            }
-          ],
-          "dimOffsets": {
-            "widthCm": -44,
-            "heightCm": -30
-          },
-          "minModules": 3,
-          "maxModules": 3,
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_a"
+          }
         },
         {
           "id": "mat_glassfix_zip_b",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 14 cm × magasság − 30 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -29225,7 +28318,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -29653,16 +28746,22 @@
           },
           "matrixRowAxis": "height",
           "matrixColAxis": "projection",
-          "dimOffsets": {
-            "projectionCm": -14,
-            "heightCm": -30
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 700
+          }
         },
         {
           "id": "mat_glassfix_glass_b",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 14 cm × magasság − 30 cm, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -29671,7 +28770,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -29735,11 +28834,13 @@
               "align": "center"
             }
           ],
-          "dimOffsets": {
-            "projectionCm": -14,
-            "heightCm": -30
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         },
         {
           "id": "mat_glassfix_glass_triangle",
@@ -30341,8 +29442,8 @@
         "maxHeightCm": 400
       },
       "catalogRef": {
-        "pdfFile": "",
-        "pages": "",
+        "pdfFile": "Price list 2026_27_Új.pdf",
+        "pages": "69. o. (R ZIIIP 120 ár + Somfy Sunilus IO motor 262 EUR, 500 cm felett Maestria+ io 25/17 332 EUR)",
         "productAlias": "Vertica 120 ZIP / Screeny GPZ",
         "note": "legacy: templates/ZIPes/datasheet.py Refleksol_120_ZIP + editor.py; ár = gyári (szélesség × magasság) + 370; szerelés 12% | 2026: a régi mérettábla maradt - az új Aluprof R ZIIIP 120 tábla (69. o.) motor nélküli, más alapú, ellenőrizd. Egyedi szövet katalógusból: ár nincs megadva. | Aluprof R ZIIIP 120 gyári ár + Somfy Sunilus SCR IO 10/17 motor (nagy méretnél Maestria+ io 25/17)."
       },
@@ -35333,7 +34434,7 @@
         {
           "id": "mat_neos_zip_a",
           "name": "Gerendába integrált oldalsó ZIP árnyékoló a szélesség oldalára - Vertica PRIME ZIP, Soltis 92 ponyva, Somfy IO motor (szereléssel)",
-          "description": "Nettó méret: szélesség − 32 cm × magasság. Az ár tartalmazza a 8% szerelést, programozást.",
+          "description": "Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -35502,15 +34603,20 @@
           },
           "matrixRowAxis": "width",
           "matrixColAxis": "height",
-          "dimOffsets": {
-            "widthCm": -32
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_vertica_zip",
+            "materialId": "mat_vertica_a"
           },
-          "excludeFromPercentBase": true
+          "ownSplit": {
+            "axis": "width",
+            "maxCm": 600
+          }
         },
         {
           "id": "mat_neos_zip_b_wall",
           "name": "Gerendába integrált oldalsó ZIP árnyékoló a kinyúlás oldalára - Vertica PRIME ZIP, Soltis 92 ponyva, Somfy IO motor (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 16 cm × magasság. Az ár tartalmazza a 8% szerelést, programozást.",
+          "description": "Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -35519,7 +34625,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -35682,15 +34788,22 @@
           ],
           "matrixRowAxis": "projection",
           "matrixColAxis": "height",
-          "dimOffsets": {
-            "projectionCm": -16
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_vertica_zip",
+            "materialId": "mat_vertica_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 600
+          }
         },
         {
           "id": "mat_neos_zip_b_free",
           "name": "Gerendába integrált oldalsó ZIP árnyékoló a kinyúlás oldalára - Vertica PRIME ZIP, Soltis 92 ponyva, Somfy IO motor (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 32 cm × magasság. Az ár tartalmazza a 8% szerelést, programozást.",
+          "description": "Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -35699,7 +34812,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -35862,15 +34975,22 @@
           ],
           "matrixRowAxis": "projection",
           "matrixColAxis": "height",
-          "dimOffsets": {
-            "projectionCm": -32
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_vertica_zip",
+            "materialId": "mat_vertica_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 600
+          }
         },
         {
           "id": "mat_neos_glass_a",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a szélesség oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó szélesség − 32 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -35919,15 +35039,16 @@
               "align": "center"
             }
           ],
-          "dimOffsets": {
-            "widthCm": -32
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_a"
+          }
         },
         {
           "id": "mat_neos_glass_b_wall",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 16 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -35936,7 +35057,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -35979,15 +35100,18 @@
           "mountTypes": [
             "Épülethez rögzített"
           ],
-          "dimOffsets": {
-            "projectionCm": -16
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         },
         {
           "id": "mat_neos_glass_b_free",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 32 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -35996,7 +35120,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -36039,10 +35163,13 @@
           "mountTypes": [
             "Szabadon álló"
           ],
-          "dimOffsets": {
-            "projectionCm": -32
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         },
         {
           "description": "",
@@ -38454,7 +37581,7 @@
         {
           "id": "mat_isola3_zip_a",
           "name": "Oldalsó ZIP árnyékoló a szélesség oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: szélesség − 24 cm × magasság. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -38891,15 +38018,16 @@
           },
           "matrixRowAxis": "height",
           "matrixColAxis": "width",
-          "dimOffsets": {
-            "widthCm": -24
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_a"
+          }
         },
         {
           "id": "mat_isola3_zip_b_wall",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 12 cm × magasság. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -38908,7 +38036,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -39339,15 +38467,22 @@
           ],
           "matrixRowAxis": "height",
           "matrixColAxis": "projection",
-          "dimOffsets": {
-            "projectionCm": -12
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 700
+          }
         },
         {
           "id": "mat_isola3_zip_b_free",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 24 cm × magasság. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -39356,7 +38491,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -39787,15 +38922,22 @@
           ],
           "matrixRowAxis": "height",
           "matrixColAxis": "projection",
-          "dimOffsets": {
-            "projectionCm": -24
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 700
+          }
         },
         {
           "id": "mat_isola3_glass_a",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a szélesség oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó szélesség − 24 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -39844,15 +38986,16 @@
               "align": "center"
             }
           ],
-          "dimOffsets": {
-            "widthCm": -24
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_a"
+          }
         },
         {
           "id": "mat_isola3_glass_b_wall",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 12 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -39861,7 +39004,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -39904,15 +39047,18 @@
           "mountTypes": [
             "Épülethez rögzített"
           ],
-          "dimOffsets": {
-            "projectionCm": -12
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         },
         {
           "id": "mat_isola3_glass_b_free",
           "name": "Keret nélküli, elcsúsztatható üvegfalrendszer a kinyúlás oldalára (10 mm edzett üveg, szereléssel)",
-          "description": "Nettó kinyúlás − 24 cm × magasság, sávos m² ár (≤8,5 m²: 257, ≤13,5 m²: 210, felette 200 EUR/m²); az ár tartalmazza a 12% szerelést.",
+          "description": "Az ár a szerelést is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "tiered_m2",
@@ -39921,7 +39067,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "m²",
+          "unitLabel": "oldal",
           "m2Tiers": [
             {
               "maxM2": 8.5,
@@ -39964,10 +39110,13 @@
           "mountTypes": [
             "Szabadon álló"
           ],
-          "dimOffsets": {
-            "projectionCm": -24
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_uvegfal_spanyol",
+            "materialId": "mat_uvegfal_es_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2
         },
         {
           "description": "",
@@ -41226,7 +40375,7 @@
         {
           "id": "mat_xtesa_zip_a",
           "name": "Oldalsó ZIP árnyékoló a szélesség oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: szélesség − 22 cm × magasság − 10 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -41663,16 +40812,16 @@
           },
           "matrixRowAxis": "height",
           "matrixColAxis": "width",
-          "dimOffsets": {
-            "widthCm": -22,
-            "heightCm": -10
-          },
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_a"
+          }
         },
         {
           "id": "mat_xtesa_zip_b_wall",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
-          "description": "Nettó méret: kinyúlás − 11 cm × magasság − 10 cm. Az ár tartalmazza a 10% szerelést, programozást. Az ár a Somfy IO motort tartalmazza.",
+          "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
           "itemRole": "optional",
           "defaultSelected": false,
           "pricingMode": "matrix_cm",
@@ -41681,7 +40830,7 @@
           "basePrice": 1,
           "unitPrice": 1,
           "defaultQuantity": 1,
-          "unitLabel": "db",
+          "unitLabel": "oldal",
           "m2Tiers": [],
           "percentageRate": 0,
           "minPrice": 1,
@@ -42112,11 +41261,17 @@
           ],
           "matrixRowAxis": "height",
           "matrixColAxis": "projection",
-          "dimOffsets": {
-            "projectionCm": -11,
-            "heightCm": -10
+          "excludeFromPercentBase": true,
+          "priceSource": {
+            "templateId": "tpl_legacy_refleksol_zip",
+            "materialId": "mat_zip_b"
           },
-          "excludeFromPercentBase": true
+          "perSide": true,
+          "maxSides": 2,
+          "ownSplit": {
+            "axis": "projection",
+            "maxCm": 700
+          }
         },
         {
           "description": "",

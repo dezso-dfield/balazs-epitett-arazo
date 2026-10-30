@@ -154,6 +154,16 @@ export interface TemplateMaterialItem {
   modulesProjection?: number;
   // Nem számít bele a százalékos tételek (pl. szerelés %) alapjába (pl. motor, távirányító)
   excludeFromPercentBase?: boolean;
+  // Az ár egy másik (önálló) termék tételéből jön, pl. a pergolához kért oldalsó ZIP a Refleksol
+  // 120 ZIP termékből: ugyanaz a tábla, ugyanaz a szerelési %, így mindenhol ugyanazt az árat adja.
+  // Betöltéskor a resolvePriceSources tölti ki az árazási mezőket a forrásból.
+  priceSource?: { templateId: string; materialId: string };
+  // Saját modulokra bontás (a forrástermék szabálya szerint), pl. 700 cm fölött 2 árnyékoló
+  ownSplit?: { axis: SizeAxis; maxCm: number };
+  // Legfeljebb ennyi oldal választható (pl. kinyúlás oldal: 2 = mindkét oldal)
+  maxSides?: number;
+  // Az árazóban kiválasztott extra (alaptételként számol, de a PDF-ben külön csoportban)
+  chosenExtra?: boolean;
   // Színválaszték (pl. alapszínek vagy választható RAL színek), a PDF-ben színmintaként
   colorOptions?: ColorOption[];
   colorTitle?: string;
@@ -362,6 +372,7 @@ export interface QuoteTableRow {
   priceOverridden?: boolean;  // Kézzel átírt ár - újraszámoláskor megmarad
   quantityOverridden?: boolean;
   systemRole?: 'assembly';    // Képletből generált sor (szerelés)
+  chosenExtra?: boolean;      // Az árazóban kiválasztott extra: a PDF-ben a szerkezet összesítője után, külön
   outOfRange?: boolean;       // A méret kívül esik a mérettáblán
 }
 

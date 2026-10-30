@@ -35,6 +35,7 @@ import {
   formatDotNumber,
   MOUNT_TYPES,
   PRICING_MODE_OPTIONS,
+  toTemplateText,
 } from '@/lib/constants';
 import {
   buildEditableBlockFromTemplate,
@@ -78,6 +79,8 @@ interface PdfBlockEditorViewProps {
   onBackToWizard?: () => void;
   // Mentés után a kiküldő ablak megnyitása
   onSendQuote?: (saved: QuoteRecord) => void;
+  // Egy termékszakasz alcímének és bevezetőjének mentése a termék sablonjába
+  onSaveTemplate?: (template: QuoteTemplate) => Promise<void>;
 }
 
 export function PdfBlockEditorView({
@@ -90,6 +93,7 @@ export function PdfBlockEditorView({
   onSaveQuoteAndGeneratePdf,
   onBackToWizard,
   onSendQuote,
+  onSaveTemplate,
 }: PdfBlockEditorViewProps) {
   const isExistingSavedQuote = Boolean(initialQuote.id);
 
@@ -1329,6 +1333,33 @@ export function PdfBlockEditorView({
                       placeholder="Írd ide a sablonhoz tartozó leíró szöveget..."
                       className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs leading-relaxed"
                     />
+                    {onSaveTemplate && blk.templateId && templates.some((t) => t.id === blk.templateId) && (
+                      <div className="mt-2 flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            const tpl = templates.find((t) => t.id === blk.templateId)!;
+                            const ctx = { customerName, greetingName, city, widthCm, projectionCm, heightCm, mountType, eurHufRate, deliveryFeeHuf };
+                            if (
+                              !window.confirm(
+                                `A „${tpl.name}” minden új ajánlata ezzel az alcímmel és bevezetővel indul. A méret, név és település helyére automatikusan kitöltődő adat kerül. Mented?`
+                              )
+                            )
+                              return;
+                            await onSaveTemplate({
+                              ...tpl,
+                              subtitle: toTemplateText(blk.sectionSubtitle || '', ctx),
+                              introText: toTemplateText(blk.sectionIntroText || '', ctx),
+                            });
+                          }}
+                          className={btn.secondary}
+                        >
+                          <Save className="w-4 h-4" />
+                          Mentés a termék alapszövegeként
+                        </button>
+                        <span className="text-xs text-slate-500">Az alcím és a bevezető minden új ajánlatban így indul.</span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Section Photos + Text Boxes under each photo */}
