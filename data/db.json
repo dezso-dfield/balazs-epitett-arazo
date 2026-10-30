@@ -517,7 +517,7 @@
       "id": "tpl_legacy_sb400",
       "categoryId": "cat_1792391983811_seed",
       "name": "SOLARE 400 bioklimatikus pergola",
-      "subtitle": "Forgatható lamellás tető, Somfy IO motorral - 150 kg/m² hóterhelés",
+      "subtitle": "Forgatható lamellás tető, Somfy IO motorral - 200 kg/m² hóterhelés",
       "enabled": true,
       "status": "active",
       "order": 1,
@@ -546,7 +546,7 @@
         {
           "id": "tb_sb400_tech",
           "title": "Műszaki adatok",
-          "content": "- Profilok: gerenda 21×8,5 cm, lamella 21,6 cm, oszlop 15×8,5 cm\n- Általános falvastagság: 3-6 mm\n- Gyártási idő a megrendeléstől számítva: 20-30 nap\n- Szélállóság: EN 13561 szerinti legmagasabb, 6. osztály, orkán erejű szélnek is ellenáll (119 km/h)",
+          "content": "- Profilok: gerenda 21×8,5 cm, lamella 21,6 cm, oszlop 15×8,5 cm\n- Általános falvastagság: 3-6 mm\n- Gyártási idő a megrendeléstől számítva: 20-30 nap\n- Hóterhelés: 200 kg/m²\n- Szélállóság: EN 13561 szerinti legmagasabb, 6. osztály, orkán erejű szélnek is ellenáll (119 km/h)",
           "position": "before_photos"
         },
         {
@@ -3808,7 +3808,7 @@
       "id": "tpl_legacy_seesky_bio",
       "categoryId": "cat_1792391983811_seed",
       "name": "SEESKY BIO bioklimatikus pergola",
-      "subtitle": "Hőszigetelt lamellák, rejtett motor - 200 kg/m² hóterhelés",
+      "subtitle": "Hőszigetelt lamellák, rejtett motor - 250 kg/m² hóterhelés",
       "enabled": true,
       "status": "seasonal",
       "order": 2,
@@ -3837,7 +3837,7 @@
         {
           "id": "tb_seesky_tech",
           "title": "Műszaki adatok",
-          "content": "- Profilok: gerenda 20×16 cm, lamella 20 cm, oszlop 16×16 cm\n- Szélállóság: EN 13561 szerinti legmagasabb, 6. osztály, orkán erejű szélnek is ellenáll (119 km/h)",
+          "content": "- Profilok: gerenda 20×16 cm, lamella 20 cm, oszlop 16×16 cm\n- Hóterhelés: 250 kg/m²\n- Szélállóság: EN 13561 szerinti legmagasabb, 6. osztály, orkán erejű szélnek is ellenáll (119 km/h)",
           "position": "before_photos"
         },
         {
@@ -14060,7 +14060,7 @@
       "sizeLimits": {
         "minWidthCm": 250,
         "maxWidthCm": 1300,
-        "minProjectionCm": 250,
+        "minProjectionCm": 230,
         "maxProjectionCm": 600,
         "maxHeightCm": 300
       },
@@ -21600,7 +21600,7 @@
         "assemblyFixedEur": 0,
         "assemblyPerM2Eur": 0
       },
-      "introText": "A VERANDA TENS ({{szelesseg}} × {{kinyulas}} cm) meglévő szerkezetre - télikertre, üvegtetőre vagy pergolára - építhető elhúzható vásznas árnyékoló, a tető fölé és alá is szerelhető; egymodulos és többmodulos kivitelben. Csak motoros vezérléssel; szélállóság EN 13561 2. osztály (30-50 km/h). A napháló megvezetése az oldalsó profilokban történik, a rugós feszítőrendszer segít a vásznat feszesen tartani.",
+      "introText": "A VERANDA TENS ({{szelesseg}} × {{kinyulas}} cm) meglévő szerkezetre - télikertre, üvegtetőre vagy pergolára - építhető elhúzható vásznas árnyékoló, a tető fölé és alá is szerelhető; egymodulos és többmodulos kivitelben. Csak motoros vezérléssel; szélállóság EN 13561 3. osztály (40-50 km/h). A napháló megvezetése az oldalsó profilokban történik, a rugós feszítőrendszer segít a vásznat feszesen tartani.",
       "closingText": "Csak árnyékolásra ajánljuk, hóesésben nem használható.",
       "textBlocks": [
         {
@@ -23470,7 +23470,7 @@
       "sizeLimits": {
         "minWidthCm": 200,
         "maxWidthCm": 1000,
-        "minProjectionCm": 200,
+        "minProjectionCm": 150,
         "maxProjectionCm": 600,
         "maxHeightCm": 300
       },
@@ -23486,7 +23486,7 @@
         "assemblyFixedEur": 0,
         "assemblyPerM2Eur": 0
       },
-      "introText": "A VERANDA V ZIIP ({{szelesseg}} × {{kinyulas}} cm) meglévő szerkezetre építhető, ZIP-rendszerű feszített árnyékoló: a zipzáras oldalvezetés miatt a ponyva mindig feszes marad. Szélállóság EN 13561 3. osztály (50-70 km/h). A ponyva teljesen be van zárva egy kazettás kialakításba, és végig az oldalsó megvezető profilokban mozog.",
+      "introText": "A VERANDA V ZIIP ({{szelesseg}} × {{kinyulas}} cm) meglévő szerkezetre építhető, ZIP-rendszerű feszített árnyékoló: a zipzáras oldalvezetés miatt a ponyva mindig feszes marad. Szélállóság EN 13561 5. osztály (50-80 km/h). A ponyva teljesen be van zárva egy kazettás kialakításba, és végig az oldalsó megvezető profilokban mozog.",
       "closingText": "Csak árnyékolásra ajánljuk, hóesésben nem használható.",
       "textBlocks": [
         {
@@ -29358,7 +29358,7 @@
     {
       "id": "tpl_legacy_uvegfal_spanyol",
       "categoryId": "cat_1792346155886_2odc",
-      "name": "LINE GLASS spanyol prémium üvegfal",
+      "name": "LINE GLASS keret nélküli, elcsúsztatható üvegfal",
       "subtitle": "Keret nélküli, elcsúsztatható 10 mm edzett üvegfal - prémium kategória",
       "enabled": true,
       "status": "active",
@@ -29821,7 +29821,7 @@
         "assemblyFixedEur": 0,
         "assemblyPerM2Eur": 0
       },
-      "introText": "Meglévő terasz vagy pergola beépítése oldalsó ZIP árnyékolóval: 1 db {{szelesseg}}×{{magassag}} cm-es és 1 db {{kinyulas}}×{{magassag}} cm-es vertikális árnyékoló, motoros működéssel. Szélállóság: EN 13561 szerinti legmagasabb, 6. osztály, orkán erejű szélnek is ellenáll (119 km/h).\n\nA SCREENY GPZ család oldalsó árnyékolóinál a napháló megvezetése speciális oldalsó megvezetésben történik. A ponyva mindkét oldalára zipzár van hegesztve, így a ponyva mindig feszes (ráncmentes) marad, és végig az oldalsó megvezető profilokban mozog. Mivel a ponyva nem tud kijutni a megvezető profilokból, nagyobb széllökéseknek is ellenáll, és a szúnyogháló feladatát is teljes mértékben ellátja. Egymodulos és többmodulos változatban is kapható.\n\nEz a termékcsalád csak motoros vezérléssel szerelhető; a motorok a távirányítón kívül okosotthon-vezérlővel (applikáción keresztül) is vezérelhetők.",
+      "introText": "Meglévő terasz vagy pergola beépítése oldalsó ZIP árnyékolóval: 1 db {{szelesseg}}×{{magassag}} cm-es és 1 db {{kinyulas}}×{{magassag}} cm-es vertikális árnyékoló, motoros működéssel. Szélállóság: EN 13561 szerinti 5. osztály, viharos erejű szélnek is ellenáll (80-100 km/h); a vászon védelmére szélérzékelő használatát javasoljuk.\n\nA SCREENY GPZ család oldalsó árnyékolóinál a napháló megvezetése speciális oldalsó megvezetésben történik. A ponyva mindkét oldalára zipzár van hegesztve, így a ponyva mindig feszes (ráncmentes) marad, és végig az oldalsó megvezető profilokban mozog. Mivel a ponyva nem tud kijutni a megvezető profilokból, nagyobb széllökéseknek is ellenáll, és a szúnyogháló feladatát is teljes mértékben ellátja. Egymodulos és többmodulos változatban is kapható.\n\nEz a termékcsalád csak motoros vezérléssel szerelhető; a motorok a távirányítón kívül okosotthon-vezérlővel (applikáción keresztül) is vezérelhetők.",
       "closingText": "",
       "textBlocks": [
         {
@@ -52115,5 +52115,5 @@
     }
   ],
   "trackingEvents": [],
-  "dataRevision": 4
+  "dataRevision": 5
 }
