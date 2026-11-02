@@ -17,7 +17,8 @@ MAX_SIDE = 1400
 
 done = skipped = 0
 for dirpath, _dirs, files in os.walk(ROOT):
-    if os.path.abspath(dirpath).startswith(os.path.abspath(OUT)):
+    # A saját kimenet és az előnézeti képek (_thumb) nem forrásképek
+    if os.path.abspath(dirpath).startswith((os.path.abspath(OUT), os.path.join(os.path.abspath(ROOT), '_thumb'))):
         continue
     for name in files:
         if not name.lower().endswith(('.png', '.jpg', '.jpeg')):
