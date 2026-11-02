@@ -540,7 +540,7 @@
         "assemblyFixedEur": 0,
         "assemblyPerM2Eur": 0
       },
-      "introText": "A SOLARE 400 ({{meret}}, {{beepites}}) forgatható lamellás tetejű bioklimatikus pergola: magas minőség, jó terhelési indexek és kedvező ár jellemzi. Zárt lamellák esetén teljesen vízzáró, a lamellák hermetikusan zárnak. A teljes szerkezet szinterezett alumíniumból készül, rozsdamentes acél merevítésekkel a kritikus pontokban.\n\nAlumínium vázával, 0-120° között elforgatható lamelláival és oszlopaiban rejtett esővíz-elvezetésével jó választás az időjárás elemeivel szemben. A lamellák mozgatását villanymotor végzi, távirányítóval vagy applikációval vezérelhető; a motor a pergola tetején látható, opcionálisan a gerendákba rejtve is kérhető.\n\nTélen-nyáron használható: a lamellák dőlésszögének állításával nemcsak a bejutó fény mennyiségét, hanem a szellőzést is szabályozni tudjuk, így valósul meg a bioklimatikus hatás. A motoros oldalsó árnyékolók és az üvegfalrendszerek később is szerelhetők a pergolához.",
+      "introText": "A SOLARE 400 ({{meret}}, {{beepites}}) forgatható lamellás tetejű bioklimatikus pergola rejtett fali konzolokkal: magas minőség, jó terhelési indexek és kedvező ár jellemzi. Zárt lamellák esetén teljesen vízzáró, a lamellák hermetikusan zárnak. A teljes szerkezet szinterezett alumíniumból készül, rozsdamentes acél merevítésekkel a kritikus pontokban.\n\nAlumínium vázával, 0-120° között elforgatható lamelláival és oszlopaiban rejtett esővíz-elvezetésével jó választás az időjárás elemeivel szemben. A lamellák mozgatását villanymotor végzi, távirányítóval vagy applikációval vezérelhető; a motor a pergola tetején látható, opcionálisan a gerendákba rejtve is kérhető.\n\nTélen-nyáron használható: a lamellák dőlésszögének állításával nemcsak a bejutó fény mennyiségét, hanem a szellőzést is szabályozni tudjuk, így valósul meg a bioklimatikus hatás. A motoros oldalsó árnyékolók és az üvegfalrendszerek később is szerelhetők a pergolához.",
       "closingText": "Ha a hónap végéig megrendeli az alapszerkezetet, az infrafűtést és az eső-/szélérzékelőt ajándékba adjuk.",
       "textBlocks": [
         {
@@ -25162,7 +25162,7 @@
         "pdfFile": "",
         "pages": "",
         "productAlias": "Polifix",
-        "note": "Árképző (docx 2026-10): fix sávos ár szélesség × kinyúlás szerint + sávos szerelés; ajándék infrafűtés. Falhoz rögzítve 17 × 6 m-ig, különálló 8,5 × 6 m-ig."
+        "note": "Balázs Excelje (Polikarbonát, üveg tetős excel.xlsx, 2026-11-02): ár és szerelés szélesség × kinyúlás szerint, a következő nagyobb méretre kerekítve. Falhoz rögzítve 1800 × 600 cm-ig, különállóként 600 × 600 cm-ig (= falhoz rögzített ár + 540 EUR). Ajándék infrafűtés. Szendvicspanel tető +8,5% (jóváhagyva)."
       },
       "pricingOverride": {
         "profitMode": "markup_percent",
@@ -25300,7 +25300,7 @@
         {
           "id": "mat_polifix_base_wall",
           "name": "POLIFIX - 16 mm opál polikarbonát tetővel, falhoz rögzítve",
-          "description": "Sávos ár: szélesség 6 / 8,5 / 12 / 17 m-ig × kinyúlás 3 / 6 m-ig.",
+          "description": "",
           "itemRole": "base",
           "defaultSelected": true,
           "pricingMode": "matrix_cm",
@@ -25323,27 +25323,153 @@
             "rowLabel": "Kinyúlás (cm)",
             "colLabel": "Szélesség (cm)",
             "rows": [
+              100,
+              200,
               300,
+              400,
+              500,
               600
             ],
             "cols": [
+              100,
+              200,
+              300,
+              400,
+              500,
               600,
-              850,
+              700,
+              800,
+              900,
+              1000,
+              1100,
               1200,
-              1700
+              1300,
+              1400,
+              1500,
+              1600,
+              1700,
+              1800
             ],
             "values": {
+              "100": {
+                "100": 1200,
+                "200": 1560,
+                "300": 1760,
+                "400": 2580,
+                "500": 2780,
+                "600": 2980,
+                "700": 3290,
+                "800": 3490,
+                "900": 3990,
+                "1000": 4900,
+                "1100": 5150,
+                "1200": 5290,
+                "1300": 5590,
+                "1400": 5990,
+                "1500": 6190,
+                "1600": 7590,
+                "1700": 7990,
+                "1800": 8590
+              },
+              "200": {
+                "100": 1350,
+                "200": 1800,
+                "300": 2000,
+                "400": 3400,
+                "500": 3600,
+                "600": 3800,
+                "700": 4300,
+                "800": 4690,
+                "900": 5300,
+                "1000": 6200,
+                "1100": 6500,
+                "1200": 6790,
+                "1300": 7690,
+                "1400": 8590,
+                "1500": 8690,
+                "1600": 9690,
+                "1700": 9900,
+                "1800": 10590
+              },
               "300": {
-                "600": 3972,
-                "850": 4795,
-                "1200": 6990,
-                "1700": 8568
+                "100": 1500,
+                "200": 2000,
+                "300": 2200,
+                "400": 3600,
+                "500": 3800,
+                "600": 4320,
+                "700": 4800,
+                "800": 5290,
+                "900": 5900,
+                "1000": 6800,
+                "1100": 7000,
+                "1200": 7390,
+                "1300": 7890,
+                "1400": 8790,
+                "1500": 8890,
+                "1600": 10590,
+                "1700": 11000,
+                "1800": 11490
+              },
+              "400": {
+                "100": 1800,
+                "200": 2500,
+                "300": 2800,
+                "400": 4500,
+                "500": 5000,
+                "600": 5163,
+                "700": 6290,
+                "800": 6390,
+                "900": 7590,
+                "1000": 8290,
+                "1100": 8990,
+                "1200": 9300,
+                "1300": 9690,
+                "1400": 9990,
+                "1500": 11590,
+                "1600": 13190,
+                "1700": 13890,
+                "1800": 14190
+              },
+              "500": {
+                "100": 2000,
+                "200": 2800,
+                "300": 3230,
+                "400": 4800,
+                "500": 5300,
+                "600": 5434,
+                "700": 6550,
+                "800": 6690,
+                "900": 7852,
+                "1000": 8650,
+                "1100": 9490,
+                "1200": 9600,
+                "1300": 9990,
+                "1400": 10290,
+                "1500": 11890,
+                "1600": 13590,
+                "1700": 14190,
+                "1800": 14590
               },
               "600": {
-                "600": 5205,
-                "850": 8219,
-                "1200": 9590,
-                "1700": 12500
+                "100": 2200,
+                "200": 3150,
+                "300": 3530,
+                "400": 5100,
+                "500": 5500,
+                "600": 5700,
+                "700": 6793,
+                "800": 6990,
+                "900": 8152,
+                "1000": 8967,
+                "1100": 9790,
+                "1200": 9990,
+                "1300": 10290,
+                "1400": 10590,
+                "1500": 12200,
+                "1600": 13950,
+                "1700": 14590,
+                "1800": 14918
               }
             }
           },
@@ -25356,7 +25482,7 @@
         {
           "id": "mat_polifix_base_free",
           "name": "POLIFIX - 16 mm opál polikarbonát tetővel, különálló (szabadon álló)",
-          "description": "Sávos ár: szélesség 6 / 8,5 m-ig × kinyúlás 3 / 6 m-ig.",
+          "description": "",
           "itemRole": "base",
           "defaultSelected": true,
           "pricingMode": "matrix_cm",
@@ -25379,21 +25505,69 @@
             "rowLabel": "Kinyúlás (cm)",
             "colLabel": "Szélesség (cm)",
             "rows": [
+              100,
+              200,
               300,
+              400,
+              500,
               600
             ],
             "cols": [
-              600,
-              850
+              100,
+              200,
+              300,
+              400,
+              500,
+              600
             ],
             "values": {
+              "100": {
+                "100": 1740,
+                "200": 2100,
+                "300": 2300,
+                "400": 3120,
+                "500": 3320,
+                "600": 3520
+              },
+              "200": {
+                "100": 1890,
+                "200": 2340,
+                "300": 2540,
+                "400": 3940,
+                "500": 4140,
+                "600": 4340
+              },
               "300": {
-                "600": 5328,
-                "850": 6450
+                "100": 2040,
+                "200": 2540,
+                "300": 2740,
+                "400": 4140,
+                "500": 4340,
+                "600": 4860
+              },
+              "400": {
+                "100": 2340,
+                "200": 3040,
+                "300": 3340,
+                "400": 5040,
+                "500": 5540,
+                "600": 5703
+              },
+              "500": {
+                "100": 2540,
+                "200": 3340,
+                "300": 3770,
+                "400": 5340,
+                "500": 5840,
+                "600": 5974
               },
               "600": {
-                "600": 6620,
-                "850": 9863
+                "100": 2740,
+                "200": 3690,
+                "300": 4070,
+                "400": 5640,
+                "500": 6040,
+                "600": 6240
               }
             }
           },
@@ -25406,7 +25580,7 @@
         {
           "id": "mat_polifix_install_wall",
           "name": "Szerelés",
-          "description": "Sávos szerelési díj.",
+          "description": "",
           "itemRole": "base",
           "defaultSelected": true,
           "pricingMode": "matrix_cm",
@@ -25429,27 +25603,153 @@
             "rowLabel": "Kinyúlás (cm)",
             "colLabel": "Szélesség (cm)",
             "rows": [
+              100,
+              200,
               300,
+              400,
+              500,
               600
             ],
             "cols": [
+              100,
+              200,
+              300,
+              400,
+              500,
               600,
-              850,
+              700,
+              800,
+              900,
+              1000,
+              1100,
               1200,
-              1700
+              1300,
+              1400,
+              1500,
+              1600,
+              1700,
+              1800
             ],
             "values": {
+              "100": {
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1000,
+                "700": 1200,
+                "800": 1300,
+                "900": 1500,
+                "1000": 1700,
+                "1100": 1800,
+                "1200": 1900,
+                "1300": 2000,
+                "1400": 2200,
+                "1500": 2300,
+                "1600": 2500,
+                "1700": 2500,
+                "1800": 2800
+              },
+              "200": {
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1000,
+                "700": 1200,
+                "800": 1300,
+                "900": 1500,
+                "1000": 1700,
+                "1100": 1800,
+                "1200": 1900,
+                "1300": 2000,
+                "1400": 2200,
+                "1500": 2300,
+                "1600": 2500,
+                "1700": 2500,
+                "1800": 2800
+              },
               "300": {
-                "600": 900,
-                "850": 1000,
-                "1200": 1200,
-                "1700": 1500
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1000,
+                "700": 1200,
+                "800": 1300,
+                "900": 1500,
+                "1000": 1700,
+                "1100": 1800,
+                "1200": 1900,
+                "1300": 2000,
+                "1400": 2200,
+                "1500": 2300,
+                "1600": 2500,
+                "1700": 2500,
+                "1800": 2800
+              },
+              "400": {
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1000,
+                "700": 1200,
+                "800": 1300,
+                "900": 1500,
+                "1000": 1700,
+                "1100": 1800,
+                "1200": 1900,
+                "1300": 2000,
+                "1400": 2200,
+                "1500": 2300,
+                "1600": 2500,
+                "1700": 2500,
+                "1800": 2800
+              },
+              "500": {
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1000,
+                "700": 1200,
+                "800": 1300,
+                "900": 1500,
+                "1000": 1700,
+                "1100": 1800,
+                "1200": 1900,
+                "1300": 2000,
+                "1400": 2200,
+                "1500": 2300,
+                "1600": 2500,
+                "1700": 2500,
+                "1800": 2800
               },
               "600": {
-                "600": 1200,
-                "850": 1200,
-                "1200": 1500,
-                "1700": 2000
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1000,
+                "700": 1200,
+                "800": 1300,
+                "900": 1500,
+                "1000": 1700,
+                "1100": 1800,
+                "1200": 1900,
+                "1300": 2000,
+                "1400": 2200,
+                "1500": 2300,
+                "1600": 2500,
+                "1700": 2500,
+                "1800": 2800
               }
             }
           },
@@ -25463,7 +25763,7 @@
         {
           "id": "mat_polifix_install_free",
           "name": "Szerelés",
-          "description": "Sávos szerelési díj.",
+          "description": "",
           "itemRole": "base",
           "defaultSelected": true,
           "pricingMode": "matrix_cm",
@@ -25486,21 +25786,69 @@
             "rowLabel": "Kinyúlás (cm)",
             "colLabel": "Szélesség (cm)",
             "rows": [
+              100,
+              200,
               300,
+              400,
+              500,
               600
             ],
             "cols": [
-              600,
-              850
+              100,
+              200,
+              300,
+              400,
+              500,
+              600
             ],
             "values": {
+              "100": {
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1200
+              },
+              "200": {
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1200
+              },
               "300": {
-                "600": 1200,
-                "850": 1500
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1200
+              },
+              "400": {
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1200
+              },
+              "500": {
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1200
               },
               "600": {
-                "600": 1500,
-                "850": 1800
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1200
               }
             }
           },
@@ -26063,6 +26411,31 @@
           }
         },
         {
+          "id": "mat_polifix_thermo_a",
+          "name": "THERMO GLASS hőszigetelt, eltolható üvegfal a szélesség oldalára (szereléssel)",
+          "description": "90.000 Ft/m², oldalanként + 950 EUR rendszerfelár és + 400 EUR szerelés.",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "per_m2",
+          "currency": "HUF",
+          "dimensionSource": "front_wall",
+          "basePrice": 0,
+          "unitPrice": 90000,
+          "defaultQuantity": 1,
+          "unitLabel": "m²",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true,
+          "surchargeEur": 1350
+        },
+        {
           "id": "mat_polifix_zip_b",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
           "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
@@ -26597,6 +26970,33 @@
           },
           "perSide": true,
           "maxSides": 2
+        },
+        {
+          "id": "mat_polifix_thermo_b",
+          "name": "THERMO GLASS hőszigetelt, eltolható üvegfal a kinyúlás oldalára (szereléssel)",
+          "description": "90.000 Ft/m², oldalanként + 950 EUR rendszerfelár és + 400 EUR szerelés.",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "per_m2",
+          "currency": "HUF",
+          "dimensionSource": "side_wall",
+          "basePrice": 0,
+          "unitPrice": 90000,
+          "defaultQuantity": 1,
+          "unitLabel": "oldal",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true,
+          "perSide": true,
+          "maxSides": 2,
+          "surchargeEur": 1350
         },
         {
           "id": "mat_polifix_veranda",
@@ -27233,8 +27633,8 @@
       "moduleSplits": [
         {
           "axis": "width",
-          "maxCm": 600,
-          "maxModules": 3
+          "maxCm": 850,
+          "maxModules": 2
         }
       ],
       "mountTypes": [
@@ -27244,10 +27644,10 @@
       "sizeRules": [
         {
           "id": "rule_polifix_free",
-          "label": "különálló szerkezetként (ártábla 8,5 m-ig)",
+          "label": "különálló szerkezetként: max. 400 cm kinyúlás, 250 cm magasság",
           "mountType": "Szabadon álló",
-          "maxWidthCm": 850,
-          "maxProjectionCm": 600,
+          "maxWidthCm": 1580,
+          "maxProjectionCm": 400,
           "maxHeightCm": 250
         }
       ],
@@ -27258,13 +27658,13 @@
       "id": "tpl_legacy_glassfix",
       "categoryId": "cat_legacy_uvegteto",
       "name": "GLASSFIX üvegtetős pergola",
-      "subtitle": "Falhoz rögzítve; elöl 2 láb 6 m-ig, 3 láb 12 m-ig, 4 láb 18 m-ig - max. 4 m kinyúlás",
+      "subtitle": "Falhoz rögzítve; elöl 2 láb 6 m-ig, 3 láb 12 m-ig, 4 láb 18 m-ig - max. 4,5 m kinyúlás",
       "enabled": true,
       "status": "active",
       "order": 1,
       "sizeLimits": {
         "minWidthCm": 100,
-        "maxWidthCm": 1200,
+        "maxWidthCm": 1700,
         "minProjectionCm": 50,
         "maxProjectionCm": 450,
         "maxHeightCm": 300
@@ -27273,7 +27673,7 @@
         "pdfFile": "",
         "pages": "",
         "productAlias": "Glassfix",
-        "note": "Árképző (docx 2026-10): fix sávos ár szélesség × kinyúlás szerint + sávos szerelés; ajándék infrafűtés. Falhoz rögzítve 12 × 4,5 m-ig, különálló 8,5 × 4,5 m-ig."
+        "note": "Balázs Excelje (Polikarbonát, üveg tetős excel.xlsx, 2026-11-02): ár és szerelés szélesség × kinyúlás szerint, a következő nagyobb méretre kerekítve. Falhoz rögzítve 1800 × 450 cm-ig, különállóként 850 × 450 cm-ig (100 cm kinyúlásnál 300 cm szélességtől). Ajándék infrafűtés."
       },
       "pricingOverride": {
         "profitMode": "markup_percent",
@@ -27359,7 +27759,7 @@
         {
           "id": "mat_glassfix_base_wall",
           "name": "GLASSFIX - 10 mm vastag biztonsági üvegtetővel, falhoz rögzítve",
-          "description": "Sávos ár: szélesség 6 / 8,5 / 12 m-ig × kinyúlás 3 / 4,5 m-ig.",
+          "description": "",
           "itemRole": "base",
           "defaultSelected": true,
           "pricingMode": "matrix_cm",
@@ -27382,24 +27782,132 @@
             "rowLabel": "Kinyúlás (cm)",
             "colLabel": "Szélesség (cm)",
             "rows": [
+              100,
+              200,
               300,
+              400,
               450
             ],
             "cols": [
+              100,
+              200,
+              300,
+              400,
+              500,
               600,
-              850,
-              1200
+              700,
+              800,
+              900,
+              1000,
+              1100,
+              1200,
+              1300,
+              1400,
+              1500,
+              1600,
+              1700,
+              1800
             ],
             "values": {
+              "100": {
+                "100": 1300,
+                "200": 1760,
+                "300": 2060,
+                "400": 3080,
+                "500": 3280,
+                "600": 3590,
+                "700": 3990,
+                "800": 4790,
+                "900": 4990,
+                "1000": 6100,
+                "1100": 6390,
+                "1200": 6790,
+                "1300": 7590,
+                "1400": 7790,
+                "1500": 8690,
+                "1600": 10090,
+                "1700": 10990,
+                "1800": 12090
+              },
+              "200": {
+                "100": 1550,
+                "200": 2200,
+                "300": 2600,
+                "400": 4100,
+                "500": 4500,
+                "600": 4800,
+                "700": 5100,
+                "800": 5990,
+                "900": 6800,
+                "1000": 7700,
+                "1100": 8190,
+                "1200": 8390,
+                "1300": 9990,
+                "1400": 11090,
+                "1500": 11490,
+                "1600": 12690,
+                "1700": 12990,
+                "1800": 14090
+              },
               "300": {
-                "600": 5342,
-                "850": 6438,
-                "1200": 9590
+                "100": 1800,
+                "200": 2600,
+                "300": 3100,
+                "400": 4300,
+                "500": 4700,
+                "600": 5320,
+                "700": 6290,
+                "800": 6790,
+                "900": 7900,
+                "1000": 8800,
+                "1100": 9000,
+                "1200": 9590,
+                "1300": 10390,
+                "1400": 11590,
+                "1500": 12090,
+                "1600": 13990,
+                "1700": 14500,
+                "1800": 15290
+              },
+              "400": {
+                "100": 2200,
+                "200": 3300,
+                "300": 3790,
+                "400": 5500,
+                "500": 5900,
+                "600": 6390,
+                "700": 7290,
+                "800": 7990,
+                "900": 9490,
+                "1000": 10290,
+                "1100": 10990,
+                "1200": 11590,
+                "1300": 12390,
+                "1400": 12900,
+                "1500": 14790,
+                "1600": 16590,
+                "1700": 17390,
+                "1800": 17990
               },
               "450": {
-                "600": 6850,
-                "850": 9600,
-                "1200": 11700
+                "100": 2450,
+                "200": 3700,
+                "300": 3990,
+                "400": 5800,
+                "500": 6200,
+                "600": 6650,
+                "700": 7950,
+                "800": 8290,
+                "900": 9900,
+                "1000": 10650,
+                "1100": 11490,
+                "1200": 11990,
+                "1300": 12790,
+                "1400": 13290,
+                "1500": 15090,
+                "1600": 16990,
+                "1700": 17690,
+                "1800": 18590
               }
             }
           },
@@ -27412,7 +27920,7 @@
         {
           "id": "mat_glassfix_base_free",
           "name": "GLASSFIX - 10 mm vastag biztonsági üvegtetővel, különálló (szabadon álló)",
-          "description": "Sávos ár: szélesség 6 / 8,5 m-ig × kinyúlás 3 / 4,5 m-ig.",
+          "description": "",
           "itemRole": "base",
           "defaultSelected": true,
           "pricingMode": "matrix_cm",
@@ -27435,20 +27943,77 @@
             "rowLabel": "Kinyúlás (cm)",
             "colLabel": "Szélesség (cm)",
             "rows": [
+              100,
+              200,
               300,
+              400,
               450
             ],
             "cols": [
+              100,
+              200,
+              300,
+              400,
+              500,
               600,
+              700,
+              800,
               850
             ],
             "values": {
+              "100": {
+                "100": 0,
+                "200": 0,
+                "300": 6000,
+                "400": 6500,
+                "500": 6800,
+                "600": 7000,
+                "700": 7500,
+                "800": 8000,
+                "850": 9000
+              },
+              "200": {
+                "100": 4500,
+                "200": 6000,
+                "300": 6500,
+                "400": 7500,
+                "500": 7800,
+                "600": 8000,
+                "700": 8500,
+                "800": 9250,
+                "850": 9958
+              },
               "300": {
-                "600": 9013,
+                "100": 5000,
+                "200": 6500,
+                "300": 7000,
+                "400": 8000,
+                "500": 8500,
+                "600": 9000,
+                "700": 9500,
+                "800": 10250,
                 "850": 10958
               },
+              "400": {
+                "100": 5500,
+                "200": 7000,
+                "300": 7500,
+                "400": 8500,
+                "500": 9500,
+                "600": 10640,
+                "700": 11680,
+                "800": 12844,
+                "850": 13698
+              },
               "450": {
+                "100": 6000,
+                "200": 7500,
+                "300": 8000,
+                "400": 9000,
+                "500": 10500,
                 "600": 12280,
+                "700": 13859,
+                "800": 15438,
                 "850": 16438
               }
             }
@@ -27462,7 +28027,7 @@
         {
           "id": "mat_glassfix_install_wall",
           "name": "Szerelés",
-          "description": "Sávos szerelési díj.",
+          "description": "",
           "itemRole": "base",
           "defaultSelected": true,
           "pricingMode": "matrix_cm",
@@ -27485,24 +28050,132 @@
             "rowLabel": "Kinyúlás (cm)",
             "colLabel": "Szélesség (cm)",
             "rows": [
+              100,
+              200,
               300,
+              400,
               450
             ],
             "cols": [
+              100,
+              200,
+              300,
+              400,
+              500,
               600,
-              850,
-              1200
+              700,
+              800,
+              900,
+              1000,
+              1100,
+              1200,
+              1300,
+              1400,
+              1500,
+              1600,
+              1700,
+              1800
             ],
             "values": {
+              "100": {
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1200,
+                "700": 1400,
+                "800": 1500,
+                "900": 1700,
+                "1000": 2000,
+                "1100": 2500,
+                "1200": 2500,
+                "1300": 2900,
+                "1400": 2900,
+                "1500": 3200,
+                "1600": 3500,
+                "1700": 3800,
+                "1800": 4000
+              },
+              "200": {
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1200,
+                "700": 1400,
+                "800": 1500,
+                "900": 1700,
+                "1000": 2000,
+                "1100": 2500,
+                "1200": 2500,
+                "1300": 2900,
+                "1400": 2900,
+                "1500": 3200,
+                "1600": 3500,
+                "1700": 3800,
+                "1800": 4000
+              },
               "300": {
-                "600": 1100,
-                "850": 1500,
-                "1200": 2000
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1200,
+                "700": 1400,
+                "800": 1500,
+                "900": 1700,
+                "1000": 2000,
+                "1100": 2500,
+                "1200": 2500,
+                "1300": 2900,
+                "1400": 2900,
+                "1500": 3200,
+                "1600": 3500,
+                "1700": 3800,
+                "1800": 4000
+              },
+              "400": {
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1200,
+                "700": 1400,
+                "800": 1500,
+                "900": 1700,
+                "1000": 2000,
+                "1100": 2500,
+                "1200": 2500,
+                "1300": 2900,
+                "1400": 2900,
+                "1500": 3200,
+                "1600": 3500,
+                "1700": 3800,
+                "1800": 4000
               },
               "450": {
-                "600": 2000,
-                "850": 2000,
-                "1200": 2500
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1200,
+                "700": 1400,
+                "800": 1500,
+                "900": 1700,
+                "1000": 2000,
+                "1100": 2500,
+                "1200": 2500,
+                "1300": 2900,
+                "1400": 2900,
+                "1500": 3200,
+                "1600": 3500,
+                "1700": 3800,
+                "1800": 4000
               }
             }
           },
@@ -27516,7 +28189,7 @@
         {
           "id": "mat_glassfix_install_free",
           "name": "Szerelés",
-          "description": "Sávos szerelési díj.",
+          "description": "",
           "itemRole": "base",
           "defaultSelected": true,
           "pricingMode": "matrix_cm",
@@ -27539,20 +28212,77 @@
             "rowLabel": "Kinyúlás (cm)",
             "colLabel": "Szélesség (cm)",
             "rows": [
+              100,
+              200,
               300,
+              400,
               450
             ],
             "cols": [
+              100,
+              200,
+              300,
+              400,
+              500,
               600,
+              700,
+              800,
               850
             ],
             "values": {
+              "100": {
+                "100": 800,
+                "200": 1000,
+                "300": 1000,
+                "400": 1500,
+                "500": 1600,
+                "600": 1900,
+                "700": 2000,
+                "800": 2300,
+                "850": 2500
+              },
+              "200": {
+                "100": 800,
+                "200": 1000,
+                "300": 1000,
+                "400": 1500,
+                "500": 1600,
+                "600": 1900,
+                "700": 2000,
+                "800": 2300,
+                "850": 2500
+              },
               "300": {
-                "600": 1500,
-                "850": 2000
+                "100": 800,
+                "200": 1000,
+                "300": 1000,
+                "400": 1500,
+                "500": 1600,
+                "600": 1900,
+                "700": 2000,
+                "800": 2300,
+                "850": 2500
+              },
+              "400": {
+                "100": 800,
+                "200": 1000,
+                "300": 1000,
+                "400": 1500,
+                "500": 1600,
+                "600": 1900,
+                "700": 2000,
+                "800": 2300,
+                "850": 2500
               },
               "450": {
-                "600": 2000,
+                "100": 800,
+                "200": 1000,
+                "300": 1000,
+                "400": 1500,
+                "500": 1600,
+                "600": 1900,
+                "700": 2000,
+                "800": 2300,
                 "850": 2500
               }
             }
@@ -28624,6 +29354,31 @@
           }
         },
         {
+          "id": "mat_thermofix_thermo_a_2lab",
+          "name": "THERMO GLASS hőszigetelt, eltolható üvegfal a szélesség oldalára (szereléssel)",
+          "description": "90.000 Ft/m², oldalanként + 950 EUR rendszerfelár és + 400 EUR szerelés.",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "per_m2",
+          "currency": "HUF",
+          "dimensionSource": "front_wall",
+          "basePrice": 0,
+          "unitPrice": 90000,
+          "defaultQuantity": 1,
+          "unitLabel": "m²",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true,
+          "surchargeEur": 1350
+        },
+        {
           "id": "mat_glassfix_zip_b",
           "name": "Oldalsó ZIP árnyékoló a kinyúlás oldalára - Refleksol 120 ZIP, Serge 600 ponyva, Somfy IO motor, távirányító (szereléssel)",
           "description": "Az ár a Somfy IO motort tartalmazza. Az ár a szerelést és a programozást is tartalmazza.",
@@ -29160,6 +29915,33 @@
           "maxSides": 2
         },
         {
+          "id": "mat_thermofix_thermo_b",
+          "name": "THERMO GLASS hőszigetelt, eltolható üvegfal a kinyúlás oldalára (szereléssel)",
+          "description": "90.000 Ft/m², oldalanként + 950 EUR rendszerfelár és + 400 EUR szerelés.",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "per_m2",
+          "currency": "HUF",
+          "dimensionSource": "side_wall",
+          "basePrice": 0,
+          "unitPrice": 90000,
+          "defaultQuantity": 1,
+          "unitLabel": "oldal",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "photos": [],
+          "excludeFromPercentBase": true,
+          "perSide": true,
+          "maxSides": 2,
+          "surchargeEur": 1350
+        },
+        {
           "id": "mat_glassfix_glass_triangle",
           "name": "Háromszögrész beépítése üvegből - 1 db (szereléssel)",
           "description": "Kinyúlás (cm) × 1,3 EUR, +12% szerelés",
@@ -29308,8 +30090,8 @@
       "moduleSplits": [
         {
           "axis": "width",
-          "maxCm": 600,
-          "maxModules": 3
+          "maxCm": 850,
+          "maxModules": 2
         }
       ],
       "mountTypes": [
@@ -29319,9 +30101,9 @@
       "sizeRules": [
         {
           "id": "rule_glassfix_free",
-          "label": "különálló szerkezetként: legfeljebb 790 × 450 cm",
+          "label": "különálló szerkezetként: legfeljebb 850 × 450 cm, 250 cm magas",
           "mountType": "Szabadon álló",
-          "maxWidthCm": 790,
+          "maxWidthCm": 850,
           "maxProjectionCm": 450,
           "maxHeightCm": 250
         }
@@ -29567,10 +30349,10 @@
     {
       "id": "tpl_legacy_uvegfal_lengyel",
       "categoryId": "cat_1792346155886_2odc",
-      "name": "SLIDING DOORS lengyel üvegfal",
+      "name": "LINE GLASS üvegfal (régi lengyel ártábla, nem használt)",
       "subtitle": "Keret nélküli, elcsúsztatható 10 mm edzett üvegfal - középkategória",
       "enabled": true,
-      "status": "active",
+      "status": "inactive",
       "order": 2,
       "sizeLimits": {
         "minProjectionCm": 50,
@@ -29579,7 +30361,7 @@
       "catalogRef": {
         "pdfFile": "",
         "pages": "",
-        "productAlias": "Sliding Doors",
+        "productAlias": "LINE GLASS",
         "note": "legacy: templates/uvegfalas/datasheet.py Lengyel (sávos m² ár oldalanként) + editor.py item2; szerelés 12%"
       },
       "pricingOverride": {
@@ -29588,7 +30370,7 @@
         "assemblyFixedEur": 0,
         "assemblyPerM2Eur": 0
       },
-      "introText": "A SLIDING DOORS keret nélküli, elcsúsztatható üvegfalrendszer, amely síneken csúszó üvegtáblákból áll: könnyen telepíthető, és keret nélküli üvegfalaival zavartalan kilátást, exkluzív megjelenést biztosít. Ideális megoldás a pergola oldalainak vagy a meglévő terasz beépítésére, így a belső tér védett a széltől, esőtől és zajtól; belső térelválasztóként is kitűnő választás. Üvegfalrendszereinkkel megmaradnak a természetes fény pozitív hatásai, amelyek nagyban befolyásolják a hangulatot és a jó közérzetet.\n\nAz üvegek 10 mm vastag edzett biztonsági üvegek, a táblák elhúzás közben csatlakoznak egymáshoz, így az első üveg mozgatja a többit is. Opcionálisan kérhető belső biztonsági zár és kefés alumínium huzatgátló profil.\n\nBeépítendő oldalak: 1 db {{szelesseg}}×{{magassag}} cm-es és 1 db {{kinyulas}}×{{magassag}} cm-es oldal.",
+      "introText": "A LINE GLASS keret nélküli, elcsúsztatható üvegfalrendszer, amely síneken csúszó üvegtáblákból áll: könnyen telepíthető, és keret nélküli üvegfalaival zavartalan kilátást, exkluzív megjelenést biztosít. Ideális megoldás a pergola oldalainak vagy a meglévő terasz beépítésére, így a belső tér védett a széltől, esőtől és zajtól; belső térelválasztóként is kitűnő választás. Üvegfalrendszereinkkel megmaradnak a természetes fény pozitív hatásai, amelyek nagyban befolyásolják a hangulatot és a jó közérzetet.\n\nAz üvegek 10 mm vastag edzett biztonsági üvegek, a táblák elhúzás közben csatlakoznak egymáshoz, így az első üveg mozgatja a többit is. Opcionálisan kérhető belső biztonsági zár és kefés alumínium huzatgátló profil.\n\nBeépítendő oldalak: 1 db {{szelesseg}}×{{magassag}} cm-es és 1 db {{kinyulas}}×{{magassag}} cm-es oldal.",
       "closingText": "",
       "textBlocks": [
         {
@@ -29611,7 +30393,7 @@
           "id": "sphoto_legacy_uvegfal_lengyel_1",
           "imageUrl": "/uploads/legacy/uvegfalas/image_07.jpg",
           "titleAbove": "",
-          "captionBelow": "SLIDING DOORS - keret nélküli, síneken csúszó üvegfal.",
+          "captionBelow": "LINE GLASS - keret nélküli, síneken csúszó üvegfal.",
           "widthPct": 75,
           "align": "center"
         },
@@ -30937,6 +31719,77 @@
           "defaultNote": "Opció",
           "id": "x_zip_ral",
           "name": "Egyedi RAL szín (+20% felár)",
+          "colorOptions": [
+            {
+              "id": "col_refleksol_zip_x_0",
+              "code": "Wood 26",
+              "name": "Mahogany",
+              "hex": "#6b2e1f"
+            },
+            {
+              "id": "col_refleksol_zip_x_1",
+              "code": "Wood 27",
+              "name": "Cherry",
+              "hex": "#7b3a2a"
+            },
+            {
+              "id": "col_refleksol_zip_x_2",
+              "code": "Wood 28",
+              "name": "Walnut",
+              "hex": "#5a3a26"
+            },
+            {
+              "id": "col_refleksol_zip_x_3",
+              "code": "Wood 30",
+              "name": "Golden Oak",
+              "hex": "#a86b32"
+            },
+            {
+              "id": "col_refleksol_zip_x_4",
+              "code": "Wood 49",
+              "name": "Malt Oak",
+              "hex": "#8c6a47"
+            },
+            {
+              "id": "col_refleksol_zip_x_5",
+              "code": "Wood 52",
+              "name": "Winchester",
+              "hex": "#7a5536"
+            }
+          ],
+          "colorTitle": "Felárral választható színek",
+          "photos": [
+            {
+              "id": "ph_cat2026_x_zip_ral",
+              "imageUrl": "/uploads/catalog-2026/colours-aluprof/colours-1.jpg",
+              "titleAbove": "",
+              "captionBelow": "Aluprof pergola színek (RAL)",
+              "widthPct": 75,
+              "align": "center"
+            }
+          ]
+        },
+        {
+          "description": "",
+          "itemRole": "optional",
+          "defaultSelected": false,
+          "pricingMode": "percentage",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 1,
+          "unitPrice": 1,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 5,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "Opció",
+          "id": "x_zip_fabric",
+          "name": "Egyedi szövet a katalógusból (+5% felár)",
           "colorOptions": [
             {
               "id": "col_refleksol_zip_x_0",
@@ -41836,17 +42689,34 @@
       "subtitle": "Kazettás karos napellenző, Somfy IO motorral",
       "enabled": true,
       "status": "active",
-      "introText": "A MADEIRA ({{meret}}) teljesen zárt kazettás karos napellenző motoros működtetéssel. Behúzott állapotban a vászon és a karok a kazettában védve vannak az időjárástól.",
+      "introText": "A MADEIRA ({{meret}}) összecsukható kazettás karos napellenző, fal- és mennyezetszereléssel egyaránt kérhető. Zárt szerkezet: becsukott állapotban a szövetet nem érik az időjárás károsító hatásai (napfény, fagy, eső). Prémium minőségű, jó ár-érték arányú lengyel termék, teljesen automatizált működéssel (szél- és napérzékelővel) is választható.",
       "closingText": "",
       "textBlocks": [
         {
           "id": "tb_madeira_after",
           "title": "",
-          "content": "Szövet- és színválaszték katalógusból.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi szövetek és színek (felár ellenében)\n- szél- és napérzékelő, okosotthon vezérlő\n- LED-világítás",
+          "content": "A tartó szerkezet és a mozgató karok alapszínei lent láthatók, a szövet rengeteg színben választható.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi színek és szövetek (felár ellenében)\n- automata működés: nap-, szél- és esőérzékelő\n- okosotthon vezérlő\n- LED-világítás a kazetta alsó síkján és a karokban",
           "position": "after_table"
         }
       ],
-      "photos": [],
+      "photos": [
+        {
+          "id": "iphoto_tpl_madeira_2026_1",
+          "imageUrl": "/uploads/offers/madeira/madeira-2026-sheet.jpg",
+          "titleAbove": "Műszaki adatok és alapszínek",
+          "captionBelow": "Kazettás karos napellenző (Aluprof): max. 3,6 m kinyúlás, 5-35° dőlésszög",
+          "widthPct": 75,
+          "align": "center"
+        },
+        {
+          "id": "iphoto_tpl_madeira_2026_2",
+          "imageUrl": "/uploads/offers/madeira/madeira-2026-mounting.jpg",
+          "titleAbove": "Szerelési módok",
+          "captionBelow": "Falra, mennyezetre vagy tetőszarufára szerelhető.",
+          "widthPct": 75,
+          "align": "center"
+        }
+      ],
       "materials": [
         {
           "description": "Alumínium szerkezet, összecsukható karok.",
@@ -41938,46 +42808,58 @@
           "splitByModule": true,
           "colorOptions": [
             {
-              "id": "col_madeira_std_0",
+              "id": "col_corsica_std_0",
               "code": "RAL 9010",
               "name": "Pure White",
               "hex": "#f7f9ef"
             },
             {
-              "id": "col_madeira_std_1",
+              "id": "col_corsica_std_1",
               "code": "RAL 1015",
               "name": "Light Ivory",
               "hex": "#e6d2b5"
             },
             {
-              "id": "col_madeira_std_2",
+              "id": "col_corsica_std_2",
+              "code": "VSR 240 SATIN",
+              "name": "Beige",
+              "hex": "#d8c7a6"
+            },
+            {
+              "id": "col_corsica_std_3",
               "code": "RAL 9006",
               "name": "White Aluminium",
               "hex": "#a5a8a6"
             },
             {
-              "id": "col_madeira_std_3",
+              "id": "col_corsica_std_4",
               "code": "FSM 71319",
               "name": "Structural Graphite",
               "hex": "#3c3f42"
             },
             {
-              "id": "col_madeira_std_4",
+              "id": "col_corsica_std_5",
               "code": "RAL 8014",
               "name": "Sepia Brown",
               "hex": "#4a3526"
             },
             {
-              "id": "col_madeira_std_5",
+              "id": "col_corsica_std_6",
               "code": "RAL 7016",
               "name": "Anthracite Structure, struktúrált",
               "hex": "#383e42"
             },
             {
-              "id": "col_madeira_std_6",
+              "id": "col_corsica_std_7",
               "code": "RAL 9005",
               "name": "Jet Black Structure, struktúrált",
               "hex": "#0a0a0d"
+            },
+            {
+              "id": "col_corsica_std_8",
+              "code": "RAL 8003",
+              "name": "Clay Brown Structure, struktúrált",
+              "hex": "#80542f"
             }
           ],
           "colorTitle": "Alapszínek (felár nélkül)"
@@ -42469,14 +43351,14 @@
       },
       "updatedAt": "2026-10-30T12:00:00.000Z",
       "alsoInCategoryIds": [],
-      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a motorokra, vezérlőkre 3 év; a szövetekre 5 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a termékekre 3 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
     },
     {
       "id": "tpl_corsica",
       "subtitle": "Kazettás karos napellenző, Somfy IO motorral",
       "enabled": true,
       "status": "active",
-      "introText": "A CORSICA ({{meret}}) összecsukható kazettás karos napellenző, fal- és mennyezetszereléssel egyaránt kérhető. Zárt szerkezet: becsukott állapotban a szövetet nem érik az időjárás károsító hatásai (napfény, fagy, eső). Jó minőségű, jó ár-érték arányú lengyel termék, teljesen automatizált működéssel (szél- és napérzékelővel) is választható; a kazetta alsó síkjába LED-világítás is kérhető.",
+      "introText": "A CORSICA ({{meret}}) összecsukható kazettás karos napellenző, fal- és mennyezetszereléssel egyaránt kérhető. Zárt szerkezet: becsukott állapotban a szövetet nem érik az időjárás károsító hatásai (napfény, fagy, eső). Prémium minőségű, jó ár-érték arányú lengyel termék, teljesen automatizált működéssel (szél- és napérzékelővel) is választható.",
       "closingText": "",
       "textBlocks": [
         {
@@ -42488,36 +43370,34 @@
         {
           "id": "tb_corsica_after",
           "title": "",
-          "content": "Szövet- és színválaszték katalógusból.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi szövetek és színek (felár ellenében)\n- szél- és napérzékelő, okosotthon vezérlő\n- LED-világítás",
+          "content": "A tartó szerkezet és a mozgató karok alapszínei lent láthatók, a szövet rengeteg színben választható.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi színek és szövetek (felár ellenében)\n- automata működés: nap-, szél- és esőérzékelő\n- okosotthon vezérlő\n- LED-világítás a kazetta alsó síkján és a karokban",
           "position": "after_table"
         }
       ],
       "photos": [
         {
-          "id": "ph_offer_corsica_1",
-          "imageUrl": "/uploads/offers/corsica/corsica-01.jpg",
+          "id": "iphoto_tpl_corsica_2026_1",
+          "imageUrl": "/uploads/offers/corsica/corsica-2026-photo.jpg",
           "titleAbove": "",
           "captionBelow": "CORSICA kazettás karos napellenző",
           "widthPct": 75,
-          "align": "center",
-          "subPhotos": [
-            {
-              "id": "ph_offer_corsica_1_1",
-              "imageUrl": "/uploads/offers/corsica/corsica-11.jpg",
-              "titleAbove": "",
-              "captionBelow": "Kazettás kivitel",
-              "widthPct": 50,
-              "align": "center"
-            },
-            {
-              "id": "ph_offer_corsica_1_2",
-              "imageUrl": "/uploads/offers/corsica/corsica-12.jpg",
-              "titleAbove": "",
-              "captionBelow": "Fali, mennyezeti és szarufára szerelés",
-              "widthPct": 50,
-              "align": "center"
-            }
-          ]
+          "align": "center"
+        },
+        {
+          "id": "iphoto_tpl_corsica_2026_2",
+          "imageUrl": "/uploads/offers/corsica/corsica-2026-sheet.jpg",
+          "titleAbove": "Műszaki adatok és alapszínek",
+          "captionBelow": "CORSICA (Aluprof): max. 7 m széles, 3,6 m kinyúlás, 5-35° dőlésszög",
+          "widthPct": 75,
+          "align": "center"
+        },
+        {
+          "id": "iphoto_tpl_corsica_2026_3",
+          "imageUrl": "/uploads/offers/corsica/corsica-2026-mounting.jpg",
+          "titleAbove": "Szerelési módok",
+          "captionBelow": "Falra, mennyezetre vagy tetőszarufára szerelhető.",
+          "widthPct": 75,
+          "align": "center"
         }
       ],
       "materials": [
@@ -43148,24 +44028,41 @@
       },
       "updatedAt": "2026-10-30T12:00:00.000Z",
       "alsoInCategoryIds": [],
-      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a motorokra, vezérlőkre 3 év; a szövetekre 5 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a termékekre 3 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
     },
     {
       "id": "tpl_jamaica",
       "subtitle": "Kazetta nélküli karos napellenző, Somfy IO motorral",
       "enabled": true,
       "status": "active",
-      "introText": "A JAMAICA ({{meret}}) kazetta nélküli karos napellenző motoros működtetéssel. Behúzott állapotban a vászon és a karok a falon kompaktan helyezkednek el.",
+      "introText": "A JAMAICA ({{meret}}) összecsukható, kazetta nélküli karos napellenző, fal- és mennyezetszereléssel egyaránt kérhető. Prémium minőségű, felső kategóriás, jó ár-érték arányú lengyel termék. Motoros vezérléssel, szél- és fényérzékelővel is kérhető.",
       "closingText": "",
       "textBlocks": [
         {
           "id": "tb_jamaica_after",
           "title": "",
-          "content": "Szövet- és színválaszték katalógusból.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi szövetek és színek (felár ellenében)\n- szél- és napérzékelő, okosotthon vezérlő\n- LED-világítás",
+          "content": "A tartó szerkezet és a mozgató karok alapszínei lent láthatók, a szövet rengeteg színben választható.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi színek és szövetek (felár ellenében)\n- automata működés: nap-, szél- és esőérzékelő\n- okosotthon vezérlő\n- LED-világítás a karokban",
           "position": "after_table"
         }
       ],
-      "photos": [],
+      "photos": [
+        {
+          "id": "iphoto_tpl_jamaica_2026_1",
+          "imageUrl": "/uploads/offers/jamaica/jamaica-2026-sheet.jpg",
+          "titleAbove": "Műszaki adatok és alapszínek",
+          "captionBelow": "JAMAICA (Aluprof): max. 7 m széles, 3,6 m kinyúlás, 5-40° dőlésszög",
+          "widthPct": 75,
+          "align": "center"
+        },
+        {
+          "id": "iphoto_tpl_jamaica_2026_2",
+          "imageUrl": "/uploads/offers/jamaica/jamaica-2026-mounting.jpg",
+          "titleAbove": "Szerelési módok",
+          "captionBelow": "Falra, mennyezetre vagy tetőszarufára szerelhető.",
+          "widthPct": 75,
+          "align": "center"
+        }
+      ],
       "materials": [
         {
           "description": "Alumínium szerkezet, összecsukható karok.",
@@ -43771,49 +44668,47 @@
       },
       "updatedAt": "2026-10-30T12:00:00.000Z",
       "alsoInCategoryIds": [],
-      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a motorokra, vezérlőkre 3 év; a szövetekre 5 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a termékekre 3 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
     },
     {
       "id": "tpl_australia",
       "subtitle": "Kazetta nélküli karos napellenző, Somfy IO motorral",
       "enabled": true,
       "status": "active",
-      "introText": "Az AUSTRALIA ({{meret}}) kazetta nélküli karos napellenző, középkategóriás, jó ár-érték arányú lengyel termék. Motoros működtetéssel, szél- és fényérzékelővel is kérhető. Behúzott állapotban a vászon és a karok a falon kompaktan helyezkednek el.",
+      "introText": "Az AUSTRALIA ({{meret}}) összecsukható, kazetta nélküli karos napellenző, fal- és mennyezetszereléssel egyaránt kérhető. Prémium minőségű, felső kategóriás, jó ár-érték arányú lengyel termék. Motoros vezérléssel, szél- és fényérzékelővel is kérhető.",
       "closingText": "",
       "textBlocks": [
         {
           "id": "tb_australia_after",
           "title": "",
-          "content": "Szövet- és színválaszték katalógusból.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi szövetek és színek (felár ellenében)\n- szél- és napérzékelő, okosotthon vezérlő\n- LED-világítás",
+          "content": "A tartó szerkezet és a mozgató karok alapszínei lent láthatók, a szövet rengeteg színben választható.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi színek és szövetek (felár ellenében)\n- automata működés: nap-, szél- és esőérzékelő\n- okosotthon vezérlő\n- LED-világítás a karokban",
           "position": "after_table"
         }
       ],
       "photos": [
         {
-          "id": "ph_offer_australia_1",
-          "imageUrl": "/uploads/offers/australia/australia-01.jpg",
+          "id": "iphoto_tpl_australia_2026_1",
+          "imageUrl": "/uploads/offers/australia/australia-2026-photo.jpg",
           "titleAbove": "",
-          "captionBelow": "AUSTRALIA karos napellenző",
+          "captionBelow": "AUSTRALIA kazetta nélküli karos napellenző",
           "widthPct": 75,
-          "align": "center",
-          "subPhotos": [
-            {
-              "id": "ph_offer_australia_1_1",
-              "imageUrl": "/uploads/offers/australia/australia-11.jpg",
-              "titleAbove": "",
-              "captionBelow": "Kazetta nélküli kivitel",
-              "widthPct": 50,
-              "align": "center"
-            },
-            {
-              "id": "ph_offer_australia_1_2",
-              "imageUrl": "/uploads/offers/australia/australia-12.jpg",
-              "titleAbove": "",
-              "captionBelow": "Fali, mennyezeti és szarufára szerelés",
-              "widthPct": 50,
-              "align": "center"
-            }
-          ]
+          "align": "center"
+        },
+        {
+          "id": "iphoto_tpl_australia_2026_2",
+          "imageUrl": "/uploads/offers/australia/australia-2026-sheet.jpg",
+          "titleAbove": "Műszaki adatok és alapszínek",
+          "captionBelow": "AUSTRALIA (Aluprof): max. 7 m széles, 3,6 m kinyúlás, 5-60° dőlésszög",
+          "widthPct": 75,
+          "align": "center"
+        },
+        {
+          "id": "iphoto_tpl_australia_2026_3",
+          "imageUrl": "/uploads/offers/australia/australia-2026-mounting.jpg",
+          "titleAbove": "Szerelési módok",
+          "captionBelow": "Falra, mennyezetre vagy tetőszarufára szerelhető.",
+          "widthPct": 75,
+          "align": "center"
         }
       ],
       "materials": [
@@ -44423,7 +45318,7 @@
       },
       "updatedAt": "2026-10-30T12:00:00.000Z",
       "alsoInCategoryIds": [],
-      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a motorokra, vezérlőkre 3 év; a szövetekre 5 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a termékekre 3 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
     },
     {
       "id": "tpl_thermo_glass",
@@ -44658,8 +45553,8 @@
     {
       "id": "tpl_guillotine_vertica",
       "subtitle": "Motoros mozgatású, függőlegesen nyíló (guillotine) üvegfalrendszer",
-      "enabled": false,
-      "status": "inactive",
+      "enabled": true,
+      "status": "active",
       "introText": "",
       "closingText": "",
       "textBlocks": [],
@@ -44669,11 +45564,11 @@
           "description": "",
           "itemRole": "base",
           "defaultSelected": true,
-          "pricingMode": "tiered_m2",
-          "currency": "EUR",
+          "pricingMode": "per_m2",
+          "currency": "HUF",
           "dimensionSource": "front_wall",
-          "basePrice": 1,
-          "unitPrice": 1,
+          "basePrice": 0,
+          "unitPrice": 148000,
           "defaultQuantity": 1,
           "unitLabel": "m²",
           "m2Tiers": [],
@@ -44684,8 +45579,124 @@
           "fixedSurcharge": 0,
           "listPriceMultiplier": 1.25,
           "defaultNote": "",
-          "id": "mat_guillotine_vertica_base",
-          "name": "GUILLOTINE Vertica motoros üvegfal"
+          "id": "mat_guillotine_a",
+          "name": "GUILLOTINE Vertica motoros, hőszigetelt üvegfal a szélesség oldalán - 1 db"
+        },
+        {
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 1200,
+          "unitPrice": 0,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "id": "mat_guillotine_a_fee",
+          "name": "Rendszerfelár a szélesség oldalán (sínek, profilok)",
+          "photos": []
+        },
+        {
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 500,
+          "unitPrice": 0,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1,
+          "defaultNote": "",
+          "id": "mat_guillotine_a_install",
+          "name": "Szerelés a szélesség oldalán",
+          "photos": [],
+          "excludeFromPercentBase": true
+        },
+        {
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "per_m2",
+          "currency": "HUF",
+          "dimensionSource": "side_wall",
+          "basePrice": 0,
+          "unitPrice": 148000,
+          "defaultQuantity": 1,
+          "unitLabel": "m²",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "id": "mat_guillotine_b",
+          "name": "GUILLOTINE Vertica motoros, hőszigetelt üvegfal a kinyúlás oldalán - 1 db"
+        },
+        {
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 1200,
+          "unitPrice": 0,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1.25,
+          "defaultNote": "",
+          "id": "mat_guillotine_b_fee",
+          "name": "Rendszerfelár a kinyúlás oldalán (sínek, profilok)",
+          "photos": []
+        },
+        {
+          "description": "",
+          "itemRole": "base",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 500,
+          "unitPrice": 0,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1,
+          "defaultNote": "",
+          "id": "mat_guillotine_b_install",
+          "name": "Szerelés a kinyúlás oldalán",
+          "photos": [],
+          "excludeFromPercentBase": true
         },
         {
           "description": "A szerkezet árának 20%-a",
@@ -44730,12 +45741,18 @@
       },
       "sizeRules": [],
       "catalogRef": {
-        "note": "Nincs ár a kapott anyagokban - add meg a m² árat (sávosan), majd állítsd aktívra."
+        "note": "Balázs (2026-11-02): 148.000 Ft/m², a kapott árra oldalanként + 1200 EUR, szerelés oldalanként + 500 EUR."
       },
       "updatedAt": "2026-10-30T12:00:00.000Z",
       "moduleSplits": [],
       "alsoInCategoryIds": [],
-      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a termékekre 3 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek."
+      "infoText": "Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n• Az ajánlat érvényes 30 napig\n• EUR áraink az aktuális nap MNB középárfolyamán számítandók (ajánlatírás napján: {{arfolyam}} Ft/EUR)\n• Szállítási költség ide: {{telepules}}: + {{szallitas}} (+Áfa)\n• Garancia: a termékekre 3 év\n• Átfutási idő a visszaigazolástól számítva: 30-60 nap\n• Fizetés: szerződéskötéskor 60%, átvételkor a maradék 40%\n• Az árajánlat a későbbi műszaki tartalom változása és a helyszíni felmérés miatt módosulhat\n\nAmennyiben ajánlatunk szimpatikus Önnek, kérjük, e-mailben jelezzen vissza, ezután helyszíni felmérésre és méretpontosításra van szükség. Bármilyen kérdés esetén keressen minket bizalommal.\n\nMegjegyzés: az extra anyagmozgatás, villamos tervezés és elektromos kiállások, kiegészítő lakatos szerkezetek, beton alap, burkolási munkák és fogadó szerkezetek költségei a vevőt terhelik. Vállalási díjaink normál szerelési körülmények esetén, szabad és folyamatos munkaterület biztosítása mellett érvényesek.",
+      "pricingOverride": {
+        "profitMode": "markup_percent",
+        "profitValue": 0,
+        "assemblyFixedEur": 0,
+        "assemblyPerM2Eur": 0
+      }
     },
     {
       "id": "tpl_dakar",
@@ -46931,14 +47948,14 @@
       "order": 1,
       "sizeLimits": {
         "minWidthCm": 100,
-        "maxWidthCm": 1700,
+        "maxWidthCm": 1580,
         "minProjectionCm": 50,
         "maxProjectionCm": 600,
         "maxHeightCm": 300
       },
       "catalogRef": {
         "productAlias": "Polifix (szabadon álló)",
-        "note": "Ár: a POLIFIX szabadon álló ártáblája (docx 2026-10). Balázs korábbi kocsibeálló ajánlatai ennél olcsóbbak voltak (pl. 550×600 cm 7040 EUR, 600×360 cm 7840 EUR szereléssel), ellenőrizendő."
+        "note": "Balázs Excelje (Polikarbonát, üveg tetős excel.xlsx, 2026-11-02): ár és szerelés szélesség × kinyúlás szerint, a következő nagyobb méretre kerekítve. A különálló polikarbonát tetős tábla (falhoz rögzített + 540 EUR), 600 × 600 cm-ig. Magasság max. 300 cm (Balázs, 2026-11-02). Szendvicspanel tető +8,5%."
       },
       "pricingOverride": {
         "profitMode": "markup_percent",
@@ -46994,7 +48011,7 @@
         {
           "id": "mat_carport_base_free",
           "name": "FIX tetejű kocsibeálló - 16 mm opál polikarbonát tetővel, 4 lábon álló",
-          "description": "Sávos ár: szélesség 6 / 8,5 m-ig × kinyúlás 3 / 6 m-ig.",
+          "description": "",
           "itemRole": "base",
           "defaultSelected": true,
           "pricingMode": "matrix_cm",
@@ -47017,21 +48034,69 @@
             "rowLabel": "Kinyúlás (cm)",
             "colLabel": "Szélesség (cm)",
             "rows": [
+              100,
+              200,
               300,
+              400,
+              500,
               600
             ],
             "cols": [
-              600,
-              850
+              100,
+              200,
+              300,
+              400,
+              500,
+              600
             ],
             "values": {
+              "100": {
+                "100": 1740,
+                "200": 2100,
+                "300": 2300,
+                "400": 3120,
+                "500": 3320,
+                "600": 3520
+              },
+              "200": {
+                "100": 1890,
+                "200": 2340,
+                "300": 2540,
+                "400": 3940,
+                "500": 4140,
+                "600": 4340
+              },
               "300": {
-                "600": 5328,
-                "850": 6450
+                "100": 2040,
+                "200": 2540,
+                "300": 2740,
+                "400": 4140,
+                "500": 4340,
+                "600": 4860
+              },
+              "400": {
+                "100": 2340,
+                "200": 3040,
+                "300": 3340,
+                "400": 5040,
+                "500": 5540,
+                "600": 5703
+              },
+              "500": {
+                "100": 2540,
+                "200": 3340,
+                "300": 3770,
+                "400": 5340,
+                "500": 5840,
+                "600": 5974
               },
               "600": {
-                "600": 6620,
-                "850": 9863
+                "100": 2740,
+                "200": 3690,
+                "300": 4070,
+                "400": 5640,
+                "500": 6040,
+                "600": 6240
               }
             }
           },
@@ -47044,7 +48109,7 @@
         {
           "id": "mat_carport_install_free",
           "name": "Szerelés",
-          "description": "Sávos szerelési díj.",
+          "description": "",
           "itemRole": "base",
           "defaultSelected": true,
           "pricingMode": "matrix_cm",
@@ -47067,21 +48132,69 @@
             "rowLabel": "Kinyúlás (cm)",
             "colLabel": "Szélesség (cm)",
             "rows": [
+              100,
+              200,
               300,
+              400,
+              500,
               600
             ],
             "cols": [
-              600,
-              850
+              100,
+              200,
+              300,
+              400,
+              500,
+              600
             ],
             "values": {
+              "100": {
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1200
+              },
+              "200": {
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1200
+              },
               "300": {
-                "600": 1200,
-                "850": 1500
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1200
+              },
+              "400": {
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1200
+              },
+              "500": {
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1200
               },
               "600": {
-                "600": 1500,
-                "850": 1800
+                "100": 800,
+                "200": 900,
+                "300": 900,
+                "400": 1000,
+                "500": 1000,
+                "600": 1200
               }
             }
           },
@@ -48283,8 +49396,8 @@
       "moduleSplits": [
         {
           "axis": "width",
-          "maxCm": 600,
-          "maxModules": 3
+          "maxCm": 790,
+          "maxModules": 2
         }
       ],
       "mountTypes": [
@@ -48292,12 +49405,10 @@
       ],
       "sizeRules": [
         {
-          "id": "rule_polifix_free",
-          "label": "különálló szerkezetként (ártábla 8,5 m-ig)",
+          "id": "rule_carport_free",
+          "label": "kocsibeálló: max. 300 cm magas",
           "mountType": "Szabadon álló",
-          "maxWidthCm": 850,
-          "maxProjectionCm": 600,
-          "maxHeightCm": 250
+          "maxHeightCm": 300
         }
       ],
       "alsoInCategoryIds": [],
@@ -52211,5 +53322,5 @@
     }
   ],
   "trackingEvents": [],
-  "dataRevision": 6
+  "dataRevision": 7
 }

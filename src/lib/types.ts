@@ -119,6 +119,9 @@ export interface TemplateMaterialItem {
   multiplier: number;         // Beszerzési / árképzési szorzó (alapértelmezetten 1.0)
   extraDiscountPct: number;   // Extra kedvezmény % (alapértelmezetten 0)
   fixedSurcharge: number;     // Fix felár (alapértelmezetten 0)
+  // Fix EUR felár darabonként / oldalanként, forintos tételnél is EUR-ban (pl. THERMO GLASS:
+  // 90.000 Ft/m² + 950 EUR rendszerfelár + 400 EUR szerelés oldalanként)
+  surchargeEur?: number;
   listPriceMultiplier: number; // Listaár szorzó a PDF táblázathoz (pl. 1.25 = +25% listaár)
   defaultNote: string;        // Megjegyzés oszlop a PDF táblázatban (pl. "-20%", "Ajándék", "Opció")
   // Termékhez közvetlenül felcsatolt fotók + fotó alatti szövegdobozok

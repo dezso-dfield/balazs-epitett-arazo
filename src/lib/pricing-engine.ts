@@ -840,11 +840,13 @@ export function calculateTemplateRows(
 
     const noPrice = hasNoPrice(item);
     const modifiedPrice = noPrice ? 0 : applyModifiers(rawPrice, item);
+    const surchargeEur = Math.round((Number(item.surchargeEur) || 0) * qty);
     const costInEur = noPrice
       ? 0
-      : item.currency === 'HUF'
-        ? Math.max(1, Math.round(modifiedPrice / rate))
-        : Math.max(1, modifiedPrice);
+      : (item.currency === 'HUF'
+          ? Math.max(1, Math.round(modifiedPrice / rate))
+          : Math.max(1, modifiedPrice)) + surchargeEur;
+    if (surchargeEur) formulaSummary += ` + ${surchargeEur} EUR felár`;
     const priceInEur = noPrice ? 0 : applyPercentProfit(costInEur, formula);
 
     const listMult =
