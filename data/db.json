@@ -25801,7 +25801,7 @@
         "pdfFile": "",
         "pages": "",
         "productAlias": "Polifix",
-        "note": "Balázs Excelje (Polikarbonát, üveg tetős excel.xlsx, 2026-11-02): ár és szerelés szélesség × kinyúlás szerint, a következő nagyobb méretre kerekítve. Falhoz rögzítve 1800 × 600 cm-ig, különállóként 600 × 600 cm-ig (= falhoz rögzített ár + 540 EUR). Ajándék infrafűtés. Szendvicspanel tető +8,5% (jóváhagyva)."
+        "note": "Balázs Excelje (Polikarbonát, üveg tetős excel_Vjó.xlsx, 2026-11-02): ár és szerelés szélesség × kinyúlás szerint, a következő nagyobb méretre kerekítve. Falhoz rögzítve 1800 × 600 cm-ig, különállóként 800 × 600 cm-ig (2 modullal 1580 cm) (= falhoz rögzített ár + 540 EUR). Ajándék infrafűtés. Szendvicspanel tető +8,5% (jóváhagyva)."
       },
       "pricingOverride": {
         "profitMode": "markup_percent",
@@ -26157,7 +26157,9 @@
               300,
               400,
               500,
-              600
+              600,
+              700,
+              800
             ],
             "values": {
               "100": {
@@ -26166,7 +26168,9 @@
                 "300": 2300,
                 "400": 3120,
                 "500": 3320,
-                "600": 3520
+                "600": 3520,
+                "700": 3830,
+                "800": 4030
               },
               "200": {
                 "100": 1890,
@@ -26174,7 +26178,9 @@
                 "300": 2540,
                 "400": 3940,
                 "500": 4140,
-                "600": 4340
+                "600": 4340,
+                "700": 4840,
+                "800": 5230
               },
               "300": {
                 "100": 2040,
@@ -26182,7 +26188,9 @@
                 "300": 2740,
                 "400": 4140,
                 "500": 4340,
-                "600": 4860
+                "600": 4860,
+                "700": 5340,
+                "800": 5830
               },
               "400": {
                 "100": 2340,
@@ -26190,7 +26198,9 @@
                 "300": 3340,
                 "400": 5040,
                 "500": 5540,
-                "600": 5703
+                "600": 5703,
+                "700": 6830,
+                "800": 6930
               },
               "500": {
                 "100": 2540,
@@ -26198,7 +26208,9 @@
                 "300": 3770,
                 "400": 5340,
                 "500": 5840,
-                "600": 5974
+                "600": 5974,
+                "700": 7090,
+                "800": 7230
               },
               "600": {
                 "100": 2740,
@@ -26206,7 +26218,9 @@
                 "300": 4070,
                 "400": 5640,
                 "500": 6040,
-                "600": 6240
+                "600": 6240,
+                "700": 7333,
+                "800": 7530
               }
             }
           },
@@ -26214,7 +26228,11 @@
           "matrixColAxis": "width",
           "mountTypes": [
             "Szabadon álló"
-          ]
+          ],
+          "ownSplit": {
+            "axis": "width",
+            "maxCm": 790
+          }
         },
         {
           "id": "mat_polifix_install_wall",
@@ -26438,7 +26456,9 @@
               300,
               400,
               500,
-              600
+              600,
+              700,
+              800
             ],
             "values": {
               "100": {
@@ -26447,7 +26467,9 @@
                 "300": 900,
                 "400": 1000,
                 "500": 1000,
-                "600": 1200
+                "600": 1200,
+                "700": 1300,
+                "800": 1500
               },
               "200": {
                 "100": 800,
@@ -26455,7 +26477,9 @@
                 "300": 900,
                 "400": 1000,
                 "500": 1000,
-                "600": 1200
+                "600": 1200,
+                "700": 1300,
+                "800": 1500
               },
               "300": {
                 "100": 800,
@@ -26463,7 +26487,9 @@
                 "300": 900,
                 "400": 1000,
                 "500": 1000,
-                "600": 1200
+                "600": 1200,
+                "700": 1300,
+                "800": 1500
               },
               "400": {
                 "100": 800,
@@ -26471,7 +26497,9 @@
                 "300": 900,
                 "400": 1000,
                 "500": 1000,
-                "600": 1200
+                "600": 1200,
+                "700": 1300,
+                "800": 1500
               },
               "500": {
                 "100": 800,
@@ -26479,7 +26507,9 @@
                 "300": 900,
                 "400": 1000,
                 "500": 1000,
-                "600": 1200
+                "600": 1200,
+                "700": 1300,
+                "800": 1500
               },
               "600": {
                 "100": 800,
@@ -26487,7 +26517,9 @@
                 "300": 900,
                 "400": 1000,
                 "500": 1000,
-                "600": 1200
+                "600": 1200,
+                "700": 1300,
+                "800": 1500
               }
             }
           },
@@ -26496,7 +26528,11 @@
           "mountTypes": [
             "Szabadon álló"
           ],
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "ownSplit": {
+            "axis": "width",
+            "maxCm": 790
+          }
         },
         {
           "id": "mat_polifix_gift_infra",
@@ -28283,10 +28319,10 @@
       "sizeRules": [
         {
           "id": "rule_polifix_free",
-          "label": "különálló szerkezetként: max. 400 cm kinyúlás, 250 cm magasság",
+          "label": "különálló szerkezetként: max. 600 cm kinyúlás, 250 cm magasság",
           "mountType": "Szabadon álló",
           "maxWidthCm": 1580,
-          "maxProjectionCm": 400,
+          "maxProjectionCm": 600,
           "maxHeightCm": 250
         }
       ],
@@ -28312,7 +28348,7 @@
         "pdfFile": "",
         "pages": "",
         "productAlias": "Glassfix",
-        "note": "Balázs Excelje (Polikarbonát, üveg tetős excel.xlsx, 2026-11-02): ár és szerelés szélesség × kinyúlás szerint, a következő nagyobb méretre kerekítve. Falhoz rögzítve 1800 × 450 cm-ig, különállóként 850 × 450 cm-ig (100 cm kinyúlásnál 300 cm szélességtől). Ajándék infrafűtés."
+        "note": "Balázs Excelje (Polikarbonát, üveg tetős excel_Vjó.xlsx, 2026-11-02): ár és szerelés szélesség × kinyúlás szerint, a következő nagyobb méretre kerekítve. Falhoz rögzítve 1800 × 450 cm-ig, különállóként 850 × 450 cm-ig (100 cm kinyúlásnál 300 cm szélességtől). Ajándék infrafűtés."
       },
       "pricingOverride": {
         "profitMode": "markup_percent",
@@ -43504,7 +43540,7 @@
         {
           "id": "tb_madeira_after",
           "title": "",
-          "content": "A tartó szerkezet és a mozgató karok alapszínei lent láthatók, a szövet rengeteg színben választható.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi színek és szövetek (felár ellenében)\n- automata működés: nap-, szél- és esőérzékelő\n- okosotthon vezérlő\n- LED-világítás a kazetta alsó síkján és a karokban",
+          "content": "A tartó szerkezet és a mozgató karok alapszínei lent láthatók, a szövet rengeteg színben választható.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi színek és szövetek (felár ellenében)\n- automata működés: nap-, szél- és esőérzékelő\n- okosotthon vezérlő\n- LED-világítás a karokban\n\nAjándék: szélérzékelő és LED-világítás a kazetta alsó síkján",
           "position": "after_table"
         }
       ],
@@ -43770,6 +43806,29 @@
           "photos": []
         },
         {
+          "description": "",
+          "itemRole": "gift",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 100,
+          "unitPrice": 100,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1,
+          "defaultNote": "Ajándék",
+          "id": "x_madeira_led_cassette",
+          "name": "LED világítás a kazetta alsó felén (szabályozható, COB LED-szalag, meleg fehér)",
+          "excludeFromPercentBase": true
+        },
+        {
           "description": "A szerkezet árának 20%-a",
           "itemRole": "optional",
           "defaultSelected": false,
@@ -44003,29 +44062,6 @@
           "pricingMode": "fixed",
           "currency": "EUR",
           "dimensionSource": "roof",
-          "basePrice": 100,
-          "unitPrice": 100,
-          "defaultQuantity": 1,
-          "unitLabel": "db",
-          "m2Tiers": [],
-          "percentageRate": 0,
-          "minPrice": 1,
-          "multiplier": 1,
-          "extraDiscountPct": 0,
-          "fixedSurcharge": 0,
-          "listPriceMultiplier": 1.25,
-          "defaultNote": "Opció",
-          "id": "x_madeira_led_cassette",
-          "name": "LED világítás a kazetta alsó felén (szabályozható, COB LED-szalag, meleg fehér)",
-          "excludeFromPercentBase": true
-        },
-        {
-          "description": "",
-          "itemRole": "optional",
-          "defaultSelected": false,
-          "pricingMode": "fixed",
-          "currency": "EUR",
-          "dimensionSource": "roof",
           "basePrice": 500,
           "unitPrice": 500,
           "defaultQuantity": 1,
@@ -44179,7 +44215,7 @@
         {
           "id": "tb_corsica_after",
           "title": "",
-          "content": "A tartó szerkezet és a mozgató karok alapszínei lent láthatók, a szövet rengeteg színben választható.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi színek és szövetek (felár ellenében)\n- automata működés: nap-, szél- és esőérzékelő\n- okosotthon vezérlő\n- LED-világítás a kazetta alsó síkján és a karokban",
+          "content": "A tartó szerkezet és a mozgató karok alapszínei lent láthatók, a szövet rengeteg színben választható.\n\n+ Opcionálisan rendelhető a termékhez:\n- katalógusból választható egyedi színek és szövetek (felár ellenében)\n- automata működés: nap-, szél- és esőérzékelő\n- okosotthon vezérlő\n- LED-világítás a karokban\n\nAjándék: szélérzékelő és LED-világítás a kazetta alsó síkján",
           "position": "after_table"
         }
       ],
@@ -44459,6 +44495,29 @@
           "photos": []
         },
         {
+          "description": "",
+          "itemRole": "gift",
+          "defaultSelected": true,
+          "pricingMode": "fixed",
+          "currency": "EUR",
+          "dimensionSource": "roof",
+          "basePrice": 100,
+          "unitPrice": 100,
+          "defaultQuantity": 1,
+          "unitLabel": "db",
+          "m2Tiers": [],
+          "percentageRate": 0,
+          "minPrice": 1,
+          "multiplier": 1,
+          "extraDiscountPct": 0,
+          "fixedSurcharge": 0,
+          "listPriceMultiplier": 1,
+          "defaultNote": "Ajándék",
+          "id": "x_corsica_led_cassette",
+          "name": "LED világítás a kazetta alsó felén (szabályozható, COB LED-szalag, meleg fehér)",
+          "excludeFromPercentBase": true
+        },
+        {
           "description": "A szerkezet árának 20%-a",
           "itemRole": "optional",
           "defaultSelected": false,
@@ -44672,29 +44731,6 @@
               "align": "center"
             }
           ]
-        },
-        {
-          "description": "",
-          "itemRole": "optional",
-          "defaultSelected": false,
-          "pricingMode": "fixed",
-          "currency": "EUR",
-          "dimensionSource": "roof",
-          "basePrice": 100,
-          "unitPrice": 100,
-          "defaultQuantity": 1,
-          "unitLabel": "db",
-          "m2Tiers": [],
-          "percentageRate": 0,
-          "minPrice": 1,
-          "multiplier": 1,
-          "extraDiscountPct": 0,
-          "fixedSurcharge": 0,
-          "listPriceMultiplier": 1.25,
-          "defaultNote": "Opció",
-          "id": "x_corsica_led_cassette",
-          "name": "LED világítás a kazetta alsó felén (szabályozható, COB LED-szalag, meleg fehér)",
-          "excludeFromPercentBase": true
         },
         {
           "description": "",
@@ -48764,7 +48800,7 @@
       },
       "catalogRef": {
         "productAlias": "Polifix (szabadon álló)",
-        "note": "Balázs Excelje (Polikarbonát, üveg tetős excel.xlsx, 2026-11-02): ár és szerelés szélesség × kinyúlás szerint, a következő nagyobb méretre kerekítve. A különálló polikarbonát tetős tábla (falhoz rögzített + 540 EUR), 600 × 600 cm-ig. Magasság max. 300 cm (Balázs, 2026-11-02). Szendvicspanel tető +8,5%."
+        "note": "Balázs Excelje (Polikarbonát, üveg tetős excel_Vjó.xlsx, 2026-11-02): ár és szerelés szélesség × kinyúlás szerint, a következő nagyobb méretre kerekítve. A különálló polikarbonát tetős tábla (falhoz rögzített + 540 EUR), 600 × 600 cm-ig. Magasság max. 300 cm (Balázs, 2026-11-02). Szendvicspanel tető +8,5%."
       },
       "pricingOverride": {
         "profitMode": "markup_percent",
@@ -48856,7 +48892,9 @@
               300,
               400,
               500,
-              600
+              600,
+              700,
+              800
             ],
             "values": {
               "100": {
@@ -48865,7 +48903,9 @@
                 "300": 2300,
                 "400": 3120,
                 "500": 3320,
-                "600": 3520
+                "600": 3520,
+                "700": 3830,
+                "800": 4030
               },
               "200": {
                 "100": 1890,
@@ -48873,7 +48913,9 @@
                 "300": 2540,
                 "400": 3940,
                 "500": 4140,
-                "600": 4340
+                "600": 4340,
+                "700": 4840,
+                "800": 5230
               },
               "300": {
                 "100": 2040,
@@ -48881,7 +48923,9 @@
                 "300": 2740,
                 "400": 4140,
                 "500": 4340,
-                "600": 4860
+                "600": 4860,
+                "700": 5340,
+                "800": 5830
               },
               "400": {
                 "100": 2340,
@@ -48889,7 +48933,9 @@
                 "300": 3340,
                 "400": 5040,
                 "500": 5540,
-                "600": 5703
+                "600": 5703,
+                "700": 6830,
+                "800": 6930
               },
               "500": {
                 "100": 2540,
@@ -48897,7 +48943,9 @@
                 "300": 3770,
                 "400": 5340,
                 "500": 5840,
-                "600": 5974
+                "600": 5974,
+                "700": 7090,
+                "800": 7230
               },
               "600": {
                 "100": 2740,
@@ -48905,7 +48953,9 @@
                 "300": 4070,
                 "400": 5640,
                 "500": 6040,
-                "600": 6240
+                "600": 6240,
+                "700": 7333,
+                "800": 7530
               }
             }
           },
@@ -48913,7 +48963,11 @@
           "matrixColAxis": "width",
           "mountTypes": [
             "Szabadon álló"
-          ]
+          ],
+          "ownSplit": {
+            "axis": "width",
+            "maxCm": 790
+          }
         },
         {
           "id": "mat_carport_install_free",
@@ -48954,7 +49008,9 @@
               300,
               400,
               500,
-              600
+              600,
+              700,
+              800
             ],
             "values": {
               "100": {
@@ -48963,7 +49019,9 @@
                 "300": 900,
                 "400": 1000,
                 "500": 1000,
-                "600": 1200
+                "600": 1200,
+                "700": 1300,
+                "800": 1500
               },
               "200": {
                 "100": 800,
@@ -48971,7 +49029,9 @@
                 "300": 900,
                 "400": 1000,
                 "500": 1000,
-                "600": 1200
+                "600": 1200,
+                "700": 1300,
+                "800": 1500
               },
               "300": {
                 "100": 800,
@@ -48979,7 +49039,9 @@
                 "300": 900,
                 "400": 1000,
                 "500": 1000,
-                "600": 1200
+                "600": 1200,
+                "700": 1300,
+                "800": 1500
               },
               "400": {
                 "100": 800,
@@ -48987,7 +49049,9 @@
                 "300": 900,
                 "400": 1000,
                 "500": 1000,
-                "600": 1200
+                "600": 1200,
+                "700": 1300,
+                "800": 1500
               },
               "500": {
                 "100": 800,
@@ -48995,7 +49059,9 @@
                 "300": 900,
                 "400": 1000,
                 "500": 1000,
-                "600": 1200
+                "600": 1200,
+                "700": 1300,
+                "800": 1500
               },
               "600": {
                 "100": 800,
@@ -49003,7 +49069,9 @@
                 "300": 900,
                 "400": 1000,
                 "500": 1000,
-                "600": 1200
+                "600": 1200,
+                "700": 1300,
+                "800": 1500
               }
             }
           },
@@ -49012,7 +49080,11 @@
           "mountTypes": [
             "Szabadon álló"
           ],
-          "excludeFromPercentBase": true
+          "excludeFromPercentBase": true,
+          "ownSplit": {
+            "axis": "width",
+            "maxCm": 790
+          }
         },
         {
           "id": "mat_carport_zip_a",
@@ -54183,5 +54255,5 @@
     }
   ],
   "trackingEvents": [],
-  "dataRevision": 7
+  "dataRevision": 8
 }
