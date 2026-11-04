@@ -12104,6 +12104,14 @@
           "captionBelow": "A kazettába zárt, feszített ponyva alulnézetből",
           "widthPct": 75,
           "align": "center"
+        },
+        {
+          "id": "ph_doc_hydra_doc_1",
+          "imageUrl": "/uploads/offers/hydra/hydra-doc-1.png",
+          "titleAbove": "",
+          "captionBelow": "HYDRA 2 modulos kiosztás: max. 12 m széles (2 × 6 m)",
+          "widthPct": 60,
+          "align": "center"
         }
       ],
       "materials": [
@@ -14396,6 +14404,14 @@
           "captionBelow": "",
           "widthPct": 75,
           "align": "center"
+        },
+        {
+          "id": "ph_doc_a100_doc_1",
+          "imageUrl": "/uploads/offers/a100/a100-doc-1.png",
+          "titleAbove": "",
+          "captionBelow": "A100 LUX 2 modulos kiosztás: max. 9 m széles",
+          "widthPct": 60,
+          "align": "center"
         }
       ],
       "materials": [
@@ -16651,6 +16667,14 @@
               "align": "center"
             }
           ]
+        },
+        {
+          "id": "ph_doc_keplan_doc_1",
+          "imageUrl": "/uploads/offers/keplan/keplan-doc-1.jpg",
+          "titleAbove": "",
+          "captionBelow": "KEPLAN LED-világítással (bemutatótermi kivitel)",
+          "widthPct": 75,
+          "align": "center"
         }
       ],
       "materials": [
@@ -30878,6 +30902,22 @@
           "captionBelow": "A termékek tanúsítványai",
           "widthPct": 75,
           "align": "center"
+        },
+        {
+          "id": "ph_doc_lineglass_doc_1",
+          "imageUrl": "/uploads/offers/lineglass/lineglass-doc-1.jpg",
+          "titleAbove": "",
+          "captionBelow": "Pergola körbe LINE GLASS üvegfallal, LED-világítással",
+          "widthPct": 75,
+          "align": "center"
+        },
+        {
+          "id": "ph_doc_lineglass_doc_2",
+          "imageUrl": "/uploads/offers/lineglass/lineglass-doc-2.jpg",
+          "titleAbove": "",
+          "captionBelow": "LINE GLASS üvegfal pergolába építve",
+          "widthPct": 75,
+          "align": "center"
         }
       ],
       "materials": [
@@ -37410,6 +37450,30 @@
           "imageUrl": "/uploads/catalog-2026/isola-3/drawing-2.jpg",
           "titleAbove": "",
           "captionBelow": "1L - szabadon álló, egymodulos kiosztás",
+          "widthPct": 75,
+          "align": "center"
+        },
+        {
+          "id": "ph_doc_isola3_doc_1",
+          "imageUrl": "/uploads/offers/isola3/isola3-doc-1.jpg",
+          "titleAbove": "",
+          "captionBelow": "ISOLA 3 elhúzható PVC ponyvás pergola",
+          "widthPct": 75,
+          "align": "center"
+        },
+        {
+          "id": "ph_doc_isola3_doc_2",
+          "imageUrl": "/uploads/offers/isola3/isola3-doc-2.jpg",
+          "titleAbove": "",
+          "captionBelow": "ISOLA 3 nyitott ponyvával",
+          "widthPct": 75,
+          "align": "center"
+        },
+        {
+          "id": "ph_doc_isola3_doc_3",
+          "imageUrl": "/uploads/offers/isola3/isola3-doc-3.jpg",
+          "titleAbove": "",
+          "captionBelow": "ISOLA 3 elcsúsztatható üvegfalakkal",
           "widthPct": 75,
           "align": "center"
         }
@@ -46623,6 +46687,14 @@
           "captionBelow": "",
           "widthPct": 75,
           "align": "center"
+        },
+        {
+          "id": "ph_doc_cubic_doc_1",
+          "imageUrl": "/uploads/offers/cubic/cubic-doc-1.jpg",
+          "titleAbove": "",
+          "captionBelow": "CUBIC sík tetejű pergola",
+          "widthPct": 75,
+          "align": "center"
         }
       ],
       "materials": [
@@ -47495,6 +47567,22 @@
               "align": "center"
             }
           ]
+        },
+        {
+          "id": "ph_doc_run_doc_1",
+          "imageUrl": "/uploads/offers/run/run-doc-1.png",
+          "titleAbove": "",
+          "captionBelow": "RUN rendszer: 4 sínes kivitel keresztmetszete",
+          "widthPct": 45,
+          "align": "center"
+        },
+        {
+          "id": "ph_doc_run_doc_2",
+          "imageUrl": "/uploads/offers/run/run-doc-2.png",
+          "titleAbove": "",
+          "captionBelow": "Süllyesztett alsó sínrendszerrel is kérhető",
+          "widthPct": 50,
+          "align": "center"
         }
       ],
       "materials": [
@@ -47629,6 +47717,22 @@
               "align": "center"
             }
           ]
+        },
+        {
+          "id": "ph_doc_kolibrie_doc_1",
+          "imageUrl": "/uploads/offers/kolibrie/kolibrie-doc-1.jpg",
+          "titleAbove": "",
+          "captionBelow": "KOLIBRIE vitorla medence mellett",
+          "widthPct": 45,
+          "align": "center"
+        },
+        {
+          "id": "ph_doc_kolibrie_doc_2",
+          "imageUrl": "/uploads/offers/kolibrie/kolibrie-doc-2.jpg",
+          "titleAbove": "",
+          "captionBelow": "KOLIBRIE egyoszlopos kivitel",
+          "widthPct": 45,
+          "align": "center"
         }
       ],
       "materials": [
@@ -53340,5 +53444,5 @@
     }
   ],
   "trackingEvents": [],
-  "dataRevision": 9
+  "dataRevision": 10
 }
