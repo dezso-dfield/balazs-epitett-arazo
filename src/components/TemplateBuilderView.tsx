@@ -45,6 +45,7 @@ import {
   CustomTextBlock,
   DimensionSource,
   M2PriceTier,
+  PercentageTier,
   PhotoCaptionBlock,
   PricingFormulaConfig,
   ProductCategory,
@@ -169,6 +170,7 @@ export function TemplateBuilderView({
   const [tplOrder, setTplOrder] = useState<number | undefined>(undefined);
   const [tplSizeLimits, setTplSizeLimits] = useState<TemplateSizeLimits>({});
   const [tplModuleSplits, setTplModuleSplits] = useState<ModuleSplitRule[]>([]);
+  const [tplAllowRotate, setTplAllowRotate] = useState(false);
   const [tplMountTypes, setTplMountTypes] = useState<MountType[]>([]);
   const [tplAlsoInCategoryIds, setTplAlsoInCategoryIds] = useState<string[]>([]);
   const [tplSizeRules, setTplSizeRules] = useState<ConditionalSizeRule[]>([]);
@@ -298,6 +300,7 @@ export function TemplateBuilderView({
     setTplOrder(undefined);
     setTplSizeLimits({});
     setTplModuleSplits([]);
+    setTplAllowRotate(false);
     setTplMountTypes([]);
     setTplAlsoInCategoryIds([]);
     setTplSizeRules([]);
@@ -335,6 +338,7 @@ export function TemplateBuilderView({
         (r) => ({ ...r })
       )
     );
+    setTplAllowRotate(Boolean(tpl.allowRotate));
     setTplMountTypes([...(tpl.mountTypes || [])]);
     setTplAlsoInCategoryIds([...(tpl.alsoInCategoryIds || [])]);
     setTplSizeRules((tpl.sizeRules || []).map((r) => ({ ...r })));
@@ -480,6 +484,7 @@ export function TemplateBuilderView({
           templates.filter((t) => t.categoryId === tplCategoryId).length + 1,
         sizeLimits: tplSizeLimits,
         moduleSplits: tplModuleSplits,
+        allowRotate: tplAllowRotate || undefined,
         mountTypes: tplMountTypes,
         sizeRules: tplSizeRules,
         alsoInCategoryIds: tplAlsoInCategoryIds.filter((id) => id !== tplCategoryId),
@@ -539,6 +544,7 @@ export function TemplateBuilderView({
     materials: tplMaterials,
     pricingOverride: tplPricingOverride,
     moduleSplits: tplModuleSplits,
+    allowRotate: tplAllowRotate || undefined,
     mountTypes: tplMountTypes,
     sizeRules: tplSizeRules,
     createdAt: '',
@@ -1455,6 +1461,18 @@ export function TemplateBuilderView({
                       modulszám a kettő szorzata. A tételeknél megadható, melyik modulszámnál
                       szerepeljenek (pl. a gyártó 2 modulos ártáblája).
                     </p>
+                    <label className="flex items-start gap-2 text-sm text-slate-700 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="mt-0.5"
+                        checked={tplAllowRotate}
+                        onChange={(e) => setTplAllowRotate(e.target.checked)}
+                      />
+                      <span>
+                        Elforgatható szerkezet: ha a szélesség és a kinyúlás felcserélésével kevesebb
+                        modul kell, úgy számol
+                      </span>
+                    </label>
                   </div>
 
                   <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
@@ -2085,6 +2103,47 @@ export function TemplateBuilderView({
                               />
                               Darabszám × modulszám (pl. motor modulonként)
                             </label>
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="text-[13px] text-slate-600">Saját bontás: ha a</span>
+                              <select
+                                value={currentMaterial.ownSplit?.axis || 'width'}
+                                onChange={(e) =>
+                                  updateMaterial(activeMaterialIdx, {
+                                    ownSplit: currentMaterial.ownSplit
+                                      ? { ...currentMaterial.ownSplit, axis: e.target.value as SizeAxis }
+                                      : undefined,
+                                  })
+                                }
+                                disabled={!currentMaterial.ownSplit}
+                                className="px-2 py-1.5 rounded-lg border border-slate-300"
+                              >
+                                <option value="width">szélesség</option>
+                                <option value="projection">kinyúlás</option>
+                                <option value="height">magasság</option>
+                              </select>
+                              <span className="text-[13px] text-slate-600">nagyobb, mint</span>
+                              <input
+                                type="number"
+                                min={1}
+                                value={currentMaterial.ownSplit?.maxCm ?? ''}
+                                onChange={(e) =>
+                                  updateMaterial(activeMaterialIdx, {
+                                    ownSplit:
+                                      e.target.value === '' || !(Number(e.target.value) > 0)
+                                        ? undefined
+                                        : {
+                                            axis: currentMaterial.ownSplit?.axis || 'width',
+                                            maxCm: Number(e.target.value),
+                                          },
+                                  })
+                                }
+                                placeholder="-"
+                                className="w-20 px-2 py-1.5 rounded-lg border border-slate-300 text-right"
+                              />
+                              <span className="text-[13px] text-slate-600">
+                                cm, több egyforma darabra bontva árazza (pl. 790: 1580 cm = 2 × 790 cm)
+                              </span>
+                            </div>
                             <div className="flex items-center gap-2">
                               <span className="text-[13px] text-slate-600">Csak ha a modulszám</span>
                               <input
@@ -2871,6 +2930,80 @@ export function TemplateBuilderView({
                                 className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm"
                               />
                             </div>
+                            <div className="sm:col-span-2 space-y-2">
+                              <label className="block text-xs font-bold text-slate-700">
+                                Sávos kulcs (opcionális, ha megadod, ez érvényes a fenti kulcs helyett)
+                              </label>
+                              {(currentMaterial.percentageTiers || []).map((tier, ti) => {
+                                const setTiers = (next: PercentageTier[]) =>
+                                  updateMaterial(activeMaterialIdx, {
+                                    percentageTiers: next.length ? next : undefined,
+                                  });
+                                const tiers = currentMaterial.percentageTiers || [];
+                                return (
+                                  <div key={ti} className="flex flex-wrap items-center gap-2 text-sm text-slate-700">
+                                    <span>alaptételek összege</span>
+                                    <input
+                                      type="number"
+                                      min={1}
+                                      value={tier.maxAmount >= 1e8 ? '' : tier.maxAmount}
+                                      placeholder="bármennyi"
+                                      onChange={(e) =>
+                                        setTiers(
+                                          tiers.map((t, j) =>
+                                            j === ti
+                                              ? { ...t, maxAmount: e.target.value === '' ? 1e9 : Math.max(1, Number(e.target.value) || 1) }
+                                              : t
+                                          )
+                                        )
+                                      }
+                                      className="w-28 px-2 py-1.5 rounded-lg border border-slate-300 text-right"
+                                    />
+                                    <span>EUR-ig:</span>
+                                    <input
+                                      type="number"
+                                      min={0}
+                                      step="0.5"
+                                      value={tier.percent}
+                                      onChange={(e) =>
+                                        setTiers(
+                                          tiers.map((t, j) =>
+                                            j === ti ? { ...t, percent: Math.max(0, Number(e.target.value) || 0) } : t
+                                          )
+                                        )
+                                      }
+                                      className="w-20 px-2 py-1.5 rounded-lg border border-slate-300 text-right"
+                                    />
+                                    <span>%</span>
+                                    <button
+                                      type="button"
+                                      onClick={() => setTiers(tiers.filter((_, j) => j !== ti))}
+                                      className="px-2 py-1 rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-50"
+                                    >
+                                      Törlés
+                                    </button>
+                                  </div>
+                                );
+                              })}
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  updateMaterial(activeMaterialIdx, {
+                                    percentageTiers: [
+                                      ...(currentMaterial.percentageTiers || []),
+                                      { maxAmount: 1e9, percent: currentMaterial.percentageRate || 10 },
+                                    ],
+                                  })
+                                }
+                                className="px-3 py-1.5 rounded-lg border border-slate-300 text-sm text-slate-700 hover:bg-slate-50"
+                              >
+                                + Sáv hozzáadása
+                              </button>
+                              <p className="text-xs text-slate-500">
+                                Pl. 8500 EUR-ig 11%, felette 10%: első sáv 8499 / 11, második sáv üresen hagyott
+                                határral / 10.
+                              </p>
+                            </div>
                           </div>
                         )}
 
@@ -2930,6 +3063,22 @@ export function TemplateBuilderView({
                                     0,
                                     Number(e.target.value) || 0
                                   ),
+                                })
+                              }
+                              className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-sm"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-slate-600 mb-1">
+                              Fix EUR felár darabonként / modulonként
+                            </label>
+                            <input
+                              type="number"
+                              min={0}
+                              value={currentMaterial.surchargeEur ?? 0}
+                              onChange={(e) =>
+                                updateMaterial(activeMaterialIdx, {
+                                  surchargeEur: Math.max(0, Number(e.target.value) || 0) || undefined,
                                 })
                               }
                               className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-sm"

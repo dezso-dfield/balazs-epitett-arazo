@@ -31046,13 +31046,7 @@
           "fixedSurcharge": 0,
           "listPriceMultiplier": 1,
           "defaultNote": "",
-          "photos": [],
-          "percentageTiers": [
-            {
-              "maxAmount": 1000000000,
-              "percent": 11
-            }
-          ]
+          "photos": []
         }
       ],
       "createdAt": "2026-10-19T08:18:53.225Z",
@@ -31249,13 +31243,7 @@
           "fixedSurcharge": 0,
           "listPriceMultiplier": 1,
           "defaultNote": "",
-          "photos": [],
-          "percentageTiers": [
-            {
-              "maxAmount": 1000000000,
-              "percent": 12
-            }
-          ]
+          "photos": []
         }
       ],
       "createdAt": "2026-10-19T08:18:53.225Z",
@@ -32578,13 +32566,7 @@
           "fixedSurcharge": 0,
           "listPriceMultiplier": 1,
           "defaultNote": "",
-          "photos": [],
-          "percentageTiers": [
-            {
-              "maxAmount": 1000000000,
-              "percent": 12
-            }
-          ]
+          "photos": []
         },
         {
           "description": "",
@@ -33083,13 +33065,7 @@
           "fixedSurcharge": 0,
           "listPriceMultiplier": 1,
           "defaultNote": "",
-          "photos": [],
-          "percentageTiers": [
-            {
-              "maxAmount": 1000000000,
-              "percent": 8
-            }
-          ]
+          "photos": []
         },
         {
           "id": "mat_vertica_smarthome",
@@ -53444,5 +53420,5 @@
     }
   ],
   "trackingEvents": [],
-  "dataRevision": 10
+  "dataRevision": 11
 }

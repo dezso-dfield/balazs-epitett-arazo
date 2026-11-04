@@ -531,7 +531,7 @@ export function GuidedQuoteWizardView({
       const status = wrongMount
         ? { text: `Csak ${tpl.mountTypes!.map((m) => mountLabel(m).toLowerCase()).join(' / ')} kérhető`, cls: 'text-slate-500' }
         : isOut
-        ? { text: fit.reasons.join(' · '), cls: 'text-amber-700' }
+        ? { text: `Ebben a méretben nem gyártható: ${fit.reasons.join(' · ')}`, cls: 'text-rose-700 font-medium' }
         : fit.status === 'no_limits'
         ? { text: 'Nincs megadva méretkorlát - ellenőrizd', cls: 'text-amber-700' }
         : {
@@ -559,7 +559,7 @@ export function GuidedQuoteWizardView({
               />
             )}
             <div className="min-w-0 flex-1">
-              <div className="text-sm font-medium text-slate-950">
+              <div className={`text-sm font-medium ${isOut && !isForced ? 'text-rose-800' : 'text-slate-950'}`}>
                 {tpl.name}
                 {tpl.status === 'seasonal' && <span className="ml-2 text-xs font-normal text-amber-700">időszakos</span>}
                 {tpl.status === 'test' && <span className="ml-2 text-xs font-normal text-violet-700">teszt</span>}
