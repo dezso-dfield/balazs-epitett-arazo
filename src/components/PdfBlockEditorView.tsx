@@ -364,6 +364,17 @@ export function PdfBlockEditorView({
     );
   };
 
+  // Átrendezés után a termékszakaszok címében lévő sorszám („1. KEDRY …”) a tényleges sorrendet kövesse
+  const renumberSections = (list: QuoteDocumentBlock[]): QuoteDocumentBlock[] => {
+    let n = 0;
+    return list.map((b) => {
+      if (b.type !== 'template_section') return b;
+      n += 1;
+      const title = b.sectionTitle || '';
+      return /^\d+\.\s/.test(title) ? { ...b, sectionTitle: title.replace(/^\d+\.\s/, `${n}. `) } : b;
+    });
+  };
+
   const moveBlock = (idx: number, direction: -1 | 1) => {
     setBlocks((prev) => {
       const target = idx + direction;
@@ -372,7 +383,7 @@ export function PdfBlockEditorView({
       const temp = copy[idx];
       copy[idx] = copy[target];
       copy[target] = temp;
-      return copy;
+      return renumberSections(copy);
     });
     setNeedsPreviewRefresh(true);
   };
@@ -396,7 +407,7 @@ export function PdfBlockEditorView({
       const copy = [...prev];
       const [item] = copy.splice(from, 1);
       copy.splice(to > from ? to - 1 : to, 0, item);
-      return copy;
+      return renumberSections(copy);
     });
     setNeedsPreviewRefresh(true);
   };
@@ -605,7 +616,7 @@ export function PdfBlockEditorView({
     if (!needsPreviewRefresh) return;
     const timer = setTimeout(() => {
       refreshLivePdfPreview();
-    }, 1200);
+    }, 500);
     return () => clearTimeout(timer);
   }, [needsPreviewRefresh, refreshLivePdfPreview]);
 

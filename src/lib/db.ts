@@ -29,6 +29,10 @@ export const SAVED_PDFS_DIR = path.join(process.cwd(), 'data', 'pdfs');
 declare global {
   // eslint-disable-next-line no-var
   var __customPricerDbCache: DatabaseSchema | undefined;
+  // eslint-disable-next-line no-var
+  var __customPricerDbLoadedAt: number | undefined;
+  // eslint-disable-next-line no-var
+  var __customPricerBundledDb: DatabaseSchema | null | undefined;
 }
 
 export function createEmptyDatabase(): DatabaseSchema {
@@ -203,12 +207,15 @@ export function saveDb(data: DatabaseSchema): void {
   }
 }
 
+// A telepítéssel érkező adatfájl példányonként változatlan: elég egyszer beolvasni (~2 MB JSON)
 function readBundledDb(): DatabaseSchema | null {
+  if (globalThis.__customPricerBundledDb !== undefined) return globalThis.__customPricerBundledDb;
   try {
-    return normalizeDatabase(JSON.parse(fs.readFileSync(BUNDLED_DB_PATH, 'utf-8')));
+    globalThis.__customPricerBundledDb = normalizeDatabase(JSON.parse(fs.readFileSync(BUNDLED_DB_PATH, 'utf-8')));
   } catch {
-    return null;
+    globalThis.__customPricerBundledDb = null;
   }
+  return globalThis.__customPricerBundledDb;
 }
 
 /**
@@ -216,8 +223,23 @@ function readBundledDb(): DatabaseSchema | null {
  * minden szerverpéldány ugyanazt látja. Ha a telepítés újabb katalógust hoz (dataRevision),
  * a menük, kategóriák és termékek frissülnek, az ajánlatok, képek és beállítások maradnak.
  */
-export async function loadDb(): Promise<DatabaseSchema> {
+export async function loadDb(opts: { maxAgeMs?: number } = {}): Promise<DatabaseSchema> {
   if (!blobEnabled()) return getDb();
+  // Csak olvasó, gyakori kéréseknél (pl. PDF-előnézet) elég a nemrég betöltött példány
+  if (
+    opts.maxAgeMs &&
+    globalThis.__customPricerDbCache &&
+    globalThis.__customPricerDbLoadedAt &&
+    Date.now() - globalThis.__customPricerDbLoadedAt < opts.maxAgeMs
+  ) {
+    return globalThis.__customPricerDbCache;
+  }
+  const db = await loadDbFresh();
+  globalThis.__customPricerDbLoadedAt = Date.now();
+  return db;
+}
+
+async function loadDbFresh(): Promise<DatabaseSchema> {
   const bundled = readBundledDb();
   let stored: DatabaseSchema | null = null;
   try {

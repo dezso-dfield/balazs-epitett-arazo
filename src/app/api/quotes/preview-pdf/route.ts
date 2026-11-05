@@ -7,7 +7,8 @@ export const dynamic = 'force-dynamic';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const db = await loadDb();
+    // Az előnézethez csak a beállítások kellenek: 30 mp-ig a memóriában lévő példány is jó
+    const db = await loadDb({ maxAgeMs: 30_000 });
     const pdfBytes = await renderEditableQuotePdfBytes(body, db.config);
 
     // A szerkesztő bináris PDF-et kér (harmadával kisebb, mint a base64 JSON)
