@@ -695,14 +695,38 @@ export function PdfBlockEditorView({
       );
 
       if (saved && mode === 'download') {
-        window.open(`/api/quotes/${saved.id}/pdf?download=1`, '_blank');
+        await downloadSavedPdf(saved.id, saved.quoteNumber);
       }
       if (saved && mode === 'send') {
         onSendQuote?.(saved);
       }
-      await refreshLivePdfPreview();
     } finally {
       setSavingPdf(false);
+    }
+    // az előnézet frissítése ne tartsa vissza a gombokat
+    void refreshLivePdfPreview();
+  };
+
+  // Letöltés fájlként (nem új lapon: a mentés utáni window.open-t a böngésző felugró ablakként blokkolhatja)
+  const downloadSavedPdf = async (id: string, quoteNumber?: string) => {
+    try {
+      const res = await fetch(`/api/quotes/${id}/pdf?download=1`);
+      if (!res.ok) throw new Error(String(res.status));
+      const blob = await res.blob();
+      const cd = res.headers.get('content-disposition') || '';
+      const m = cd.match(/filename\*=UTF-8''([^;]+)|filename="?([^";]+)"?/i);
+      const name = m ? decodeURIComponent(m[1] || m[2]) : `${quoteNumber || 'arajanlat'}.pdf`;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 10_000);
+    } catch (e) {
+      console.error('PDF letöltési hiba:', e);
+      window.location.href = `/api/quotes/${id}/pdf?download=1`;
     }
   };
 
@@ -792,7 +816,18 @@ export function PdfBlockEditorView({
               className={btn.secondary}
             >
               <Save className="w-4 h-4" />
-              Mentés
+              {savingPdf ? 'Mentés…' : 'Mentés'}
+            </button>
+            {/* PDF letöltés bármelyik lépésből (mentés után) */}
+            <button
+              type="button"
+              disabled={savingPdf}
+              onClick={() => handleSaveAndDownload('download')}
+              className={btn.secondary}
+              title="Mentés, majd a PDF letöltése"
+            >
+              <Download className="w-4 h-4" />
+              PDF
             </button>
           </>
         }

@@ -291,7 +291,9 @@ export default function CustomPricerAppPage() {
     if (data?.ok && data.quote) {
       const savedQuote = data.quote as QuoteRecord;
       setActiveDraftOrSavedQuote(savedQuote);
-      await fetchState(true);
+      // a listák frissítése a háttérben: a letöltés/küldés ne várjon a teljes állapot újratöltésére
+      if (downloadAfterSave) void fetchState(true);
+      else await fetchState(true);
       showToast(
         isUpdate
           ? 'Szerkesztett PDF frissítve és elmentve!'
