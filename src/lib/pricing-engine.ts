@@ -323,9 +323,13 @@ export function resolvePriceSources<T extends QuoteTemplate>(templates: T[]): T[
       const src = srcTpl?.materials?.find((x) => x.id === m.priceSource!.materialId);
       if (!srcTpl || !src || src.priceSource) continue;
       const install = (srcTpl.materials || []).find(
-        (x) => x.itemRole === 'base' && x.pricingMode === 'percentage' && /szerel/i.test(x.name)
+        (x) => x.itemRole === 'base' && /szerel/i.test(x.name) && (x.pricingMode === 'percentage' || x.pricingMode === 'fixed')
       );
-      const pct = install ? Number(install.percentageTiers?.[0]?.percent ?? install.percentageRate) || 0 : 0;
+      const pct = install?.pricingMode === 'percentage'
+        ? Number(install.percentageTiers?.[0]?.percent ?? install.percentageRate) || 0
+        : 0;
+      // fix összegű szerelés (pl. 300 EUR/db): darabonként hozzáadjuk az átvett árhoz
+      const installEach = install?.pricingMode === 'fixed' ? Number(install.basePrice) || 0 : 0;
       const k = 1 + pct / 100;
       const widthSplit = src.splitByModule
         ? (srcTpl.moduleSplits || []).find((s) => s.axis === 'width')
@@ -346,6 +350,7 @@ export function resolvePriceSources<T extends QuoteTemplate>(templates: T[]): T[
         listPriceMultiplier: src.listPriceMultiplier,
         multiplier: Math.round((Number(src.multiplier) || 1) * k * 10000) / 10000,
         fixedSurcharge: Math.round((Number(src.fixedSurcharge) || 0) * k * 100) / 100,
+        surchargeEur: (Number(src.surchargeEur) || 0) * k + installEach,
         extraDiscountPct: src.extraDiscountPct || 0,
         dimOffsets: src.dimOffsets,
         // ha a forrásnak van saját modulszabálya, az érvényes; különben marad a pergola modulja
