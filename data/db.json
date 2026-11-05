@@ -38017,6 +38017,14 @@
           "captionBelow": "Gerendába integrált Vertica PRIME ZIP árnyékoló (Kedry Skylife).",
           "widthPct": 75,
           "align": "center"
+        },
+        {
+          "id": "ph_doc_vertica_prime_1",
+          "imageUrl": "/uploads/offers/vertica-prime/vertica-prime-doc-1.jpg",
+          "titleAbove": "",
+          "captionBelow": "Gerendába integrált, leengedett árnyékoló KE pergolán",
+          "widthPct": 75,
+          "align": "center"
         }
       ],
       "materials": [
@@ -52537,7 +52545,7 @@
       "sizeRules": [],
       "alsoInCategoryIds": [],
       "catalogRef": {
-        "note": "Teszt: a kapott anyagokban nincs mérettábla. Az alapszerkezet és a szerelés árát kézzel add meg az ajánlatban (vagy töltsd ki itt), majd állítsd aktívra. A kiegészítők ára Balázs ajánlataiból: motor 600, távirányító 100, LED a karokban 600, napfényérzékelő 200 EUR."
+        "note": "Nem kell: Balázs leírása (Árajánlat készítő szoftver, V. fejezet) és az új Otter-ajánlat szerint csak a MADEIRA, CORSICA, JAMAICA és AUSTRALIA karos napellenző szerepel; ez a régi beszállító modellje, ártábla nincs. Inaktív marad."
       },
       "createdAt": "2026-10-30T12:00:00.000Z",
       "updatedAt": "2026-10-30T12:00:00.000Z",
@@ -52791,7 +52799,7 @@
       "sizeRules": [],
       "alsoInCategoryIds": [],
       "catalogRef": {
-        "note": "Teszt: a kapott anyagokban nincs mérettábla. Az alapszerkezet és a szerelés árát kézzel add meg az ajánlatban (vagy töltsd ki itt), majd állítsd aktívra. A kiegészítők ára Balázs ajánlataiból: motor 600, távirányító 100, LED a karokban 600, napfényérzékelő 200 EUR."
+        "note": "Nem kell: Balázs leírása (Árajánlat készítő szoftver, V. fejezet) és az új Otter-ajánlat szerint csak a MADEIRA, CORSICA, JAMAICA és AUSTRALIA karos napellenző szerepel; ez a régi beszállító modellje, ártábla nincs. Inaktív marad."
       },
       "createdAt": "2026-10-30T12:00:00.000Z",
       "updatedAt": "2026-10-30T12:00:00.000Z",
@@ -55243,7 +55251,7 @@
         "cat_1792391983814_seed"
       ],
       "catalogRef": {
-        "note": "Teszt: a kapott anyagokban nincs mérettábla. Az alapszerkezet és a szerelés árát kézzel add meg az ajánlatban (vagy töltsd ki itt), majd állítsd aktívra. A kiegészítők ára Balázs ajánlataiból: motor 600, távirányító 100 EUR (Balázs napellenző ajánlatai)."
+        "note": "Nem kell: Balázs leírása (Árajánlat készítő szoftver, V. fejezet) és az új Otter-ajánlat szerint csak a MADEIRA, CORSICA, JAMAICA és AUSTRALIA karos napellenző szerepel; ez a régi beszállító modellje, ártábla nincs. Inaktív marad."
       },
       "createdAt": "2026-10-30T12:00:00.000Z",
       "updatedAt": "2026-10-30T12:00:00.000Z",
@@ -55470,7 +55478,7 @@
         "cat_1792391983814_seed"
       ],
       "catalogRef": {
-        "note": "Teszt: a kapott anyagokban nincs mérettábla. Az alapszerkezet és a szerelés árát kézzel add meg az ajánlatban (vagy töltsd ki itt), majd állítsd aktívra. A kiegészítők ára Balázs ajánlataiból: motor 600, távirányító 100 EUR (Balázs napellenző ajánlatai)."
+        "note": "Nem kell: Balázs leírása (Árajánlat készítő szoftver, V. fejezet) és az új Otter-ajánlat szerint csak a MADEIRA, CORSICA, JAMAICA és AUSTRALIA karos napellenző szerepel; ez a régi beszállító modellje, ártábla nincs. Inaktív marad."
       },
       "createdAt": "2026-10-30T12:00:00.000Z",
       "updatedAt": "2026-10-30T12:00:00.000Z",
@@ -55702,7 +55710,7 @@
         "cat_1792391983814_seed"
       ],
       "catalogRef": {
-        "note": "Teszt: a kapott anyagokban nincs mérettábla. Az alapszerkezet és a szerelés árát kézzel add meg az ajánlatban (vagy töltsd ki itt), majd állítsd aktívra. A kiegészítők ára Balázs ajánlataiból: motor 600, távirányító 100 EUR (Balázs napellenző ajánlatai)."
+        "note": "Nem kell: Balázs leírása (Árajánlat készítő szoftver, V. fejezet) és az új Otter-ajánlat szerint csak a MADEIRA, CORSICA, JAMAICA és AUSTRALIA karos napellenző szerepel; ez a régi beszállító modellje, ártábla nincs. Inaktív marad."
       },
       "createdAt": "2026-10-30T12:00:00.000Z",
       "updatedAt": "2026-10-30T12:00:00.000Z",
@@ -55910,7 +55918,7 @@
         "cat_1792391983814_seed"
       ],
       "catalogRef": {
-        "note": "Teszt: a kapott anyagokban nincs mérettábla. Az alapszerkezet és a szerelés árát kézzel add meg az ajánlatban (vagy töltsd ki itt), majd állítsd aktívra. A kiegészítők ára Balázs ajánlataiból: motor 600, távirányító 100 EUR (Balázs napellenző ajánlatai)."
+        "note": "Nem kell: Balázs leírása (Árajánlat készítő szoftver, V. fejezet) és az új Otter-ajánlat szerint csak a MADEIRA, CORSICA, JAMAICA és AUSTRALIA karos napellenző szerepel; ez a régi beszállító modellje, ártábla nincs. Inaktív marad."
       },
       "createdAt": "2026-10-30T12:00:00.000Z",
       "updatedAt": "2026-10-30T12:00:00.000Z",
@@ -58930,5 +58938,5 @@
     }
   ],
   "trackingEvents": [],
-  "dataRevision": 15
+  "dataRevision": 16
 }
