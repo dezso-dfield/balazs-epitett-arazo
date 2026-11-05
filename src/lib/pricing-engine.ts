@@ -234,6 +234,12 @@ export interface ModuleCounts {
 /** Elforgatható szerkezetnél: felcserélt szélesség/kinyúlással kevesebb modul kell-e */
 export function shouldRotate(template: QuoteTemplate, widthCm: number, projectionCm: number): boolean {
   if (!template.allowRotate || widthCm === projectionCm) return false;
+  // elforgatva is bele kell férnie a méretkorlátba (különben a forgatás „nem gyártható” méretet adna)
+  const lim = template.sizeLimits || {};
+  if (lim.maxWidthCm && projectionCm > lim.maxWidthCm) return false;
+  if (lim.maxProjectionCm && widthCm > lim.maxProjectionCm) return false;
+  if (lim.minWidthCm && projectionCm < lim.minWidthCm) return false;
+  if (lim.minProjectionCm && widthCm < lim.minProjectionCm) return false;
   return (
     getModuleCounts(template, projectionCm, widthCm).total <
     getModuleCounts(template, widthCm, projectionCm).total
