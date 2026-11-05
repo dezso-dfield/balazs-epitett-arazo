@@ -555,7 +555,16 @@ export function BrandingSettingsView({
                   updatePreset(idx, {
                     pricingMode: e.target.value as ExtraPreset['pricingMode'],
                     unitLabel:
-                      e.target.value === 'per_m2' ? 'm²' : e.target.value === 'per_lm' ? 'fm' : p.unitLabel,
+                      e.target.value === 'per_m2'
+                        ? 'm²'
+                        : e.target.value === 'per_lm'
+                        ? 'fm'
+                        : e.target.value === 'percentage'
+                        ? '%'
+                        : p.unitLabel === '%'
+                        ? 'db'
+                        : p.unitLabel,
+                    ...(e.target.value === 'percentage' ? { perSide: false } : {}),
                   })
                 }
                 className="px-2.5 py-1.5 rounded-lg border border-slate-300 text-sm"
@@ -563,22 +572,36 @@ export function BrandingSettingsView({
                 <option value="fixed">Fix ár</option>
                 <option value="per_m2">EUR / m²</option>
                 <option value="per_lm">EUR / fm</option>
+                <option value="percentage">% a szerkezet árából</option>
               </select>
               <div className="flex items-center gap-1">
                 <input
                   type="number"
                   min={0}
-                  value={p.price > 1 ? p.price : ''}
-                  onChange={(e) => updatePreset(idx, { price: Math.max(1, Number(e.target.value) || 1) })}
-                  placeholder="ár"
+                  step={p.pricingMode === 'percentage' ? 0.5 : 1}
+                  value={p.pricingMode === 'percentage' ? (p.price > 0 ? p.price : '') : p.price > 1 ? p.price : ''}
+                  onChange={(e) =>
+                    updatePreset(idx, {
+                      price:
+                        p.pricingMode === 'percentage'
+                          ? Math.max(0, Number(e.target.value) || 0)
+                          : Math.max(1, Number(e.target.value) || 1),
+                    })
+                  }
+                  placeholder={p.pricingMode === 'percentage' ? '%' : 'ár'}
                   className="w-24 px-2.5 py-1.5 rounded-lg border border-slate-300 text-sm text-right tabular-nums"
                 />
-                <span className="text-xs text-slate-500">EUR</span>
+                <span className="text-xs text-slate-500 w-7">{p.pricingMode === 'percentage' ? '%' : 'EUR'}</span>
               </div>
-              <label className="inline-flex items-center gap-1.5 text-[13px] text-slate-600 cursor-pointer">
+              <label
+                className={`inline-flex items-center gap-1.5 text-[13px] cursor-pointer ${
+                  p.pricingMode === 'percentage' ? 'text-slate-300 pointer-events-none' : 'text-slate-600'
+                }`}
+              >
                 <input
                   type="checkbox"
-                  checked={Boolean(p.perSide)}
+                  disabled={p.pricingMode === 'percentage'}
+                  checked={Boolean(p.perSide) && p.pricingMode !== 'percentage'}
                   onChange={(e) => updatePreset(idx, { perSide: e.target.checked })}
                 />
                 oldalanként

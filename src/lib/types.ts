@@ -535,7 +535,8 @@ export type QuoteNumberFormat = 'year_seq' | 'yearmonth_seq' | 'seq';
 export interface ExtraPreset {
   id: string;
   name: string;
-  pricingMode: 'fixed' | 'per_m2' | 'per_lm';
+  /** percentage: a szerkezet (alaptételek) árának X%-a; ilyenkor a price a százalék */
+  pricingMode: 'fixed' | 'per_m2' | 'per_lm' | 'percentage';
   dimensionSource?: DimensionSource;
   unitLabel: string;
   price: number;

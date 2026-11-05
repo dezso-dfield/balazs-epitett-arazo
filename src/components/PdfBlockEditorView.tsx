@@ -196,7 +196,6 @@ export function PdfBlockEditorView({
   };
 
   // Húzd és ejtsd: a fogantyú lenyomásakor válik húzhatóvá a blokk (a mezők így szerkeszthetők maradnak)
-  const [dragHandleId, setDragHandleId] = useState<string | null>(null);
   const [dragFrom, setDragFrom] = useState<number | null>(null);
   const [dropAt, setDropAt] = useState<number | null>(null);
   // Alapból minden szakasz össze van csukva; a nyitottakat tartjuk számon
@@ -1021,7 +1020,14 @@ export function PdfBlockEditorView({
         {/* Szerkezet (csak széles képernyőn) */}
         <div className="hidden xl:block xl:sticky xl:top-4">{renderOutline()}</div>
         {/* LEFT COLUMN: Editable Document Blocks */}
-        <div className="min-w-0 space-y-4">
+        <div
+          className="min-w-0 space-y-4"
+          // a kártyák közötti rés is érvényes ejtési hely (különben a húzás „elveszne”)
+          onDragOver={(e) => {
+            if (dragFrom !== null) e.preventDefault();
+          }}
+          onDrop={(e) => e.preventDefault()}
+        >
           {blocks.length > 1 && (
             <div className="flex justify-end gap-3 text-[13px] text-slate-500 -mb-2">
               <button
@@ -1045,30 +1051,13 @@ export function PdfBlockEditorView({
             {renderInsertBar(bIdx)}
             <div
               id={`blk-${blk.id}`}
-              draggable={dragHandleId === blk.id}
-              onDragStart={(e) => {
-                setDragFrom(bIdx);
-                e.dataTransfer.effectAllowed = 'move';
-                e.dataTransfer.setData('text/plain', blk.id);
-              }}
               onDragOver={(e) => {
                 if (dragFrom === null) return;
                 e.preventDefault();
                 const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
                 setDropAt(e.clientY < rect.top + rect.height / 2 ? bIdx : bIdx + 1);
               }}
-              onDrop={(e) => {
-                e.preventDefault();
-                if (dragFrom !== null && dropAt !== null) moveBlockTo(dragFrom, dropAt);
-                setDragFrom(null);
-                setDropAt(null);
-                setDragHandleId(null);
-              }}
-              onDragEnd={() => {
-                setDragFrom(null);
-                setDropAt(null);
-                setDragHandleId(null);
-              }}
+              onDrop={(e) => e.preventDefault()}
               className={`relative bg-white rounded-2xl border overflow-hidden transition ${
                 dragFrom === bIdx ? 'opacity-40 border-slate-300' : 'border-slate-200'
               }`}
@@ -1083,9 +1072,25 @@ export function PdfBlockEditorView({
               <div className="px-2 sm:px-3 py-2 border-b border-slate-200 flex items-center gap-1.5">
                 <button
                   type="button"
-                  onMouseDown={() => setDragHandleId(blk.id)}
-                  onMouseUp={() => setDragHandleId(null)}
-                  onTouchStart={() => setDragHandleId(blk.id)}
+                  // A fogantyú maga húzható (így már az első húzás működik), a húzott kép a teljes kártya
+                  draggable
+                  onDragStart={(e) => {
+                    setDragFrom(bIdx);
+                    setDropAt(null);
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/plain', blk.id);
+                    const card = document.getElementById(`blk-${blk.id}`);
+                    if (card) e.dataTransfer.setDragImage(card, 24, 20);
+                  }}
+                  onDragEnd={(e) => {
+                    // Az utolsó jelzett helyre kerül, akkor is, ha két kártya közötti résen engedted el;
+                    // Esc vagy a listán kívüli elengedés (dropEffect = none) nem mozgat
+                    if (dragFrom !== null && dropAt !== null && e.dataTransfer.dropEffect !== 'none') {
+                      moveBlockTo(dragFrom, dropAt);
+                    }
+                    setDragFrom(null);
+                    setDropAt(null);
+                  }}
                   className="p-1.5 rounded-lg text-slate-400 hover:text-slate-900 hover:bg-slate-100 cursor-grab active:cursor-grabbing"
                   title="Húzd az áthelyezéshez"
                   aria-label="Áthelyezés húzással"

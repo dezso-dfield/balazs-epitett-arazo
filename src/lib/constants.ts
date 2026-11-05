@@ -264,6 +264,19 @@ export const DEFAULT_EXTRA_PRESETS: ExtraPreset[] = [
 /** Gyors extra → sablon tétel mezői (opcionális, alapból nincs bepipálva) */
 export function extraPresetToMaterial(preset: ExtraPreset): Partial<TemplateMaterialItem> {
   const price = Math.max(1, Number(preset.price) || 1);
+  if (preset.pricingMode === 'percentage') {
+    // pl. egyedi RAL szín: a szerkezet árának X%-a (a százalék a sablonban külön is átírható)
+    return {
+      name: preset.name,
+      pricingMode: 'percentage',
+      dimensionSource: 'roof',
+      unitLabel: '%',
+      perSide: false,
+      basePrice: 1,
+      unitPrice: 1,
+      percentageRate: Number(preset.price) || 0,
+    };
+  }
   return {
     name: preset.name,
     pricingMode: preset.pricingMode,
