@@ -404,116 +404,6 @@
   ],
   "templates": [
     {
-      "id": "tpl_1792345585789_r48k",
-      "categoryId": "cat_1792345372674_leoq",
-      "name": "Teszt sablon",
-      "subtitle": "10 év garancia",
-      "enabled": true,
-      "introText": "A kiválasztott {{meret_m}} ({{meret}}) méretű konstrukció prémium alapanyagokból, egyedi méretre gyártva készül.",
-      "closingText": "A fenti összegek tartalmazzák a gyártást és a választott műszaki tartalmat.",
-      "textBlocks": [],
-      "photos": [
-        {
-          "id": "sphoto_1792345551363",
-          "imageUrl": "/uploads/1792345550798_LOGO_1200x1200.jpg",
-          "titleAbove": "",
-          "captionBelow": "",
-          "widthPct": 75,
-          "align": "center"
-        }
-      ],
-      "materials": [
-        {
-          "id": "mat_1792345381831_foz4",
-          "name": "Ricsko pergola",
-          "description": "Egyedi méretre gyártott kivitel",
-          "itemRole": "base",
-          "defaultSelected": true,
-          "pricingMode": "per_m2",
-          "currency": "EUR",
-          "dimensionSource": "roof",
-          "basePrice": 1500,
-          "unitPrice": 350,
-          "defaultQuantity": 1,
-          "unitLabel": "db",
-          "m2Tiers": [
-            {
-              "maxM2": 15,
-              "pricePerM2": 400
-            },
-            {
-              "maxM2": 25,
-              "pricePerM2": 360
-            },
-            {
-              "maxM2": 999,
-              "pricePerM2": 320
-            }
-          ],
-          "matrixTable": {
-            "rowLabel": "Kinyúlás (cm)",
-            "colLabel": "Szélesség (cm)",
-            "rows": [
-              250,
-              300,
-              350,
-              400
-            ],
-            "cols": [
-              300,
-              400,
-              500,
-              600
-            ],
-            "values": {
-              "250": {
-                "300": 2200,
-                "400": 2600,
-                "500": 3100,
-                "600": 3600
-              },
-              "300": {
-                "300": 2500,
-                "400": 2950,
-                "500": 3500,
-                "600": 4100
-              },
-              "350": {
-                "300": 2800,
-                "400": 3300,
-                "500": 3900,
-                "600": 4600
-              },
-              "400": {
-                "300": 3100,
-                "400": 3700,
-                "500": 4350,
-                "600": 5100
-              }
-            }
-          },
-          "percentageRate": 10,
-          "minPrice": 300,
-          "multiplier": 1,
-          "extraDiscountPct": 0,
-          "fixedSurcharge": 0,
-          "listPriceMultiplier": 1.25,
-          "defaultNote": "",
-          "photos": []
-        }
-      ],
-      "createdAt": "2026-10-18T17:46:25.789Z",
-      "updatedAt": "2026-10-18T17:46:25.789Z",
-      "status": "test",
-      "order": 1,
-      "sizeLimits": {},
-      "catalogRef": {},
-      "moduleSplits": [],
-      "mountTypes": [],
-      "alsoInCategoryIds": [],
-      "sizeRules": []
-    },
-    {
       "id": "tpl_legacy_sb400",
       "categoryId": "cat_1792391983811_seed",
       "name": "SOLARE 400 bioklimatikus pergola",
@@ -42718,6 +42608,14 @@
       ],
       "photos": [
         {
+          "id": "ph_doc_madeira_doc_1",
+          "imageUrl": "/uploads/offers/madeira/madeira-doc-1.jpg",
+          "titleAbove": "",
+          "captionBelow": "MADEIRA kazettás karos napellenző",
+          "widthPct": 75,
+          "align": "center"
+        },
+        {
           "id": "iphoto_tpl_madeira_2026_1",
           "imageUrl": "/uploads/offers/madeira/madeira-2026-sheet.jpg",
           "titleAbove": "Műszaki adatok és alapszínek",
@@ -42731,6 +42629,30 @@
           "titleAbove": "Szerelési módok",
           "captionBelow": "Falra, mennyezetre vagy tetőszarufára szerelhető.",
           "widthPct": 75,
+          "align": "center"
+        },
+        {
+          "id": "ph_doc_madeira_doc_2",
+          "imageUrl": "/uploads/offers/madeira/madeira-doc-2.jpg",
+          "titleAbove": "",
+          "captionBelow": "Zárt kazetta",
+          "widthPct": 35,
+          "align": "center"
+        },
+        {
+          "id": "ph_doc_madeira_doc_3",
+          "imageUrl": "/uploads/offers/madeira/madeira-doc-3.jpg",
+          "titleAbove": "",
+          "captionBelow": "Kazetta és tartókonzol",
+          "widthPct": 35,
+          "align": "center"
+        },
+        {
+          "id": "ph_doc_madeira_doc_4",
+          "imageUrl": "/uploads/offers/madeira/madeira-doc-4.jpg",
+          "titleAbove": "",
+          "captionBelow": "Lánctechnológiás könyökkar",
+          "widthPct": 35,
           "align": "center"
         }
       ],
@@ -44064,6 +43986,14 @@
       ],
       "photos": [
         {
+          "id": "ph_doc_jamaica_doc_3",
+          "imageUrl": "/uploads/offers/jamaica/jamaica-doc-3.jpg",
+          "titleAbove": "",
+          "captionBelow": "JAMAICA karos napellenző",
+          "widthPct": 75,
+          "align": "center"
+        },
+        {
           "id": "iphoto_tpl_jamaica_2026_1",
           "imageUrl": "/uploads/offers/jamaica/jamaica-2026-sheet.jpg",
           "titleAbove": "Műszaki adatok és alapszínek",
@@ -44093,6 +44023,22 @@
           "titleAbove": "",
           "captionBelow": "Kihúzható teleszkópos támasz",
           "widthPct": 35,
+          "align": "center"
+        },
+        {
+          "id": "ph_doc_jamaica_doc_4",
+          "imageUrl": "/uploads/offers/jamaica/jamaica-doc-4.jpg",
+          "titleAbove": "",
+          "captionBelow": "Karszerkezet",
+          "widthPct": 35,
+          "align": "center"
+        },
+        {
+          "id": "ph_doc_jamaica_doc_5",
+          "imageUrl": "/uploads/offers/jamaica/jamaica-doc-5.jpg",
+          "titleAbove": "",
+          "captionBelow": "JAMAICA napellenző családi házon",
+          "widthPct": 50,
           "align": "center"
         }
       ],
@@ -53515,5 +53461,5 @@
     }
   ],
   "trackingEvents": [],
-  "dataRevision": 12
+  "dataRevision": 13
 }
