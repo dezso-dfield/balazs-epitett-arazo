@@ -6798,8 +6798,8 @@
         "maxHeightCm": 300
       },
       "catalogRef": {
-        "pdfFile": "",
-        "pages": "",
+        "pdfFile": "Régi árazó (OpenSkyPergola v1.3)",
+        "pages": "SeeSkyBio m² sávok",
         "productAlias": "SeeSky Bio",
         "note": "legacy: templates/bioklimatikus/datasheet.py SeeSkyBio (m² sávok, szélesség 20 cm-es gyári lépcsőkben) + editor.py item2; ARKEPZO_SESKY_BIO = 1"
       },
@@ -31081,8 +31081,8 @@
         "maxHeightCm": 300
       },
       "catalogRef": {
-        "pdfFile": "",
-        "pages": "",
+        "pdfFile": "Polikarbonát, üveg tetős excel_Vjó.xlsx",
+        "pages": "POLIFIX lapok",
         "productAlias": "Polifix",
         "note": "Balázs Excelje (Polikarbonát, üveg tetős excel_Vjó.xlsx, 2026-11-02): ár és szerelés szélesség × kinyúlás szerint, a következő nagyobb méretre kerekítve. Falhoz rögzítve 1800 × 600 cm-ig, különállóként 800 × 600 cm-ig (2 modullal 1580 cm) (= falhoz rögzített ár + 540 EUR). Ajándék infrafűtés. Szendvicspanel tető +8,5% (jóváhagyva)."
       },
@@ -33628,8 +33628,8 @@
         "maxHeightCm": 300
       },
       "catalogRef": {
-        "pdfFile": "",
-        "pages": "",
+        "pdfFile": "Polikarbonát, üveg tetős excel_Vjó.xlsx",
+        "pages": "GLASSFIX lapok",
         "productAlias": "Glassfix",
         "note": "Balázs Excelje (Polikarbonát, üveg tetős excel_Vjó.xlsx, 2026-11-02): ár és szerelés szélesség × kinyúlás szerint, a következő nagyobb méretre kerekítve. Falhoz rögzítve 1800 × 450 cm-ig, különállóként 850 × 450 cm-ig (100 cm kinyúlásnál 300 cm szélességtől). Ajándék infrafűtés."
       },
@@ -36082,8 +36082,8 @@
         "maxHeightCm": 300
       },
       "catalogRef": {
-        "pdfFile": "",
-        "pages": "",
+        "pdfFile": "Régi árazó (OpenSkyPergola v1.3)",
+        "pages": "Spanyol üvegfal, sávos m² ár",
         "productAlias": "Line Glass / Run 2",
         "note": "legacy: templates/uvegfalas/datasheet.py Spanyol (sávos m² ár oldalanként) + editor.py item1; szerelés 11%"
       },
@@ -37988,8 +37988,8 @@
         "maxHeightCm": 300
       },
       "catalogRef": {
-        "pdfFile": "",
-        "pages": "",
+        "pdfFile": "Régi árazó (OpenSkyPergola v1.3)",
+        "pages": "Vertica PRIME ZIP tábla",
         "productAlias": "KE Vertica PRIME ZIP",
         "note": "legacy: templates/bioklimatikus/datasheet.py OldalfalZaras_Vertica_PRIME_ZIP (Kedry Skylife opció); ár = gyári × 0.65 × 0,9 + 1000, szerelés 8%"
       },
@@ -50891,7 +50891,9 @@
       },
       "sizeRules": [],
       "catalogRef": {
-        "note": "Balázs (2026-11-02): 90.000 Ft/m², a kapott árra oldalanként + 950 EUR, szerelés oldalanként + 400 EUR."
+        "note": "Balázs (2026-11-02): 90.000 Ft/m², a kapott árra oldalanként + 950 EUR, szerelés oldalanként + 400 EUR.",
+        "pdfFile": "Balázs árai (2026-11-02)",
+        "pages": "90.000 Ft/m² + rendszerfelár + szerelés"
       },
       "updatedAt": "2026-10-30T12:00:00.000Z",
       "moduleSplits": [],
@@ -51119,7 +51121,9 @@
       },
       "sizeRules": [],
       "catalogRef": {
-        "note": "Balázs (2026-11-02): 148.000 Ft/m², a kapott árra oldalanként + 1200 EUR, szerelés oldalanként + 500 EUR."
+        "note": "Balázs (2026-11-02): 148.000 Ft/m², a kapott árra oldalanként + 1200 EUR, szerelés oldalanként + 500 EUR.",
+        "pdfFile": "Balázs árai (2026-11-02)",
+        "pages": "148.000 Ft/m² + 1200 EUR + szerelés 500 EUR / oldal"
       },
       "updatedAt": "2026-10-30T12:00:00.000Z",
       "moduleSplits": [],
@@ -53106,7 +53110,9 @@
       "sizeRules": [],
       "alsoInCategoryIds": [],
       "catalogRef": {
-        "note": "A régi ajánlatokból becsülve (Hanasz: RUN 2 4800×2700 mm 4233, 3300×2700 mm 3700 EUR; Szász: 3500×2450 mm 3636 EUR; RUN 3 ugyanezekre 4590 / 4050 / 3900 EUR): oldalanként 2530 EUR + 132 EUR/m², RUN 3 +8,5%; szerelés 11% (mint LINE GLASS). Balázs megerősítésére vár."
+        "note": "A régi ajánlatokból becsülve (Hanasz: RUN 2 4800×2700 mm 4233, 3300×2700 mm 3700 EUR; Szász: 3500×2450 mm 3636 EUR; RUN 3 ugyanezekre 4590 / 4050 / 3900 EUR): oldalanként 2530 EUR + 132 EUR/m², RUN 3 +8,5%; szerelés 11% (mint LINE GLASS). Balázs megerősítésére vár.",
+        "pdfFile": "Régi ajánlatok (Hanasz, Szász)",
+        "pages": "m² ár + fix felár, becsült"
       },
       "createdAt": "2026-10-30T12:00:00.000Z",
       "updatedAt": "2026-11-05T18:00:00.000Z",
@@ -53460,7 +53466,9 @@
       "sizeRules": [],
       "alsoInCategoryIds": [],
       "catalogRef": {
-        "note": "Balázs (2026-11-05): falhoz rögzített 320×320 cm 6500, 380×380 cm 7200 EUR; különálló 320×320 cm 7100, 380×380 cm 7600 EUR (kézi, Dacron). Opció: Somfy motor érzékelőkkel, távirányítóval +600, LED +700 EUR. Ajándék: vászontakaró cső táska. Nem négyzetes méret a 380×380 cm-es árat kapja. Szerelés: az alapszerkezet (és a motor) 11%-a, a régi KOLIBRIE-ajánlat alapján (867 EUR / 7880, 911 EUR / 8280) - Balázs megerősítésére vár."
+        "note": "Balázs (2026-11-05): falhoz rögzített 320×320 cm 6500, 380×380 cm 7200 EUR; különálló 320×320 cm 7100, 380×380 cm 7600 EUR (kézi, Dacron). Opció: Somfy motor érzékelőkkel, távirányítóval +600, LED +700 EUR. Ajándék: vászontakaró cső táska. Nem négyzetes méret a 380×380 cm-es árat kapja. Szerelés: az alapszerkezet (és a motor) 11%-a, a régi KOLIBRIE-ajánlat alapján (867 EUR / 7880, 911 EUR / 8280) - Balázs megerősítésére vár.",
+        "pdfFile": "Balázs árai (2026-11-05)",
+        "pages": "320×320 és 380×380 cm, falhoz / különálló"
       },
       "createdAt": "2026-10-30T12:00:00.000Z",
       "updatedAt": "2026-10-30T12:00:00.000Z",
@@ -53483,7 +53491,9 @@
       },
       "catalogRef": {
         "productAlias": "Polifix (szabadon álló)",
-        "note": "Balázs Excelje (Polikarbonát, üveg tetős excel_Vjó.xlsx, 2026-11-02): ár és szerelés szélesség × kinyúlás szerint, a következő nagyobb méretre kerekítve. A különálló polikarbonát tetős tábla (falhoz rögzített + 540 EUR), 600 × 600 cm-ig. Magasság max. 300 cm (Balázs, 2026-11-02). Szendvicspanel tető +8,5%."
+        "note": "Balázs Excelje (Polikarbonát, üveg tetős excel_Vjó.xlsx, 2026-11-02): ár és szerelés szélesség × kinyúlás szerint, a következő nagyobb méretre kerekítve. A különálló polikarbonát tetős tábla (falhoz rögzített + 540 EUR), 600 × 600 cm-ig. Magasság max. 300 cm (Balázs, 2026-11-02). Szendvicspanel tető +8,5%.",
+        "pdfFile": "Polikarbonát, üveg tetős excel_Vjó.xlsx",
+        "pages": "kocsibeálló lapok"
       },
       "pricingOverride": {
         "profitMode": "markup_percent",
@@ -58938,5 +58948,5 @@
     }
   ],
   "trackingEvents": [],
-  "dataRevision": 16
+  "dataRevision": 17
 }
