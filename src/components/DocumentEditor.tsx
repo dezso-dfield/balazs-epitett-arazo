@@ -4,7 +4,9 @@ import React from 'react';
 import { ArrowDown, ArrowUp, ImagePlus, Plus, Scissors, Trash2, Type, X } from 'lucide-react';
 import { formatDotNumber } from '@/lib/constants';
 import { computeBlockTotals, recalculateBlockTotals } from '@/lib/pricing-engine';
-import type { PhotoCaptionBlock, QuoteDocumentBlock, SystemConfig } from '@/lib/types';
+import type { PhotoCaptionBlock, ProductCategory, QuoteDocumentBlock, SystemConfig } from '@/lib/types';
+import { blockCategoryId, getDocDesign, primaryCategory, ptPx } from '@/lib/doc-design';
+import { FormatToolbar, RichInline } from '@/components/RichEdit';
 
 /**
  * „Word-szerű” szerkesztő: az ajánlat egy A4-es lapon, a PDF kinézetével, közvetlenül a szövegbe kattintva szerkeszthető.
@@ -19,12 +21,14 @@ function Inline({
   className = '',
   placeholder,
   single,
+  style,
 }: {
   value: string;
   onChange: (v: string) => void;
   className?: string;
   placeholder?: string;
   single?: boolean;
+  style?: React.CSSProperties;
 }) {
   const ref = React.useRef<HTMLTextAreaElement>(null);
   React.useLayoutEffect(() => {
@@ -40,6 +44,7 @@ function Inline({
       value={value}
       placeholder={placeholder}
       spellCheck
+      style={style}
       onChange={(e) => onChange(single ? e.target.value.replace(/\n/g, ' ') : e.target.value)}
       className={`block w-full resize-none overflow-hidden bg-transparent border-0 p-0 m-0 outline-none rounded-sm focus:bg-amber-50/70 hover:bg-slate-50 focus:ring-2 focus:ring-indigo-200 ${className}`}
     />
@@ -80,6 +85,10 @@ export function DocumentEditor({
   onAddText,
   onAddPhoto,
   onAddPageBreak,
+  lockedReason,
+  toolbarExtra,
+  hideStructureControls,
+  categories = [],
 }: {
   blocks: QuoteDocumentBlock[];
   config: SystemConfig;
@@ -91,12 +100,30 @@ export function DocumentEditor({
   onAddText: (afterIndex: number) => void;
   onAddPhoto: (afterIndex: number) => void;
   onAddPageBreak: (at: number) => void;
+  /** sablon tervezőben: ha szöveget ad vissza, a blokk csak megjelenik (pl. „Termékek oldalon szerkeszthető”) */
+  lockedReason?: (blk: QuoteDocumentBlock) => string | null;
+  toolbarExtra?: React.ReactNode;
+  hideStructureControls?: boolean;
+  categories?: ProductCategory[];
 }) {
+  // oldal keret: a fő kategória dizájnja; a blokkok a saját kategóriájukét kapják (ha van eltérés)
+  const D = getDocDesign(config, primaryCategory(blocks, categories));
+  const styles = (blk: QuoteDocumentBlock) => {
+    const cat = categories.find((c) => c.id === blockCategoryId(blk));
+    const d = cat ? getDocDesign(config, cat) : D;
+    return {
+      D: d,
+      body: { fontSize: ptPx(d.bodySize), lineHeight: d.lineHeight, color: d.text } as React.CSSProperties,
+      headC: { color: d.heading } as React.CSSProperties,
+    };
+  };
+  const [focusId, setFocusId] = React.useState<string | null>(null);
+  const focused = blocks.find((b) => b.id === focusId);
   const rate = Number(eurHufRate) || Number(config.defaultEurHufRate) || 400;
   const hufLine = (config.docHufLine || 'Az ajánlat írásának napján, {{arfolyam}} Ft/EUR árfolyamon az összeg:').replace(/\{\{\s*arfolyam\s*\}\}/g, String(rate));
   let productNo = 0;
 
-  const insertBar = (afterIndex: number) => (
+  const insertBar = (afterIndex: number) => hideStructureControls ? null : (
     <div className="group/ins relative h-5 -my-1 flex items-center justify-center print:hidden">
       <div className="absolute inset-x-8 top-1/2 h-px bg-indigo-200 opacity-0 group-hover/ins:opacity-100 transition" />
       <div className="relative flex gap-1 opacity-0 group-hover/ins:opacity-100 transition">
@@ -133,31 +160,43 @@ export function DocumentEditor({
   );
 
   const renderTextBox = (blk: QuoteDocumentBlock) => {
+    const { D, body, headC } = styles(blk);
     const st = blk.textStyle || 'normal';
     const set = (patch: Partial<QuoteDocumentBlock>) => updateBlock(blk.id, (b) => ({ ...b, ...patch }));
+    const ro = !!lockedReason?.(blk);
+    const alignCls = blk.align === 'center' ? 'text-center' : blk.align === 'right' ? 'text-right' : '';
     if (st === 'category_heading')
-      return <Inline value={blk.title || blk.content || ''} single onChange={(v) => set({ title: v })} className="text-[15px] font-bold underline underline-offset-2" />;
-    if (st === 'promo') return <Inline value={blk.content || ''} onChange={(v) => set({ content: v })} className="text-[14px] font-bold leading-relaxed" />;
+      return <RichInline readOnly={ro} value={blk.title || blk.content || ''} single onChange={(v) => set({ title: v })} className="font-bold underline underline-offset-2" style={{ ...headC, fontSize: ptPx(11.5) }} />;
+    if (st === 'promo') return <RichInline readOnly={ro} value={blk.content || ''} onChange={(v) => set({ content: v })} className="font-bold" style={{ ...headC, fontSize: ptPx(10.5), lineHeight: 1.5 }} />;
     if (st === 'footer_info')
       return (
         <div className="space-y-1">
-          <Inline value={blk.title || ''} single onChange={(v) => set({ title: v })} className="text-[14.5px] font-bold underline underline-offset-2" />
-          <Inline value={blk.content || ''} onChange={(v) => set({ content: v })} className="text-[12.5px] leading-[1.6] text-slate-700" />
+          <RichInline readOnly={ro} value={blk.title || ''} single onChange={(v) => set({ title: v })} className="font-bold underline underline-offset-2" style={{ ...headC, fontSize: ptPx(11) }} />
+          <RichInline readOnly={ro} value={blk.content || ''} onChange={(v) => set({ content: v })} style={{ ...body, fontSize: ptPx(9.6), lineHeight: 1.6 }} />
         </div>
       );
     if (st === 'options')
-      return <Inline value={blk.content || ''} onChange={(v) => set({ content: v })} className="text-[13px] leading-[1.55] first-line:font-bold" />;
+      return <RichInline readOnly={ro} value={blk.content || ''} onChange={(v) => set({ content: v })} className="first-line:font-bold" style={{ ...body, fontSize: ptPx(9.8) }} />;
     return (
       <div className="space-y-1">
         {(blk.title || st === 'greeting') && (
-          <Inline value={blk.title || ''} single onChange={(v) => set({ title: v })} className={st === 'greeting' ? 'text-[17px] font-bold' : 'text-[14.5px] font-bold'} placeholder="Cím" />
+          <RichInline
+            readOnly={ro}
+            value={blk.title || ''}
+            single
+            onChange={(v) => set({ title: v })}
+            className="font-bold"
+            style={{ ...headC, fontSize: ptPx(st === 'greeting' ? D.greetingSize : D.bodySize + 1) }}
+            placeholder="Cím"
+          />
         )}
-        <Inline value={blk.content || ''} onChange={(v) => set({ content: v })} className={`text-[13px] leading-[1.6] text-slate-800 ${st === 'highlight' ? 'font-bold' : ''}`} />
+        <RichInline readOnly={ro} value={blk.content || ''} onChange={(v) => set({ content: v })} className={`${alignCls} ${st === 'highlight' ? 'font-bold' : ''}`} style={body} placeholder="Szöveg…" />
       </div>
     );
   };
 
   const renderSection = (blk: QuoteDocumentBlock) => {
+    const { D, body, headC } = styles(blk);
     productNo++;
     const sizeM = (blk.sectionTitle || '').match(/\((\d+)\s*[×x]\s*(\d+)\s*[×x]\s*(\d+)\s*cm(?:\s*-\s*([^)]*))?\)\s*$/);
     const rows = blk.rows || [];
@@ -186,7 +225,7 @@ export function DocumentEditor({
       const gift = r.itemRole === 'gift' || Number(r.discountPriceEur) === 0;
       return (
         <tr key={r.id} className="group/row align-bottom">
-          <td className="border border-slate-600 px-1.5 py-0.5 align-bottom">
+          <td className="border border-[var(--tb)] px-1.5 py-0.5 align-bottom">
             <div className="flex items-end gap-1">
               <Inline value={r.name || ''} onChange={(v) => setRow(i, { name: v })} className="text-[12px]" />
               <button type="button" title="Tétel elrejtése az ajánlatból" onClick={() => setRow(i, { included: false })} className="opacity-0 group-hover/row:opacity-100 text-slate-400 hover:text-rose-600 print:hidden">
@@ -194,13 +233,13 @@ export function DocumentEditor({
               </button>
             </div>
           </td>
-          <td className="border border-slate-600 px-1.5 py-0.5 align-bottom text-[12px]">
+          <td className="border border-[var(--tb)] px-1.5 py-0.5 align-bottom text-[12px]">
             <NumCell value={r.listPriceEur} blank={!gift && !(Number(r.listPriceEur) > Number(r.discountPriceEur))} onChange={(n) => setRow(i, { listPriceEur: n }, true)} />
           </td>
-          <td className="border border-slate-600 px-1.5 py-0.5 align-bottom text-[12px]">
+          <td className="border border-[var(--tb)] px-1.5 py-0.5 align-bottom text-[12px]">
             <NumCell bold value={r.discountPriceEur} onChange={(n) => setRow(i, { discountPriceEur: n }, true)} />
           </td>
-          <td className="border border-slate-600 px-1.5 py-0.5 align-bottom text-[12px] font-bold">
+          <td className="border border-[var(--tb)] px-1.5 py-0.5 align-bottom text-[12px] font-bold">
             <Inline value={r.note || (gift ? 'Ajándék' : r.itemRole === 'optional' ? 'Opció' : '')} single onChange={(v) => setRow(i, { note: v })} className="text-[12px] font-bold" />
           </td>
         </tr>
@@ -210,7 +249,7 @@ export function DocumentEditor({
     return (
       <div className="space-y-2">
         <div className="flex items-baseline gap-1">
-          <span className="text-[17px] font-bold">{productNo}.</span>
+          <span className="font-bold" style={{ ...headC, fontSize: ptPx(D.headingSize) }}>{productNo}.</span>
           <Inline
             value={(blk.sectionTitle || '').replace(/^\d+\.\s*/, '').replace(/\s*\(\d+\s*[×x]\s*\d+[^)]*\)\s*$/, '').replace(/:\s*$/, '') + ':'}
             single
@@ -220,12 +259,13 @@ export function DocumentEditor({
                 return { ...b, sectionTitle: `${productNo}. ${v.replace(/:\s*$/, '')}${suffix}` };
               })
             }
-            className="text-[17px] font-bold"
+            className="font-bold"
+            style={{ ...headC, fontSize: ptPx(D.headingSize) }}
           />
         </div>
-        {sizeLine && <div className="text-[13px] font-bold italic underline underline-offset-2">{sizeLine}</div>}
-        <Inline value={blk.sectionSubtitle || ''} single onChange={(v) => updateBlock(blk.id, (b) => ({ ...b, sectionSubtitle: v }))} className="text-[12.5px] italic text-slate-500" placeholder="Alcím" />
-        <Inline value={blk.sectionIntroText || ''} onChange={(v) => updateBlock(blk.id, (b) => ({ ...b, sectionIntroText: v }))} className="text-[13px] leading-[1.6] text-slate-800" placeholder="Termék leírása" />
+        {sizeLine && <div className="font-bold italic underline underline-offset-2" style={{ ...headC, fontSize: ptPx(9.8) }}>{sizeLine}</div>}
+        <RichInline readOnly={!!lockedReason?.(blk)} value={blk.sectionSubtitle || ''} single onChange={(v) => updateBlock(blk.id, (b) => ({ ...b, sectionSubtitle: v }))} className="italic" style={{ fontSize: ptPx(9.3), color: D.muted }} placeholder="Alcím" />
+        <RichInline readOnly={!!lockedReason?.(blk)} value={blk.sectionIntroText || ''} onChange={(v) => updateBlock(blk.id, (b) => ({ ...b, sectionIntroText: v }))} style={body} placeholder="Termék leírása" />
 
         {photos.length > 0 && (
           <div className="space-y-3 py-1">
@@ -249,7 +289,7 @@ export function DocumentEditor({
         )}
 
         {visible.length > 0 && (
-          <table className="w-full border-collapse text-slate-900 table-fixed">
+          <table className="w-full border-collapse text-slate-900 table-fixed" style={{ ['--tb' as string]: D.tableBorder }}>
             <colgroup>
               <col style={{ width: '42%' }} />
               <col style={{ width: '16%' }} />
@@ -257,20 +297,20 @@ export function DocumentEditor({
               <col style={{ width: '18%' }} />
             </colgroup>
             <thead>
-              <tr className="bg-[#d9d9d9] text-[12px] font-bold text-left">
-                <th className="border border-slate-600 px-1.5 py-1">Megnevezés</th>
-                <th className="border border-slate-600 px-1.5 py-1">Listaár (EUR)</th>
-                <th className="border border-slate-600 px-1.5 py-1">{discountLabel ? `Kedvezményes ár: ${discountLabel} (EUR)` : 'Ár (EUR)'}</th>
-                <th className="border border-slate-600 px-1.5 py-1" />
+              <tr className="text-[12px] font-bold text-left" style={{ background: D.tableHead }}>
+                <th className="border border-[var(--tb)] px-1.5 py-1">Megnevezés</th>
+                <th className="border border-[var(--tb)] px-1.5 py-1">Listaár (EUR)</th>
+                <th className="border border-[var(--tb)] px-1.5 py-1">{discountLabel ? `Kedvezményes ár: ${discountLabel} (EUR)` : 'Ár (EUR)'}</th>
+                <th className="border border-[var(--tb)] px-1.5 py-1" />
               </tr>
             </thead>
             <tbody>
               {base.map(rowEl)}
               <tr className="text-[12px]">
-                <td className="border border-slate-600" />
-                <td className="border border-slate-600 px-1.5 py-0.5">Összesen:</td>
-                <td className="border border-slate-600 px-1.5 py-0.5 text-right font-bold tabular-nums">{Math.round(totals.totalEur)}</td>
-                <td className="border border-slate-600" />
+                <td className="border border-[var(--tb)]" />
+                <td className="border border-[var(--tb)] px-1.5 py-0.5">Összesen:</td>
+                <td className="border border-[var(--tb)] px-1.5 py-0.5 text-right font-bold tabular-nums">{Math.round(totals.totalEur)}</td>
+                <td className="border border-[var(--tb)]" />
               </tr>
               {opt.map(rowEl)}
             </tbody>
@@ -307,17 +347,29 @@ export function DocumentEditor({
             </div>
           </div>
         ))}
-        <Inline value={blk.sectionClosingText || ''} onChange={(v) => updateBlock(blk.id, (b) => ({ ...b, sectionClosingText: v }))} className="text-[12px] leading-[1.6] text-slate-600" placeholder="Záró szöveg (opcionálisan rendelhető, színek…)" />
+        <RichInline readOnly={!!lockedReason?.(blk)} value={blk.sectionClosingText || ''} onChange={(v) => updateBlock(blk.id, (b) => ({ ...b, sectionClosingText: v }))} style={{ fontSize: ptPx(9), lineHeight: 1.6, color: D.muted }} placeholder="Záró szöveg (opcionálisan rendelhető, színek…)" />
       </div>
     );
   };
 
   return (
-    <div className="bg-slate-200/70 rounded-2xl p-3 sm:p-6 overflow-x-auto">
-      <div className="mx-auto bg-white shadow-xl w-full max-w-[820px] min-w-[620px]" style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}>
+    <div className="bg-slate-200/70 rounded-2xl p-3 sm:p-6 overflow-x-auto space-y-3">
+      <div className="mx-auto max-w-[820px] min-w-[620px]">
+        <FormatToolbar
+          accent={D.accent}
+          align={focused?.type === 'text_box' ? focused.align || 'left' : null}
+          onAlign={
+            focused?.type === 'text_box' && !lockedReason?.(focused)
+              ? (a) => updateBlock(focused.id, (b) => ({ ...b, align: a }))
+              : undefined
+          }
+          extra={toolbarExtra}
+        />
+      </div>
+      <div className="mx-auto bg-white shadow-xl w-full max-w-[820px] min-w-[620px]" style={{ fontFamily: 'Arial, Helvetica, sans-serif', color: D.text }}>
         {/* fejléc: középre igazított logó, mint a PDF-ben */}
         <div className="pt-7 pb-3 text-center relative">
-          {config.pdfLogoUrl ? <img src={config.pdfLogoUrl} alt="" className="h-11 mx-auto object-contain" /> : <div className="text-xl font-bold">{config.companyName}</div>}
+          {config.pdfLogoUrl ? <img src={config.pdfLogoUrl} alt="" className="mx-auto object-contain" style={{ height: ptPx(D.logoHeight) }} /> : <div className="text-xl font-bold">{config.companyName}</div>}
           {config.companySubtitle && <div className="text-[10px] text-slate-500 mt-1">{config.companySubtitle}</div>}
           {quoteNumber && <div className="absolute right-6 top-4 text-[10px] text-slate-400">Árajánlat {quoteNumber}</div>}
         </div>
@@ -325,9 +377,12 @@ export function DocumentEditor({
           {insertBar(-1)}
           {blocks.map((blk, idx) => (
             <React.Fragment key={blk.id}>
-              <div className="group relative py-1.5">
+              <div className={`group relative py-1.5 ${lockedReason?.(blk) ? 'opacity-90' : ''}`} onFocus={() => setFocusId(blk.id)}>
+                {lockedReason?.(blk) && (
+                  <div className="absolute -right-[64px] top-1 w-[58px] text-[9px] leading-tight text-slate-400 print:hidden">{lockedReason(blk)}</div>
+                )}
                 {/* blokk műveletek a lap szélén */}
-                <div className="absolute -left-[58px] top-1 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition print:hidden">
+                <div className={`absolute -left-[58px] top-1 flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition print:hidden ${hideStructureControls ? 'hidden' : 'flex'}`}>
                   <button type="button" title="Feljebb" disabled={idx === 0} onClick={() => moveBlock(idx, -1)} className="p-1 rounded-md bg-white border border-slate-200 text-slate-500 hover:text-slate-900 disabled:opacity-30">
                     <ArrowUp className="w-3.5 h-3.5" />
                   </button>
@@ -368,9 +423,9 @@ export function DocumentEditor({
           ))}
         </div>
         {/* lábléc: sötétkék sáv, mint a PDF-ben */}
-        <div className="bg-[#343a55] text-white text-center py-3">
-          <div className="text-[12px]">{(config.companyWebsite || 'www.openskypergola.hu').replace(/^https?:\/\//, '')}</div>
-          <div className="text-[9px] text-indigo-100/80">{[config.companyPhone, config.companyEmail].filter(Boolean).join('  ·  ')}</div>
+        <div className="text-white text-center py-3" style={{ background: D.accent }}>
+          <div className="text-[12px]">{D.footerText.trim() || (config.companyWebsite || 'www.openskypergola.hu').replace(/^https?:\/\//, '')}</div>
+          <div className="text-[9px]" style={{ color: D.accentText }}>{[config.companyPhone, config.companyEmail].filter(Boolean).join('  ·  ')}</div>
         </div>
       </div>
     </div>

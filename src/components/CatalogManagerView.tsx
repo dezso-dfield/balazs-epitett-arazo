@@ -1,6 +1,7 @@
 'use client';
 
 import { CategoryDocEditor } from '@/components/CategoryDocEditor';
+import { CategoryDesignEditor } from '@/components/TemplateDesigner';
 import { templateCoverUrl, thumbUrl } from '@/lib/thumb';
 import { isTemplateInCategory } from '@/lib/pricing-engine';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -31,6 +32,7 @@ import { AutoTextarea, btn, PageHeader } from '@/components/ui';
 import { ColorOptionsEditor } from '@/components/ColorOptions';
 
 interface CatalogManagerViewProps {
+  config?: import('@/lib/types').SystemConfig;
   menus: ProductMenu[];
   categories: ProductCategory[];
   templates: QuoteTemplate[];
@@ -504,6 +506,7 @@ function RowMenu({
 }
 
 export function CatalogManagerView({
+  config,
   menus,
   categories,
   templates,
@@ -1281,6 +1284,17 @@ export function CatalogManagerView({
                   </div>
 
                   <CategoryDocEditor category={selectedCategory} onChange={(patch) => updateCategory(selectedCategory.id, patch)} />
+                  <details className="border-b border-slate-100 px-5 py-3 group/design">
+                    <summary className="cursor-pointer text-sm font-semibold text-slate-800 select-none">
+                      Kategória dizájn{' '}
+                      <span className="font-normal text-slate-500">
+                        {Object.keys(selectedCategory.docDesign || {}).length ? '(saját eltérések)' : '(az általánost használja)'}
+                      </span>
+                    </summary>
+                    <div className="pt-3">
+                      <CategoryDesignEditor category={selectedCategory} config={config} onChange={(d) => updateCategory(selectedCategory.id, { docDesign: d })} />
+                    </div>
+                  </details>
 
                   {categoryTemplates.length === 0 ? (
                     <div className="p-6 text-sm text-slate-500">Ebben a kategóriában még nincs termék.</div>

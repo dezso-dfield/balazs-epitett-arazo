@@ -307,6 +307,7 @@ export interface ProductCategory {
   docIntro?: string;          // a bevezető után: miért ez a termékcsalád, minőség, hó- és szélterhelés…
   docOptions?: string;        // a kategória termékei után: „+Opcionálisan rendelhető a termékhez:” lista
   docPromo?: string;          // félkövér akció, pl. „Ha {{hatarido}}-ig megrendeli az alapszerkezetet…”
+  docDesign?: Partial<import('./doc-design').DocDesign>; // a kategória saját dizájnja (csak az eltérések az általánoshoz képest)
   docTotalLabel?: string;     // összesítő sor felirata, pl. „Opció, árnyékolók szereléssel Összesen:” (üresen az általános)
 }
 
@@ -572,6 +573,7 @@ export interface SystemConfig {
   docTotalLabel?: string;        // „Az alapszerkezet szereléssel Összesen:”
   docHufLine?: string;           // „Az ajánlat írásának napján, {{arfolyam}} Ft/EUR árfolyamon az összeg:”
   docOptionLabel?: string;       // „Opció:”
+  docDesign?: Partial<import('./doc-design').DocDesign>; // az egyetlen általános dizájn sablon (színek, méretek, logó)
   // Opcionális saját feltöltött PDF dizájn elemek (ha üres, tiszta modern fejlécet rajzol)
   pdfPageBackgroundUrl?: string;      // Saját A4-es fejléc/lábléc háttérkép URL
   pdfLogoUrl?: string;                // Saját logó URL

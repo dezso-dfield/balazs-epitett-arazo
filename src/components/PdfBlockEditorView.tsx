@@ -87,6 +87,7 @@ interface PdfBlockEditorViewProps {
 export function PdfBlockEditorView({
   knownCustomers,
   config,
+  categories,
   templates,
   mediaLibrary,
   initialQuote,
@@ -728,7 +729,7 @@ export function PdfBlockEditorView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSaveAndDownload = async (mode: 'save' | 'download' | 'send') => {
+  const handleSaveAndDownload = async (mode: 'save' | 'download' | 'docx' | 'send') => {
     const downloadImmediately = mode !== 'save';
     setSavingPdf(true);
     try {
@@ -763,6 +764,9 @@ export function PdfBlockEditorView({
       if (saved && mode === 'download') {
         await downloadSavedPdf(saved.id, saved.quoteNumber);
       }
+      if (saved && mode === 'docx') {
+        await downloadSavedPdf(saved.id, saved.quoteNumber, 'docx');
+      }
       if (saved && mode === 'send') {
         onSendQuote?.(saved);
       }
@@ -774,14 +778,15 @@ export function PdfBlockEditorView({
   };
 
   // Letöltés fájlként (nem új lapon: a mentés utáni window.open-t a böngésző felugró ablakként blokkolhatja)
-  const downloadSavedPdf = async (id: string, quoteNumber?: string) => {
+  const downloadSavedPdf = async (id: string, quoteNumber?: string, kind: 'pdf' | 'docx' = 'pdf') => {
+    const url0 = kind === 'docx' ? `/api/quotes/${id}/docx` : `/api/quotes/${id}/pdf?download=1`;
     try {
-      const res = await fetch(`/api/quotes/${id}/pdf?download=1`);
+      const res = await fetch(url0);
       if (!res.ok) throw new Error(String(res.status));
       const blob = await res.blob();
       const cd = res.headers.get('content-disposition') || '';
       const m = cd.match(/filename\*=UTF-8''([^;]+)|filename="?([^";]+)"?/i);
-      const name = m ? decodeURIComponent(m[1] || m[2]) : `${quoteNumber || 'arajanlat'}.pdf`;
+      const name = m ? decodeURIComponent(m[1] || m[2]) : `${quoteNumber || 'arajanlat'}.${kind}`;
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -792,7 +797,7 @@ export function PdfBlockEditorView({
       setTimeout(() => URL.revokeObjectURL(url), 10_000);
     } catch (e) {
       console.error('PDF letöltési hiba:', e);
-      window.location.href = `/api/quotes/${id}/pdf?download=1`;
+      window.location.href = url0;
     }
   };
 
@@ -894,6 +899,16 @@ export function PdfBlockEditorView({
             >
               <Download className="w-4 h-4" />
               PDF
+            </button>
+            <button
+              type="button"
+              disabled={savingPdf}
+              onClick={() => handleSaveAndDownload('docx')}
+              className={btn.secondary}
+              title="Mentés, majd Word (.docx) letöltése: Wordben tovább szerkeszthető, onnan PDF-be menthető"
+            >
+              <FileText className="w-4 h-4" />
+              Word
             </button>
           </>
         }
@@ -1150,6 +1165,7 @@ export function PdfBlockEditorView({
             onAddText={(i) => handleAddStandaloneTextBox(i)}
             onAddPhoto={(i) => handleAddStandalonePhotoBox(i)}
             onAddPageBreak={(at) => handleAddPageBreak(at)}
+            categories={categories}
           />
           <div className="hidden 2xl:block min-w-0 2xl:sticky 2xl:top-4">{renderPreviewCard('h-[820px]')}</div>
         </div>

@@ -212,6 +212,9 @@ export const TEMPLATE_VARIABLES_HELP = [
   { token: '{{arfolyam}}', name: 'Árfolyam', label: 'EUR/HUF árfolyam (pl. 400)' },
   { token: '{{szallitas}}', name: 'Szállítási díj', label: 'Szállítási díj Ft-ban (pl. 40.000 Ft)' },
   { token: '{{datum}}', name: 'Mai dátum', label: 'Mai dátum (pl. 2026. 10. 18.)' },
+  { token: '{{termekek}}', name: 'Termékek', label: 'Az ajánlott termékek felsorolva (pl. 1 db 600x300x250 cm-es SOLARE 400 bioklimatikus pergola és ZIP oldalsó árnyékoló)' },
+  { token: '{{opciok}}', name: 'Opciók mondat', label: 'Mondat az opcionális tételekről (pl. Opcionálisan LED világítással…). Üres, ha nincs opció.' },
+  { token: '{{ajandekok}}', name: 'Ajándék mondat', label: 'Mondat az ajándék tételekről (pl. Ajándék esőérzékelővel és infrafűtéssel.). Üres, ha nincs.' },
   { token: '{{hatarido}}', name: 'Határidő', label: 'Megrendelési határidő: a hónap utolsó napja, 10 napon belül a következő hónapé (pl. Október 31)' },
 ];
 
@@ -494,7 +497,7 @@ export const DEFAULT_SYSTEM_CONFIG: SystemConfig = {
   defaultDiscountLabel: '-20%',
   defaultGreetingTemplate: 'Kedves {{megszolitas}}!',
   defaultIntroTemplate:
-    'Örömmel fogadtuk megkeresését! Kérésének megfelelően küldjük személyre szabott árajánlatunkat az Ön által megadott ({{meret_m}} / {{meret}}, {{beepites}}) paraméterek alapján.',
+    'Örömmel fogadtuk megkeresését! Kérésének megfelelően küldjük tájékoztató árajánlatunkat az Ön által megadott paraméterek alapján: {{termekek}}. {{opciok}} {{ajandekok}}',
   // A korábbi (Python) rendszer ajánlataiból átvett feltételek
   defaultClosingInfoTemplate:
     'Ha {{hatarido}}-ig megrendeli az alapszerkezetet, kedvezményt tudunk biztosítani!\n\n' +
@@ -572,6 +575,27 @@ export interface VariableReplacementContext {
   mountType?: string;
   eurHufRate?: number;
   deliveryFeeHuf?: number;
+  /** a bevezetőhöz, az ajánlat tartalmából (buildFullQuoteDocumentBlocks számolja) */
+  products?: string;
+  optionsSentence?: string;
+  giftsSentence?: string;
+}
+
+/** A régi, rövid alapértelmezett bevezető: ha ez van mentve, a hosszú (ajánlatokból vett) változat érvényes */
+export const LEGACY_INTRO_TEMPLATES = [
+  'Örömmel fogadtuk megkeresését! Kérésének megfelelően küldjük személyre szabott árajánlatunkat az Ön által megadott ({{meret_m}} / {{meret}}, {{beepites}}) paraméterek alapján.',
+  'Örömmel fogadtuk megkeresését! Kérésének megfelelően küldjük személyre szabott árajánlatunkat ({{meret_m}} / {{meret}}, {{beepites}}).',
+];
+
+/** A saját Word ajánlatok nyitó bekezdése (pl. Vadnai, Debrei, Körmendi ajánlatok) */
+export const LONG_INTRO_TEMPLATE =
+  'Örömmel fogadtuk megkeresését! Kérésének megfelelően küldjük tájékoztató árajánlatunkat az Ön által megadott paraméterek alapján: {{termekek}}. {{opciok}} {{ajandekok}}';
+
+/** Magyar felsorolás: „a, b és c” */
+export function huList(items: string[]): string {
+  const xs = items.map((x) => x.trim()).filter(Boolean);
+  if (xs.length <= 1) return xs[0] || '';
+  return `${xs.slice(0, -1).join(', ')} és ${xs[xs.length - 1]}`;
 }
 
 export function formatDotNumber(val: number | undefined | null): string {
@@ -645,5 +669,8 @@ export function replaceTemplateVariables(
     .replace(/\{\{\s*arfolyam\s*\}\}/gi, String(rate))
     .replace(/\{\{\s*szallitas\s*\}\}/gi, delivery)
     .replace(/\{\{\s*datum\s*\}\}/gi, today)
-    .replace(/\{\{\s*hatarido\s*\}\}/gi, getOrderDeadline());
+    .replace(/\{\{\s*hatarido\s*\}\}/gi, getOrderDeadline())
+    .replace(/\{\{\s*termekek\s*\}\}/gi, ctx.products || `1 db ${w}x${p}x${h} cm-es szerkezet`)
+    .replace(/\{\{\s*opciok\s*\}\}/gi, ctx.optionsSentence || '')
+    .replace(/\{\{\s*ajandekok\s*\}\}/gi, ctx.giftsSentence || '');
 }

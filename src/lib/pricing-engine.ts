@@ -2,6 +2,9 @@ import {
   DEFAULT_PRICING_FORMULA,
   replaceTemplateVariables,
   VariableReplacementContext,
+  huList,
+  LEGACY_INTRO_TEMPLATES,
+  LONG_INTRO_TEMPLATE,
 } from './constants';
 import {
   CustomMatrixTable,
@@ -19,6 +22,7 @@ import {
   TemplateMaterialItem,
   ProductCategory,
 } from './types';
+import { stripRich as stripRichText } from './richtext';
 
 export function roundHuf(eur: number, rate: number): number {
   return Math.round((eur * rate) / 1000) * 1000;
@@ -1222,6 +1226,8 @@ export function buildFullQuoteDocumentBlocks(params: {
   blocks: QuoteDocumentBlock[];
   primaryTotalEur: number;
   primaryTotalHuf: number;
+  /** a bevezető változói ebben az ajánlatban (a sablon tervező ezekkel cseréli vissza a szöveget {{…}}-re) */
+  introVars: Pick<VariableReplacementContext, 'products' | 'optionsSentence' | 'giftsSentence'>;
 } {
   const {
     customerName,
@@ -1260,21 +1266,21 @@ export function buildFullQuoteDocumentBlocks(params: {
     config.defaultGreetingTemplate || 'Kedves {{megszolitas}}!',
     varCtx
   );
-  const introBody = replaceTemplateVariables(
-    config.defaultIntroTemplate ||
-      'Örömmel fogadtuk megkeresését! Kérésének megfelelően küldjük személyre szabott árajánlatunkat ({{meret_m}} / {{meret}}, {{beepites}}).',
-    varCtx
-  );
-
-  blocks.push({
+  // a bevezető a termékek felépítése után töltődik ki ({{termekek}}, {{opciok}}, {{ajandekok}})
+  const introTemplate =
+    !config.defaultIntroTemplate?.trim() || LEGACY_INTRO_TEMPLATES.includes(config.defaultIntroTemplate.trim())
+      ? LONG_INTRO_TEMPLATE
+      : config.defaultIntroTemplate;
+  const introBlock: QuoteDocumentBlock = {
     id: `blk_intro_${Date.now()}`,
     type: 'text_box',
     title: greetingLine,
-    content: introBody,
+    content: '',
     textStyle: 'greeting',
     bold: false,
     align: 'left',
-  });
+  };
+  blocks.push(introBlock);
 
   // 1/b. Kategória sablonok bevezetője (miért ez a termékcsalád…), a Word ajánlatok szerkezetében
   // a termékek kategóriánként egymás után, a kategória első megjelenésének sorrendjében
@@ -1363,6 +1369,27 @@ export function buildFullQuoteDocumentBlocks(params: {
     );
   });
 
+  // a Word ajánlatok nyitó bekezdése: mit ajánlunk, mi opcionális, mi ajándék
+  const sections = blocks.filter((b) => b.type === 'template_section');
+  const productNames = orderedTemplates.map((tpl) => {
+    const name = (tpl.name || '').trim();
+    return catOf(tpl.categoryId)?.categoryType === 'accessory' ? name : `1 db ${widthCm}x${projectionCm}x${heightCm} cm-es ${name}`;
+  });
+  const lc = (t: string) => t.replace(/\s*\(.*?\)\s*/g, ' ').trim().replace(/^(\p{Lu})(\p{Ll})/u, (m, a, b) => a.toLowerCase() + b);
+  const rowsOf = (pred: (r: NonNullable<QuoteDocumentBlock['rows']>[number]) => boolean) =>
+    [...new Set(sections.flatMap((b) => (b.rows || []).filter((r) => r.included !== false && !r.systemRole && pred(r)).map((r) => lc(stripRichText(r.name || '')))))].filter(Boolean);
+  const optNames = rowsOf((r) => r.itemRole === 'optional').slice(0, 6);
+  const giftNames = rowsOf((r) => r.itemRole === 'gift');
+  const introVars = {
+    products: huList(productNames) || undefined,
+    optionsSentence: optNames.length ? `Opcionálisan rendelhető hozzá: ${huList(optNames)}.` : '',
+    giftsSentence: giftNames.length ? `Ajándékba adjuk hozzá: ${huList(giftNames)}.` : '',
+  };
+  introBlock.content = replaceTemplateVariables(introTemplate, { ...varCtx, ...introVars })
+    .replace(/[ \t]{2,}/g, ' ')
+    .replace(/\.\s*\./g, '.')
+    .trim();
+
   // kiegészítő kategóriák leírása (Guillotine, Thermo Glass, oldalsó árnyékoló…) az Információ előtt
   catOrder.filter(isAccessory).forEach(catIntro);
 
@@ -1395,6 +1422,7 @@ export function buildFullQuoteDocumentBlocks(params: {
     blocks,
     primaryTotalEur,
     primaryTotalHuf,
+    introVars,
   };
 }
 

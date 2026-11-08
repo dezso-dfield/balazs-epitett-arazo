@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     // Az előnézethez csak a beállítások kellenek: 30 mp-ig a memóriában lévő példány is jó
     const db = await loadDb({ maxAgeMs: 30_000 });
-    const pdfBytes = await renderEditableQuotePdfBytes(body, db.config);
+    const pdfBytes = await renderEditableQuotePdfBytes(body, db.config, db.categories);
 
     // A szerkesztő bináris PDF-et kér (harmadával kisebb, mint a base64 JSON)
     if ((req.headers.get('accept') || '').includes('application/pdf')) {

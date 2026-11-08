@@ -686,6 +686,7 @@ export default function CustomPricerAppPage() {
 
             {activeModule === 'catalog_manager' && (
               <CatalogManagerView
+                config={config}
                 menus={menus}
                 categories={categories}
                 templates={pricedTemplates}
@@ -775,6 +776,8 @@ export default function CustomPricerAppPage() {
                 config={config}
                 onSaveConfig={handleSaveSystemConfig}
                 onUploadImage={handleUploadImage}
+                categories={categories}
+                templates={pricedTemplates}
               />
             )}
           </>

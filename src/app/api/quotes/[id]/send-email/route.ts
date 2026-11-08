@@ -58,7 +58,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
         : undefined;
 
       // Mindig a legfrissebb, szerkesztett blokkokból készül a melléklet
-      const pdfBytes = await renderEditableQuotePdfBytes(quote, db.config);
+      const pdfBytes = await renderEditableQuotePdfBytes(quote, db.config, db.categories);
       const pdfName = `${sanitizeFilenamePart(quote.quoteNumber)}_${sanitizeFilenamePart(
         quote.customerName
       )}_arajanlat.pdf`;

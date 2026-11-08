@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 import { ArrowDown, ArrowUp, Copy, ImagePlus, Plus, Save, Trash2, Upload } from 'lucide-react';
+import { TemplateDesigner } from '@/components/TemplateDesigner';
 import { btn, insertAtCursor, labelCls, PageHeader, TemplatePreview, VariableChips } from '@/components/ui';
 import {
   DEFAULT_EMAIL_TEMPLATES,
@@ -32,13 +33,16 @@ interface BrandingSettingsViewProps {
   config: SystemConfig;
   onSaveConfig: (nextConfig: SystemConfig) => Promise<void>;
   onUploadImage: (file: File) => Promise<string | null>;
+  categories?: import('@/lib/types').ProductCategory[];
+  templates?: import('@/lib/types').QuoteTemplate[];
 }
 
-type SettingsTab = 'pricing' | 'extras' | 'offer' | 'email' | 'company';
+type SettingsTab = 'pricing' | 'extras' | 'offer' | 'design' | 'email' | 'company';
 const SETTINGS_TABS: [SettingsTab, string, string][] = [
   ['pricing', 'Árképzés', 'Haszon és szerelés képlete'],
   ['extras', 'Extrák', 'Gyűjtemények, gyors extrák'],
   ['offer', 'Ajánlat', 'Sorszám, PDF szövegek'],
+  ['design', 'Dizájn és sablon', 'Színek, Word-szerű sablon'],
   ['email', 'E-mail', 'Küldés, sablonok, követés'],
   ['company', 'Cég és arculat', 'Cégadatok, logó, háttér'],
 ];
@@ -47,6 +51,8 @@ export function BrandingSettingsView({
   config,
   onSaveConfig,
   onUploadImage,
+  categories = [],
+  templates = [],
 }: BrandingSettingsViewProps) {
   const [form, setForm] = useState<SystemConfig>({ ...config });
   const [tab, setTab] = useState<SettingsTab>('pricing');
@@ -948,6 +954,7 @@ export function BrandingSettingsView({
       </div>
 
       </>)}
+      {tab === 'design' && <TemplateDesigner form={form} setForm={setForm} categories={categories} templates={templates} />}
       {tab === 'company' && (
       <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-5">
         <h2 className="text-base font-semibold text-slate-950">Cég és arculat</h2>

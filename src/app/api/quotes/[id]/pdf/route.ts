@@ -23,7 +23,7 @@ export async function GET(
       return new NextResponse('Árajánlat nem található', { status: 404 });
     }
 
-    const pdfBytes = await renderEditableQuotePdfBytes(quote, db.config);
+    const pdfBytes = await renderEditableQuotePdfBytes(quote, db.config, db.categories);
     const safeName = sanitizeFilenamePart(quote.customerName || 'Ugyfel');
     const safeCity = sanitizeFilenamePart(quote.city || 'Budapest');
     const fileName =
