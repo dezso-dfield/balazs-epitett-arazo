@@ -1,5 +1,6 @@
 'use client';
 
+import { CategoryDocEditor } from '@/components/CategoryDocEditor';
 import { templateCoverUrl, thumbUrl } from '@/lib/thumb';
 import { isTemplateInCategory } from '@/lib/pricing-engine';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -1278,6 +1279,8 @@ export function CatalogManagerView({
                       Új termék
                     </button>
                   </div>
+
+                  <CategoryDocEditor category={selectedCategory} onChange={(patch) => updateCategory(selectedCategory.id, patch)} />
 
                   {categoryTemplates.length === 0 ? (
                     <div className="p-6 text-sm text-slate-500">Ebben a kategóriában még nincs termék.</div>

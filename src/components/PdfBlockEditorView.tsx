@@ -1,5 +1,6 @@
 'use client';
 
+import { DocumentEditor } from '@/components/DocumentEditor';
 import { thumbUrl } from '@/lib/thumb';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -201,6 +202,8 @@ export function PdfBlockEditorView({
   // Alapból minden szakasz össze van csukva; a nyitottakat tartjuk számon
   const [openBlocks, setOpenBlocks] = useState<Record<string, boolean>>({});
   const [editorStep, setEditorStep] = useState<1 | 2 | 3>(2);
+  // „Dokumentum” = Word-szerű szerkesztés a lapon; „Blokkok” = a részletes blokkszerkesztő
+  const [docView, setDocView] = useState<'doc' | 'blocks'>('doc');
   const [outlineDrag, setOutlineDrag] = useState<number | null>(null);
   const [outlineDrop, setOutlineDrop] = useState<number | null>(null);
   const [outlineMenuOpen, setOutlineMenuOpen] = useState(false);
@@ -1116,7 +1119,44 @@ export function PdfBlockEditorView({
         )}
       </div>
 
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="flex gap-1 p-1 rounded-xl bg-slate-100" role="group" aria-label="Szerkesztő nézet">
+          {(
+            [
+              ['doc', 'Dokumentum (mint a Word)'],
+              ['blocks', 'Blokkok és árazás'],
+            ] as const
+          ).map(([v, l]) => (
+            <button key={v} type="button" onClick={() => setDocView(v)} className={`px-3 py-1.5 rounded-lg text-[13px] font-semibold ${docView === v ? 'bg-white shadow text-slate-950' : 'text-slate-600'}`}>
+              {l}
+            </button>
+          ))}
+        </div>
+        <span className="text-xs text-slate-500">
+          {docView === 'doc' ? 'Kattints a szövegbe vagy a táblázat celláiba és írd át. A kép, tétel és árazás részletei a Blokkok nézetben.' : 'Részletes szerkesztés: árazás, tételek, fotók feltöltése.'}
+        </span>
+      </div>
+
+      {docView === 'doc' && (
+        <div className="grid grid-cols-1 2xl:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] gap-5 items-start">
+          <DocumentEditor
+            blocks={blocks}
+            config={config}
+            eurHufRate={eurHufRate}
+            quoteNumber={initialQuote.quoteNumber}
+            updateBlock={updateBlock}
+            moveBlock={moveBlock}
+            removeBlock={removeBlock}
+            onAddText={(i) => handleAddStandaloneTextBox(i)}
+            onAddPhoto={(i) => handleAddStandalonePhotoBox(i)}
+            onAddPageBreak={(at) => handleAddPageBreak(at)}
+          />
+          <div className="hidden 2xl:block min-w-0 2xl:sticky 2xl:top-4">{renderPreviewCard('h-[820px]')}</div>
+        </div>
+      )}
+
       {/* Main Split Layout: Left = Editable Blocks, Right = Live PDF Viewer */}
+      {docView === 'blocks' && (
       <div className="grid grid-cols-1 xl:grid-cols-[12rem_minmax(0,1.15fr)_minmax(0,1fr)] gap-5 items-start">
         {/* Szerkezet (csak széles képernyőn) */}
         <div className="hidden xl:block xl:sticky xl:top-4">{renderOutline()}</div>
@@ -1285,6 +1325,10 @@ export function PdfBlockEditorView({
                         <option value="normal">Normál szövegrész</option>
                         <option value="highlight">Kiemelt keretes szövegdoboz</option>
                         <option value="footer_info">Záró információs doboz</option>
+                        <option value="category_heading">Kategória cím (félkövér, aláhúzott)</option>
+                        <option value="category_intro">Kategória leírás</option>
+                        <option value="options">Opcionálisan rendelhető lista</option>
+                        <option value="promo">Akció (félkövér)</option>
                       </select>
                     </div>
                   </div>
@@ -2470,6 +2514,7 @@ export function PdfBlockEditorView({
         {/* RIGHT COLUMN: élő PDF előnézet (széles képernyőn a tartalom mellett) */}
         <div className="hidden xl:block min-w-0 xl:sticky xl:top-4">{renderPreviewCard('h-[720px]')}</div>
       </div>
+      )}
       {stepNav}
       </>)}
 

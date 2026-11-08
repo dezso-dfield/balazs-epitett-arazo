@@ -701,6 +701,67 @@ export function BrandingSettingsView({
       </div>
 
       {offerTextsCard}
+
+      {/* Általános ajánlat sablon: a saját Word ajánlatok szerkezete és visszatérő megfogalmazásai */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+        <div>
+          <h2 className="text-base font-semibold text-slate-950">Ajánlat felépítése (általános sablon)</h2>
+          <p className="text-[13px] text-slate-600 mt-0.5">
+            Minden ajánlat ebben a sorrendben készül, a saját Word ajánlataid mintájára. A kategóriák saját szövegeit (leírás, cím,
+            opciók, akció) a Termékek oldalon, a kategóriánál állíthatod be.
+          </p>
+        </div>
+        <ol className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1.5 text-[13px] text-slate-700">
+          {[
+            ['Megszólítás és bevezető', 'fent, a Szövegek kártyán'],
+            ['Kategória leírás (fő szerkezetek)', 'kategóriánként'],
+            ['Kategória cím (félkövér, aláhúzott)', 'kategóriánként'],
+            ['Termék: „1. NÉV:” + Méretek sor', 'termékenként'],
+            ['Leírás, fotók, ártáblázat', 'termékenként'],
+            ['Összesen + forint sor', 'lent / kategóriánként'],
+            ['Opció sorok', 'a választható tételekből'],
+            ['Színek, opcionálisan rendelhető, akció', 'kategóriánként'],
+            ['Kiegészítők leírása (üvegfal, árnyékoló)', 'kategóriánként'],
+            ['Információ, zárás, Megjegyzés, aláírás', 'fent, a Szövegek kártyán'],
+          ].map(([t, d], i) => (
+            <li key={t} className="flex gap-2">
+              <span className="w-5 h-5 shrink-0 rounded-md bg-slate-900 text-white text-[11px] font-bold grid place-items-center">{i + 1}</span>
+              <span>
+                <b className="font-semibold text-slate-900">{t}</b> <span className="text-slate-500">· {d}</span>
+              </span>
+            </li>
+          ))}
+        </ol>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-2 border-t border-slate-100">
+          {(
+            [
+              ['docSizeLine', 'Méretek sor a termék neve alatt', 'Méretek: {{szelesseg}} cm hosszú x {{kinyulas}} cm széles (kinyúlás) x {{magassag}} cm magas (belső) – {{beepites}}'],
+              ['docTotalLabel', 'Összesítő sor (ha a kategória nem ad sajátot)', 'Az alapszerkezet szereléssel Összesen:'],
+              ['docHufLine', 'Forint sor', 'Az ajánlat írásának napján, {{arfolyam}} Ft/EUR árfolyamon az összeg:'],
+              ['docOptionLabel', 'Opció sor kezdete', 'Opció:'],
+              ['docInfoTitle', 'Információ blokk címe', 'Információ:'],
+            ] as const
+          ).map(([key, label, ph]) => (
+            <div key={key} className={key === 'docSizeLine' ? 'lg:col-span-2' : ''}>
+              <label className={labelCls}>{label}</label>
+              <input
+                value={(form as any)[key] || ''}
+                placeholder={ph}
+                onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm"
+              />
+            </div>
+          ))}
+        </div>
+        <label className="flex items-center gap-2 text-sm text-slate-800">
+          <input type="checkbox" checked={Boolean(form.docShowTitleBlock)} onChange={(e) => setForm({ ...form, docShowTitleBlock: e.target.checked })} />
+          „Árajánlat” cím és alapadatok (ügyfél, méret, beépítés) az első oldal tetején
+          <span className="text-xs text-slate-500">(a Word ajánlatokban nincs)</span>
+        </label>
+        <p className="text-[11px] text-slate-500">
+          Üres mezőnél a szürke minta érvényes. Változók: {'{{megszolitas}} {{ugyfel_nev}} {{telepules}} {{meret}} {{szelesseg}} {{kinyulas}} {{magassag}} {{beepites}} {{arfolyam}} {{hatarido}}'}
+        </p>
+      </div>
       </>)}
       {tab === 'email' && (<>
       {/* E-mail küldés: SMTP + sablonok + megnyitás-követés */}

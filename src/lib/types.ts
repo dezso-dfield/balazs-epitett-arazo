@@ -302,6 +302,12 @@ export interface ProductCategory {
   order: number;
   menuId?: string;            // Melyik menüponthoz tartozik
   imageUrl?: string;          // Kép a végigvezetett árazó termékválasztójában
+  // Kategória sablon az ajánlatban (a saját Word ajánlatok szerkezete):
+  docHeading?: string;        // félkövér, aláhúzott cím a kategória termékei előtt, pl. „Karos napellenzők, Kazetta nélküli szerkezetek:”
+  docIntro?: string;          // a bevezető után: miért ez a termékcsalád, minőség, hó- és szélterhelés…
+  docOptions?: string;        // a kategória termékei után: „+Opcionálisan rendelhető a termékhez:” lista
+  docPromo?: string;          // félkövér akció, pl. „Ha {{hatarido}}-ig megrendeli az alapszerkezetet…”
+  docTotalLabel?: string;     // összesítő sor felirata, pl. „Opció, árnyékolók szereléssel Összesen:” (üresen az általános)
 }
 
 /**
@@ -399,7 +405,9 @@ export interface QuoteDocumentBlock {
   // 1) 'text_box' mezők
   title?: string;
   content?: string;
-  textStyle?: 'greeting' | 'normal' | 'highlight' | 'footer_info';
+  totalLabel?: string;        // termékszakasz összesítő sorának felirata (a kategória sablonból)
+  docCategoryId?: string;     // kategória szövegdoboz forrása (visszamenthető a kategória sablonba)
+  textStyle?: 'greeting' | 'normal' | 'highlight' | 'footer_info' | 'category_heading' | 'category_intro' | 'options' | 'promo';
   bold?: boolean;
   align?: 'left' | 'center' | 'right';
   // 2) 'photo_box' mezők
@@ -557,6 +565,13 @@ export interface SystemConfig {
   defaultGreetingTemplate: string;
   defaultIntroTemplate: string;
   defaultClosingInfoTemplate: string;
+  // Általános ajánlat sablon (a saját Word ajánlatok szövegei; üresen az alapértelmezés érvényes)
+  docShowTitleBlock?: boolean;   // „Árajánlat” cím + alapadatok az első oldalon (a Word ajánlatokban nincs)
+  docInfoTitle?: string;         // „Információ:”
+  docSizeLine?: string;          // „Méretek: {{szelesseg}} cm hosszú x …”
+  docTotalLabel?: string;        // „Az alapszerkezet szereléssel Összesen:”
+  docHufLine?: string;           // „Az ajánlat írásának napján, {{arfolyam}} Ft/EUR árfolyamon az összeg:”
+  docOptionLabel?: string;       // „Opció:”
   // Opcionális saját feltöltött PDF dizájn elemek (ha üres, tiszta modern fejlécet rajzol)
   pdfPageBackgroundUrl?: string;      // Saját A4-es fejléc/lábléc háttérkép URL
   pdfLogoUrl?: string;                // Saját logó URL

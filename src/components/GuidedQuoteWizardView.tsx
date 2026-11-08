@@ -381,6 +381,7 @@ export function GuidedQuoteWizardView({
         adjustmentsByTemplate,
         manualSections,
         config,
+        categories,
       });
 
     onFinishWizardToEditor({

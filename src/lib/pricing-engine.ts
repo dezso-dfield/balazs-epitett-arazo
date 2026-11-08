@@ -17,6 +17,7 @@ import {
   QuoteTemplate,
   SystemConfig,
   TemplateMaterialItem,
+  ProductCategory,
 } from './types';
 
 export function roundHuf(eur: number, rate: number): number {
@@ -1216,6 +1217,7 @@ export function buildFullQuoteDocumentBlocks(params: {
   adjustmentsByTemplate?: Record<string, PriceAdjustment[]>;
   manualSections?: { title: string; categoryId?: string }[];
   config: SystemConfig;
+  categories?: ProductCategory[];
 }): {
   blocks: QuoteDocumentBlock[];
   primaryTotalEur: number;
@@ -1236,6 +1238,7 @@ export function buildFullQuoteDocumentBlocks(params: {
     adjustmentsByTemplate,
     manualSections,
     config,
+    categories = [],
   } = params;
 
   const varCtx: VariableReplacementContext = {
@@ -1273,11 +1276,41 @@ export function buildFullQuoteDocumentBlocks(params: {
     align: 'left',
   });
 
+  // 1/b. Kategória sablonok bevezetője (miért ez a termékcsalád…), a Word ajánlatok szerkezetében
+  // a termékek kategóriánként egymás után, a kategória első megjelenésének sorrendjében
+  const catOrder = [...new Set(selectedTemplates.map((t) => t.categoryId))];
+  const orderedTemplates = [...selectedTemplates].sort((a, b) => catOrder.indexOf(a.categoryId) - catOrder.indexOf(b.categoryId));
+  const catOf = (id: string) => categories.find((c) => c.id === id);
+  const tb = (key: string, style: QuoteDocumentBlock['textStyle'], content: string, title = ''): QuoteDocumentBlock => ({
+    id: `blk_${key}_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+    type: 'text_box',
+    title,
+    content,
+    textStyle: style,
+    bold: false,
+    align: 'left',
+  });
+  // fő szerkezetek leírása a bevezető után; a kiegészítőké (üvegfal, árnyékoló…) a végén, az Információ előtt
+  const hasMain = catOrder.some((cid) => catOf(cid)?.categoryType !== 'accessory');
+  // kiegészítő csak akkor kerül a végére, ha van mellette fő szerkezet (önálló ZIP / üvegfal ajánlatnál elöl)
+  const isAccessory = (cid: string) => hasMain && catOf(cid)?.categoryType === 'accessory';
+  const catIntro = (cid: string) => {
+    const intro = replaceTemplateVariables(catOf(cid)?.docIntro || '', varCtx).trim();
+    if (intro) blocks.push({ ...tb('catintro', 'category_intro', intro), docCategoryId: cid });
+  };
+  catOrder.filter((cid) => !isAccessory(cid)).forEach(catIntro);
+
   // 2. Kiválasztott Sablonok és Termékek blokkjai
   let primaryTotalEur = 0;
   let primaryTotalHuf = 0;
 
-  selectedTemplates.forEach((tpl, idx) => {
+  let promoShown = false;
+  orderedTemplates.forEach((tpl, idx) => {
+    const cat = catOf(tpl.categoryId);
+    if (idx === 0 || orderedTemplates[idx - 1].categoryId !== tpl.categoryId) {
+      const heading = replaceTemplateVariables(cat?.docHeading || '', varCtx).trim();
+      if (heading) blocks.push({ ...tb('cathead', 'category_heading', '', heading), docCategoryId: tpl.categoryId });
+    }
     const selectedMatIds = selectedMaterialsByTemplate?.[tpl.id];
     const tplBlock = buildEditableBlockFromTemplate(
       tpl,
@@ -1297,7 +1330,21 @@ export function buildFullQuoteDocumentBlocks(params: {
       selectedMatIds,
       adjustmentsByTemplate?.[tpl.id]
     );
+    if (cat?.docTotalLabel?.trim()) tplBlock.totalLabel = replaceTemplateVariables(cat.docTotalLabel, varCtx);
     blocks.push(tplBlock);
+    // a kategória utolsó terméke után: opcionálisan rendelhető tételek és akció
+    if (idx === orderedTemplates.length - 1 || orderedTemplates[idx + 1].categoryId !== tpl.categoryId) {
+      // ha a kategória valamelyik terméke már saját listát / akciót ad (záró szövegében), nem ismételjük
+      const group = orderedTemplates.filter((t) => t.categoryId === tpl.categoryId);
+      const own = (re: RegExp) => group.some((t) => re.test(`${t.closingText || ''}\n${(t.textBlocks || []).map((x) => x.content).join('\n')}`));
+      const opts = replaceTemplateVariables(cat?.docOptions || '', varCtx).trim();
+      if (opts && !own(/opcion[aá]lisan rendelhet/i)) blocks.push({ ...tb('catopts', 'options', opts), docCategoryId: tpl.categoryId });
+      const promo = replaceTemplateVariables(cat?.docPromo || '', varCtx).trim();
+      if (promo && !own(/megrendeli/i)) {
+        blocks.push({ ...tb('catpromo', 'promo', promo), docCategoryId: tpl.categoryId });
+        promoShown = true;
+      }
+    }
 
     if (idx === 0) {
       primaryTotalEur = tplBlock.customTotalBaseEur || 0;
@@ -1316,6 +1363,9 @@ export function buildFullQuoteDocumentBlocks(params: {
     );
   });
 
+  // kiegészítő kategóriák leírása (Guillotine, Thermo Glass, oldalsó árnyékoló…) az Információ előtt
+  catOrder.filter(isAccessory).forEach(catIntro);
+
   // 3. Záró Információs Szövegdoboz Blokk (az első termék saját feltételei, ha vannak)
   const closingText = replaceTemplateVariables(
     selectedTemplates[0]?.infoText?.trim() ||
@@ -1324,11 +1374,18 @@ export function buildFullQuoteDocumentBlocks(params: {
     varCtx
   );
 
+  // ha a kategóriáknál már volt akció, az Információ elején álló akció-bekezdés nem ismétlődik
+  const closingContent = promoShown
+    ? closingText
+        .split(/\n\s*\n/)
+        .filter((par) => !/^\s*ha\s.{0,60}megrendeli/i.test(par))
+        .join('\n\n')
+    : closingText;
   blocks.push({
     id: `blk_closing_${Date.now()}`,
     type: 'text_box',
-    title: 'Fontos információk és vállalási feltételek',
-    content: closingText,
+    title: config.docInfoTitle || 'Információ:',
+    content: closingContent,
     textStyle: 'footer_info',
     bold: false,
     align: 'left',
