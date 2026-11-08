@@ -468,6 +468,69 @@ export function PdfBlockEditorView({
   };
 
   // Insert existing saved template as a new block
+  /**
+   * Egy termékszakasz minden módosítása vissza a termék sablonjába: alcím, bevezető és záró szöveg,
+   * fotók feliratokkal, tételek neve / leírása / árazása, új tételek. A konkrét ügyféladatok
+   * (méret, név, település) visszaalakulnak változóvá, hogy a következő ajánlatban az új adat kerüljön a helyükre.
+   */
+  const [savingTplFor, setSavingTplFor] = useState<string | null>(null);
+  const saveSectionToTemplate = async (blk: QuoteDocumentBlock) => {
+    if (!onSaveTemplate || !blk.templateId) return;
+    const tpl = templates.find((t) => t.id === blk.templateId);
+    if (!tpl) return;
+    const ctx = { customerName, greetingName, city, widthCm, projectionCm, heightCm, mountType, eurHufRate, deliveryFeeHuf };
+    const T = (x?: string) => toTemplateText(x || '', ctx);
+    const rows = (blk.rows || []).filter((r) => !r.systemRole);
+    let updated = 0;
+    let added = 0;
+    const materials = (tpl.materials || []).map((m) => {
+      const r = rows.find((x) => x.materialId === m.id);
+      if (!r) return m;
+      updated++;
+      const alg = r.algorithm ? { ...r.algorithm } : {};
+      // átvett árnál (priceSource) a forrás termék marad az ár gazdája
+      const pricing = m.priceSource ? {} : alg;
+      return {
+        ...m,
+        ...pricing,
+        id: m.id,
+        priceSource: m.priceSource,
+        name: T(r.name) || m.name,
+        description: T(r.description) || m.description || '',
+        photos: (r.photos || m.photos || []).map((ph) => ({ ...ph, titleAbove: T(ph.titleAbove), captionBelow: T(ph.captionBelow) })),
+      } as typeof m;
+    });
+    // az ajánlatban felvett új (algoritmussal rendelkező) tételek is bekerülnek
+    for (const r of rows) {
+      if (r.materialId && (tpl.materials || []).some((m) => m.id === r.materialId)) continue;
+      if (!r.algorithm) continue;
+      added++;
+      materials.push({ ...r.algorithm, id: r.algorithm.id || `mat_${Date.now().toString(36)}${added}`, name: T(r.name) || r.algorithm.name, description: T(r.description) || r.algorithm.description || '' });
+    }
+    const skipped = rows.filter((r) => !r.algorithm && !(r.materialId && (tpl.materials || []).some((m) => m.id === r.materialId))).length;
+    const msg =
+      `A „${tpl.name}” sablonba mentés:\n\n` +
+      `• alcím, bevezető és záró szöveg\n• ${(blk.sectionPhotos || []).length} fotó a feliratokkal\n• ${updated} tétel frissül${added ? `, ${added} új tétel` : ''}\n` +
+      (skipped ? `• ${skipped} kézi tétel (árazás nélkül) kimarad\n` : '') +
+      `\nA méret, név és település helyére a következő ajánlatokban automatikusan az új adat kerül. Mented?`;
+    if (!window.confirm(msg)) return;
+    setSavingTplFor(blk.id);
+    try {
+      await onSaveTemplate({
+        ...tpl,
+        subtitle: T(blk.sectionSubtitle),
+        introText: T(blk.sectionIntroText),
+        closingText: T(blk.sectionClosingText),
+        // a bevezető / záró szöveg már tartalmazza a külön szövegdobozokat, ezért azok beolvadnak
+        textBlocks: (tpl.textBlocks || []).filter((tb) => !['before_photos', 'before_table', 'after_table'].includes(tb.position)),
+        photos: (blk.sectionPhotos || []).map((ph) => ({ ...ph, titleAbove: T(ph.titleAbove), captionBelow: T(ph.captionBelow) })),
+        materials,
+      });
+    } finally {
+      setSavingTplFor(null);
+    }
+  };
+
   const handleInsertSavedTemplateBlock = (at?: number, templateId = templateToInsertId) => {
     const tpl = templates.find((t) => t.id === templateId);
     if (!tpl) return;
@@ -1031,21 +1094,24 @@ export function PdfBlockEditorView({
         </button>
         {templates.length > 0 && (
           <div className="flex items-center gap-1.5 w-full sm:w-auto sm:ml-auto min-w-0">
+            {/* választásra azonnal bekerül a termék (nem kell külön gombot nyomni) */}
             <select
-              value={templateToInsertId}
-              onChange={(e) => setTemplateToInsertId(e.target.value)}
-              className="min-w-0 flex-1 sm:flex-none sm:max-w-[18rem] px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white text-[13px]"
+              value=""
+              onChange={(e) => {
+                if (!e.target.value) return;
+                setTemplateToInsertId(e.target.value);
+                handleInsertSavedTemplateBlock(undefined, e.target.value);
+              }}
+              aria-label="Termék hozzáadása az ajánlathoz"
+              className="min-w-0 flex-1 sm:flex-none sm:max-w-[20rem] px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white text-[13px] font-medium"
             >
+              <option value="">+ Termék hozzáadása…</option>
               {templates.map((t) => (
                 <option key={t.id} value={t.id}>
                   {t.name}
                 </option>
               ))}
             </select>
-            <button type="button" onClick={() => handleInsertSavedTemplateBlock()} className={btn.secondary}>
-              <Plus className="w-4 h-4" />
-              Sablon
-            </button>
           </div>
         )}
       </div>
@@ -1333,6 +1399,17 @@ export function PdfBlockEditorView({
               {/* BLOCK TYPE 3: TEMPLATE & PRODUCT SECTION */}
               {blk.type === 'template_section' && (
                 <div className="p-4 sm:p-5 space-y-5">
+                  {onSaveTemplate && blk.templateId && templates.some((t) => t.id === blk.templateId) && (
+                    <div className="flex flex-wrap items-center gap-2 rounded-xl bg-indigo-50 border border-indigo-100 px-3 py-2">
+                      <span className="text-xs text-indigo-950 flex-1 min-w-[12rem]">
+                        Ha itt módosítasz (szöveg, fotó, tétel, ár), elmentheted a termék sablonjába is: a következő ajánlatok már így indulnak.
+                      </span>
+                      <button type="button" disabled={savingTplFor === blk.id} onClick={() => saveSectionToTemplate(blk)} className={btn.primary}>
+                        <Save className="w-4 h-4" />
+                        {savingTplFor === blk.id ? 'Mentés…' : 'Mentés a sablonba'}
+                      </button>
+                    </div>
+                  )}
                   {/* Section Title & Subtitle text boxes */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
@@ -1384,33 +1461,7 @@ export function PdfBlockEditorView({
                       placeholder="Írd ide a sablonhoz tartozó leíró szöveget..."
                       className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs leading-relaxed"
                     />
-                    {onSaveTemplate && blk.templateId && templates.some((t) => t.id === blk.templateId) && (
-                      <div className="mt-2 flex flex-wrap items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={async () => {
-                            const tpl = templates.find((t) => t.id === blk.templateId)!;
-                            const ctx = { customerName, greetingName, city, widthCm, projectionCm, heightCm, mountType, eurHufRate, deliveryFeeHuf };
-                            if (
-                              !window.confirm(
-                                `A „${tpl.name}” minden új ajánlata ezzel az alcímmel és bevezetővel indul. A méret, név és település helyére automatikusan kitöltődő adat kerül. Mented?`
-                              )
-                            )
-                              return;
-                            await onSaveTemplate({
-                              ...tpl,
-                              subtitle: toTemplateText(blk.sectionSubtitle || '', ctx),
-                              introText: toTemplateText(blk.sectionIntroText || '', ctx),
-                            });
-                          }}
-                          className={btn.secondary}
-                        >
-                          <Save className="w-4 h-4" />
-                          Mentés a termék alapszövegeként
-                        </button>
-                        <span className="text-xs text-slate-500">Az alcím és a bevezető minden új ajánlatban így indul.</span>
-                      </div>
-                    )}
+
                   </div>
 
                   {/* Section Photos + Text Boxes under each photo */}

@@ -166,6 +166,12 @@ const C = {
   line: rgb(0.9, 0.9, 0.9),
   brand: rgb(0.067, 0.067, 0.067),
   white: rgb(1, 1, 1),
+  // az OpenSky saját Word ajánlataiból: sötétkék láblécsáv, szürke táblázatfejléc, vékony rácsvonal
+  navy: rgb(0.204, 0.227, 0.333),
+  navyText: rgb(0.86, 0.88, 0.94),
+  headFill: rgb(0.85, 0.86, 0.88),
+  totalFill: rgb(0.94, 0.945, 0.955),
+  grid: rgb(0.72, 0.73, 0.76),
 };
 
 /**
@@ -211,7 +217,7 @@ export async function renderEditableQuotePdfBytes(
   const MARGIN_X = 52;
   const CONTENT_W = A4_W - MARGIN_X * 2;
   const RIGHT_X = MARGIN_X + CONTENT_W;
-  const BOTTOM_Y = 70;
+  const BOTTOM_Y = 84; // a sötét láblécsáv fölött
 
   const companyName = config.companyName || 'OpenSky Pergola Kft.';
   const quoteNumber = quote.quoteNumber || 'ELŐNÉZET';
@@ -256,32 +262,25 @@ export async function renderEditableQuotePdfBytes(
       page.drawImage(bgImg, { x: 0, y: 0, width: A4_W, height: A4_H });
       return { page, y: A4_H - 100 };
     }
-    const top = A4_H - 46;
-    if (pages.length === 1) {
-      if (logoImg) {
-        // Saját logó (a cégnevet tartalmazza): csak a logó, alatta a tevékenységek
-        drawLogo(page, MARGIN_X, top + 2, 24);
-        if (config.companySubtitle) {
-          page.drawText(config.companySubtitle, { x: MARGIN_X, y: top - 33, size: 8, font: fontRegular, color: C.muted });
-        }
-      } else {
-        const logoW = drawLogo(page, MARGIN_X, top, 30);
-        const tx = MARGIN_X + logoW + 10;
-        page.drawText(companyName, { x: tx, y: top - 13, size: 12.5, font: fontBold, color: C.ink });
-        if (config.companySubtitle) {
-          page.drawText(config.companySubtitle, { x: tx, y: top - 26, size: 8, font: fontRegular, color: C.muted });
-        }
+    const top = A4_H - 34;
+    if (logoImg) {
+      const dims = logoImg.scale(1);
+      const ratio = dims.height / Math.max(1, dims.width);
+      const h = pages.length === 1 ? 34 : 26;
+      const w = Math.min(190, h / ratio);
+      page.drawImage(logoImg, { x: (A4_W - w) / 2, y: top - h, width: w, height: h });
+      let y = top - h - 8;
+      if (pages.length === 1 && config.companySubtitle) {
+        const st = config.companySubtitle;
+        page.drawText(st, { x: (A4_W - textW(st, fontRegular, 7.5)) / 2, y: y - 6, size: 7.5, font: fontRegular, color: C.muted });
+        y -= 14;
       }
-      if (config.companyEmail) drawRight(page, config.companyEmail, top - 11, 8.5, fontRegular, C.muted);
-      const secondary = [config.companyWebsite, config.companyPhone].filter(Boolean).join('  ·  ');
-      if (secondary) drawRight(page, secondary, top - 24, 8.5, fontRegular, C.muted);
-      hLine(page, top - 44);
-      return { page, y: top - 44 };
+      return { page, y: y - 14 };
     }
-    page.drawText(companyName, { x: MARGIN_X, y: top - 8, size: 9, font: fontBold, color: C.ink });
-    drawRight(page, `Árajánlat ${quoteNumber}`, top - 8, 8.5, fontRegular, C.muted);
-    hLine(page, top - 20);
-    return { page, y: top - 34 };
+    // logó nélkül: cégnév középen
+    const sz = pages.length === 1 ? 16 : 12;
+    page.drawText(companyName, { x: (A4_W - textW(companyName, fontBold, sz)) / 2, y: top - sz, size: sz, font: fontBold, color: C.ink });
+    return { page, y: top - sz - 22 };
   };
 
   let current = createNewPage();
@@ -353,14 +352,22 @@ export async function renderEditableQuotePdfBytes(
     if (img) {
       const dims = img.scale(1);
       const ratio = dims.height / Math.max(1, dims.width);
-      const widthPct = Math.min(100, Math.max(30, Number(photoBlock.widthPct) || 75));
+      // a Word ajánlatokhoz hasonlóan nagy, középre igazított kép
+      const widthPct = Math.min(100, Math.max(60, Number(photoBlock.widthPct) || 85));
       let targetW = CONTENT_W * (widthPct / 100);
       let targetH = targetW * ratio;
       if (targetH > maxHeightPt) {
         targetH = maxHeightPt;
         targetW = targetH / ratio;
       }
-      ensureSpace(targetH + (captionBelow ? 28 : 8));
+      const capH = captionBelow ? 28 : 8;
+      const room = current.y - BOTTOM_Y - capH;
+      if (room < targetH) {
+        if (room >= targetH * 0.45 && room > 120) {
+          targetH = room;
+          targetW = targetH / ratio;
+        } else current = createNewPage();
+      }
       let x = MARGIN_X + (CONTENT_W - targetW) / 2;
       if (photoBlock.align === 'left') x = MARGIN_X;
       if (photoBlock.align === 'right') x = RIGHT_X - targetW;
@@ -388,139 +395,127 @@ export async function renderEditableQuotePdfBytes(
     const n = m ? parseInt(m[1], 16) : 0xcccccc;
     return rgb(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255);
   };
+  const lum = (hex: string) => {
+    const m = /^#?([0-9a-f]{6})$/i.exec((hex || '').trim());
+    const n = m ? parseInt(m[1], 16) : 0xcccccc;
+    return (0.299 * ((n >> 16) & 255) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
+  };
   const drawColorSwatches = (title: string, colors: ColorOption[]) => {
     if (!colors.length) return;
-    const COLS = 7;
-    const GAP = 8;
+    // a Word ajánlatok színtáblája: kitöltött csempék, bennük a kód és a név
+    const COLS = 6;
+    const GAP = 4;
     const cellW = (CONTENT_W - GAP * (COLS - 1)) / COLS;
-    const SW = 26;
-    ensureSpace(70);
-    drawTextParagraph(title, { bold: true, size: 9, color: C.ink, lineHeight: 1.3 });
+    const TILE_H = 34;
+    const rows = Math.ceil(colors.length / COLS);
+    const blockH = 20 + rows * (TILE_H + GAP);
+    // egyben marad, ha egy oldalra kifér; különben legalább a cím + 2 sor együtt
+    if (current.y - blockH < BOTTOM_Y && blockH < A4_H - 200) current = createNewPage();
+    else ensureSpace(20 + Math.min(rows, 2) * (TILE_H + GAP));
+    drawTextParagraph(title, { bold: true, size: 9.5, color: C.ink, lineHeight: 1.3 });
     current.y -= 6;
     for (let i = 0; i < colors.length; i += COLS) {
-      const cells = colors.slice(i, i + COLS).map((c) => ({
-        c,
-        codeLines: wrapTextLines(c.code, fontBold, 7.5, cellW).slice(0, 2),
-        nameLines: c.name ? wrapTextLines(c.name, fontRegular, 7, cellW).slice(0, 2) : [],
-      }));
-      const rowH = SW + 6 + Math.max(...cells.map((x) => x.codeLines.length * 9 + x.nameLines.length * 8.5));
-      ensureSpace(rowH + 8);
+      ensureSpace(TILE_H + GAP);
       const top = current.y;
-      cells.forEach(({ c, codeLines, nameLines }, idx) => {
+      colors.slice(i, i + COLS).forEach((c, idx) => {
         const x = MARGIN_X + idx * (cellW + GAP);
-        drawRoundedRect(current.page, x, top, SW, SW, 4, hexToRgb(c.hex));
-        // Világos színeknél is látszó keret
-        current.page.drawSvgPath(
-          `M 4 0 H ${SW - 4} Q ${SW} 0 ${SW} 4 V ${SW - 4} Q ${SW} ${SW} ${SW - 4} ${SW} H 4 Q 0 ${SW} 0 ${SW - 4} V 4 Q 0 0 4 0 Z`,
-          { x, y: top, borderColor: C.line, borderWidth: 0.8 }
-        );
-        let y = top - SW - 9;
-        for (const cl of codeLines) {
-          current.page.drawText(cl, { x, y, size: 7.5, font: fontBold, color: C.ink });
-          y -= 9;
-        }
-        for (const nl of nameLines) {
-          current.page.drawText(nl, { x, y, size: 7, font: fontRegular, color: C.muted });
-          y -= 8.5;
+        current.page.drawRectangle({ x, y: top - TILE_H, width: cellW, height: TILE_H, color: hexToRgb(c.hex), borderColor: C.grid, borderWidth: 0.4 });
+        const fg = lum(c.hex) > 0.6 ? C.ink : C.white;
+        const code = wrapTextLines(c.code, fontBold, 7, cellW - 8)[0] || '';
+        current.page.drawText(code, { x: x + (cellW - textW(code, fontBold, 7)) / 2, y: top - TILE_H / 2 + (c.name ? 2 : -2.5), size: 7, font: fontBold, color: fg });
+        if (c.name) {
+          const nm = wrapTextLines(c.name, fontRegular, 6, cellW - 8)[0] || '';
+          current.page.drawText(nm, { x: x + (cellW - textW(nm, fontRegular, 6)) / 2, y: top - TILE_H / 2 - 7, size: 6, font: fontRegular, color: fg });
         }
       });
-      current.y = top - rowH - 8;
+      current.y = top - TILE_H - GAP;
     }
-    current.y -= 4;
+    current.y -= 10;
   };
 
-  // Részletképek kis sorokban (4 egy sorban), rövid felirattal
-  const drawSubPhotoRow = async (subs: PhotoCaptionBlock[], maxCellH = 82) => {
-    const COLS = 4;
-    const GAP = 10;
-    const cellW = (CONTENT_W - GAP * (COLS - 1)) / COLS;
-    const loaded = (
-      await Promise.all(subs.map(async (p) => ({ p, img: await embedImageFromSource(pdfDoc, p.imageUrl) })))
-    ).filter((x) => x.img);
-    for (let i = 0; i < loaded.length; i += COLS) {
-      const cells = loaded.slice(i, i + COLS).map(({ p, img }) => {
-        const dims = img!.scale(1);
-        const ratio = dims.height / Math.max(1, dims.width);
-        let w = cellW;
-        let h = w * ratio;
-        if (h > maxCellH) {
-          h = maxCellH;
-          w = h / ratio;
-        }
-        const caption = replaceTemplateVariables(p.captionBelow || p.titleAbove || '', varCtx).trim();
-        const capLines = caption ? wrapTextLines(caption, fontRegular, 7.5, cellW).slice(0, 3) : [];
-        return { img: img!, w, h, capLines };
-      });
-      const rowH = Math.max(...cells.map((c) => c.h + (c.capLines.length ? c.capLines.length * 9.5 + 3 : 0)));
-      ensureSpace(rowH + 10);
-      const top = current.y;
-      cells.forEach((c, idx) => {
-        const x = MARGIN_X + idx * (cellW + GAP);
-        current.page.drawImage(c.img, { x, y: top - c.h, width: c.w, height: c.h });
-        let y = top - c.h - 3;
-        for (const cl of c.capLines) {
-          y -= 7.5;
-          current.page.drawText(cl, { x, y, size: 7.5, font: fontRegular, color: C.muted });
-          y -= 2;
-        }
-      });
-      current.y = top - rowH - 10;
+  /**
+   * Képsor egyforma magassággal, a teljes szélességet kitöltve (nincs „lyukas”, balra lógó rács):
+   * a sor magassága úgy adódik, hogy a képek szélessége + rések = tartalomszélesség (felső korláttal).
+   */
+  type Loaded = { p: PhotoCaptionBlock; img: PDFImage };
+  const drawJustifiedRow = (row: Loaded[], maxH: number, gap: number, captionSize = 8) => {
+    const ratios = row.map(({ img }) => {
+      const d = img.scale(1);
+      return d.width / Math.max(1, d.height);
+    });
+    let h = (CONTENT_W - gap * (row.length - 1)) / ratios.reduce((a, r) => a + r, 0);
+    h = Math.min(h, maxH);
+    const widths = ratios.map((r) => r * h);
+    const total = widths.reduce((a, w) => a + w, 0) + gap * (row.length - 1);
+    let x = MARGIN_X + (CONTENT_W - total) / 2;
+    const cells = row.map(({ p }, i) => {
+      const title = replaceTemplateVariables(p.titleAbove || '', varCtx).trim();
+      const caption = replaceTemplateVariables(p.captionBelow || '', varCtx).trim();
+      return {
+        w: widths[i],
+        titleLines: title ? wrapTextLines(title, fontBold, 8.5, widths[i]).slice(0, 2) : [],
+        capLines: caption ? wrapTextLines(caption, fontRegular, captionSize, widths[i]).slice(0, 4) : [],
+      };
+    });
+    const titleH = Math.max(0, ...cells.map((c) => c.titleLines.length * 11 + (c.titleLines.length ? 3 : 0)));
+    const capH = Math.max(0, ...cells.map((c) => (c.capLines.length ? c.capLines.length * (captionSize + 2.5) + 5 : 0)));
+    let rowH = titleH + h + capH;
+    const room = current.y - BOTTOM_Y - 10;
+    if (room < rowH) {
+      // ha a hely 60%-a elég, kicsinyítjük a sort, különben új oldal
+      if (room - titleH - capH >= Math.max(90, h * 0.5)) {
+        const k = (room - titleH - capH) / h;
+        h *= k;
+        cells.forEach((c, i) => (c.w = widths[i] * k));
+        x = MARGIN_X + (CONTENT_W - (cells.reduce((a, c) => a + c.w, 0) + gap * (row.length - 1))) / 2;
+        rowH = titleH + h + capH;
+      } else current = createNewPage();
     }
+    const top = current.y;
+    row.forEach(({ img }, i) => {
+      const c = cells[i];
+      let y = top;
+      for (const tl of c.titleLines) {
+        y -= 9;
+        current.page.drawText(tl, { x, y, size: 8.5, font: fontBold, color: C.ink });
+        y -= 2;
+      }
+      y = top - titleH;
+      current.page.drawImage(img, { x, y: y - h, width: c.w, height: h });
+      y -= h + 4;
+      for (const cl of c.capLines) {
+        y -= captionSize;
+        current.page.drawText(cl, { x, y, size: captionSize, font: fontRegular, color: C.muted });
+        y -= 2.5;
+      }
+      x += c.w + gap;
+    });
+    current.y = top - rowH - 14;
   };
-
-  // Képek 2 oszlopban: cím a kép fölött, felirat alatta; soronként a magasabb kép szabja a sor magasságát
-  const drawPhotoGrid = async (photos: PhotoCaptionBlock[], maxCellH = 150) => {
-    const GAP = 14;
-    const cellW = (CONTENT_W - GAP) / 2;
-    const loaded = await Promise.all(
-      photos.map(async (p) => ({ p, img: await embedImageFromSource(pdfDoc, p.imageUrl) }))
+  const loadAll = async (photos: PhotoCaptionBlock[]): Promise<Loaded[]> =>
+    (await Promise.all(photos.map(async (p) => ({ p, img: await embedImageFromSource(pdfDoc, p.imageUrl) })))).filter(
+      (x): x is Loaded => Boolean(x.img)
     );
-    const items = loaded.filter((x) => x.img);
+
+  // Részletképek: 3 egy sorban, egyforma magassággal
+  const drawSubPhotoRow = async (subs: PhotoCaptionBlock[]) => {
+    const items = await loadAll(subs);
+    for (let i = 0; i < items.length; i += 3) drawJustifiedRow(items.slice(i, i + 3), 150, 10, 7.5);
+  };
+
+  // További képek: párosával egyforma magasságban; páratlan utolsó kép nagyban, középen
+  const drawPhotoGrid = async (photos: PhotoCaptionBlock[]) => {
+    const items = await loadAll(photos);
     for (let i = 0; i < items.length; i += 2) {
-      const pair = items.slice(i, i + 2).map(({ p, img }) => {
-        const dims = img!.scale(1);
-        const ratio = dims.height / Math.max(1, dims.width);
-        let w = cellW;
-        let h = w * ratio;
-        if (h > maxCellH) {
-          h = maxCellH;
-          w = h / ratio;
-        }
-        const title = replaceTemplateVariables(p.titleAbove || '', varCtx).trim();
-        const caption = replaceTemplateVariables(p.captionBelow || '', varCtx).trim();
-        const titleLines = title ? wrapTextLines(title, fontBold, 8.5, cellW).slice(0, 2) : [];
-        const capLines = caption ? wrapTextLines(caption, fontRegular, 8, cellW).slice(0, 4) : [];
-        return { img: img!, w, h, titleLines, capLines };
-      });
-      const rowH = Math.max(
-        ...pair.map((c) => c.titleLines.length * 11 + c.h + (c.capLines.length ? c.capLines.length * 10.5 + 4 : 0))
-      );
-      ensureSpace(rowH + 16);
-      const top = current.y;
-      pair.forEach((c, idx) => {
-        const x = MARGIN_X + idx * (cellW + GAP);
-        let y = top;
-        for (const tl of c.titleLines) {
-          y -= 9;
-          current.page.drawText(tl, { x, y, size: 8.5, font: fontBold, color: C.ink });
-          y -= 2;
-        }
-        if (c.titleLines.length) y -= 3;
-        current.page.drawImage(c.img, { x, y: y - c.h, width: c.w, height: c.h });
-        y -= c.h + 4;
-        for (const cl of c.capLines) {
-          y -= 8;
-          current.page.drawText(cl, { x, y, size: 8, font: fontRegular, color: C.muted });
-          y -= 2.5;
-        }
-      });
-      current.y = top - rowH - 14;
+      const pair = items.slice(i, i + 2);
+      if (pair.length === 1) await drawPhotoWithCaption(pair[0].p, 260);
+      else drawJustifiedRow(pair, 230, 14);
     }
   };
 
   // ---- Cím és alapadatok (csak az első oldalon) ----
   {
-    current.y -= 34;
+    current.y -= 26;
     current.page.drawText('Árajánlat', { x: MARGIN_X, y: current.y, size: 24, font: fontBold, color: C.ink });
     current.y -= 18;
     current.page.drawText(`${quoteNumber}   ·   ${issueDate}   ·   Érvényes 30 napig`, {
@@ -588,7 +583,7 @@ export async function renderEditableQuotePdfBytes(
     }
 
     if (block.type === 'photo_box' && block.photo) {
-      await drawPhotoWithCaption(block.photo, 230);
+      await drawPhotoWithCaption(block.photo, 300);
       const subs = (block.photo.subPhotos || []).filter((p) => p.imageUrl);
       if (subs.length) await drawSubPhotoRow(subs);
       continue;
@@ -617,7 +612,7 @@ export async function renderEditableQuotePdfBytes(
     // Termékfotók: az első nagyban, a többi 2 oszlopos rácsban
     const sectionPhotos = (block.sectionPhotos || []).filter((sp) => sp.imageUrl);
     if (sectionPhotos.length > 0) {
-      await drawPhotoWithCaption(sectionPhotos[0], 200);
+      await drawPhotoWithCaption(sectionPhotos[0], 300);
       const heroSubs = (sectionPhotos[0].subPhotos || []).filter((p) => p.imageUrl);
       if (heroSubs.length) await drawSubPhotoRow(heroSubs);
       if (sectionPhotos.length > 1) {
@@ -630,18 +625,34 @@ export async function renderEditableQuotePdfBytes(
     const activeRows = (block.rows || []).filter((r) => r.included !== false);
 
     if (activeRows.length > 0) {
-      // 3 oszlop: Tétel | Mennyiség | Ár (a listaár kicsiben, áthúzva az ár fölött)
-      const QTY_X = MARGIN_X + CONTENT_W * 0.58;
-      const NAME_W = CONTENT_W * 0.55;
+      // Rácsos táblázat a Word ajánlatok mintájára: Megnevezés | Mennyiség | Listaár | Kedvezményes ár
       const discountLabel = (block.tableHeaders?.[3] || '').match(/\(([^)]*%[^)]*)\)/)?.[1];
+      const COLW = [0.43, 0.17, 0.17, 0.23].map((f) => f * CONTENT_W);
+      const COLX = COLW.map((_, i) => MARGIN_X + COLW.slice(0, i).reduce((a2, w) => a2 + w, 0));
+      const PAD = 6;
+      const vLines = (top: number, bottom: number) => {
+        for (const x of [...COLX, RIGHT_X]) current.page.drawRectangle({ x: x - 0.25, y: bottom, width: 0.5, height: top - bottom, color: C.grid });
+      };
+      const gridLine = (y: number) => current.page.drawRectangle({ x: MARGIN_X, y: y - 0.25, width: CONTENT_W, height: 0.5, color: C.grid });
 
       const drawTableHeader = () => {
-        ensureSpace(70);
-        current.page.drawText('Tétel', { x: MARGIN_X, y: current.y - 10, size: 8, font: fontRegular, color: C.faint });
-        current.page.drawText('Mennyiség', { x: QTY_X, y: current.y - 10, size: 8, font: fontRegular, color: C.faint });
-        drawRight(current.page, discountLabel ? `Ár (${discountLabel})` : 'Ár', current.y - 10, 8, fontRegular, C.faint);
-        current.y -= 18;
-        hLine(current.page, current.y, 0.9, C.ink);
+        ensureSpace(80);
+        const labels = ['Megnevezés', 'Mennyiség', 'Listaár (EUR)', discountLabel ? `Kedvezményes ár (${discountLabel})` : 'Ár (EUR)'];
+        const lines = labels.map((l, i) => wrapTextLines(l, fontBold, 8, COLW[i] - PAD * 2));
+        const h = Math.max(...lines.map((l) => l.length)) * 10 + 10;
+        const top = current.y;
+        current.page.drawRectangle({ x: MARGIN_X, y: top - h, width: CONTENT_W, height: h, color: C.headFill });
+        lines.forEach((ls, i) =>
+          ls.forEach((l, j) => {
+            const y = top - 13 - j * 10;
+            if (i >= 2) current.page.drawText(l, { x: COLX[i] + COLW[i] - PAD - textW(l, fontBold, 8), y, size: 8, font: fontBold, color: C.ink });
+            else current.page.drawText(l, { x: COLX[i] + PAD, y, size: 8, font: fontBold, color: C.ink });
+          })
+        );
+        gridLine(top);
+        gridLine(top - h);
+        vLines(top, top - h);
+        current.y = top - h;
       };
 
       const drawRow = (row: {
@@ -651,45 +662,40 @@ export async function renderEditableQuotePdfBytes(
         price: string;
         list?: string;
         note?: string;
+        fill?: ReturnType<typeof rgb>;
+        bold?: boolean;
       }) => {
-        const nameLines = wrapTextLines(row.name, fontBold, 9.8, NAME_W);
-        const descLines = row.description ? wrapTextLines(row.description, fontRegular, 8.5, NAME_W) : [];
-        // Mennyiség és megjegyzés teljes hosszában, tördelve
-        const qtyLines = row.qty ? wrapTextLines(row.qty, fontRegular, 9.5, RIGHT_X - QTY_X - 90) : [];
-        const noteLines = row.note ? wrapTextLines(row.note, fontRegular, 8, 120) : [];
-        const leftH = nameLines.length * 13 + descLines.length * 11.5;
-        const rightH = (row.list ? 11 : 0) + 13 + noteLines.length * 10;
-        const rowH = Math.max(leftH, rightH, qtyLines.length * 12) + 18;
+        const nameLines = wrapTextLines(row.name, fontBold, 9.3, COLW[0] - PAD * 2);
+        const descLines = row.description ? wrapTextLines(row.description, fontRegular, 7.8, COLW[0] - PAD * 2) : [];
+        const qtyLines = row.qty ? wrapTextLines(row.qty, fontRegular, 8.8, COLW[1] - PAD * 2) : [];
+        const noteLines = row.note ? wrapTextLines(row.note, fontRegular, 7.5, COLW[3] - PAD * 2) : [];
+        const leftH = nameLines.length * 12 + descLines.length * 10;
+        const rightH = 12 + noteLines.length * 9.5;
+        const rowH = Math.max(leftH, rightH, qtyLines.length * 11) + 12;
         if (current.y - rowH < BOTTOM_Y) {
           current = createNewPage();
           drawTableHeader();
         }
         const top = current.y;
-        let ly = top - 9;
+        if (row.fill) current.page.drawRectangle({ x: MARGIN_X, y: top - rowH, width: CONTENT_W, height: rowH, color: row.fill });
+        let ly = top - 6;
         for (const nl of nameLines) {
-          ly -= 10;
-          current.page.drawText(nl, { x: MARGIN_X, y: ly, size: 9.8, font: fontBold, color: C.ink });
-          ly -= 3;
-        }
-        for (const dl of descLines) {
-          ly -= 9;
-          current.page.drawText(dl, { x: MARGIN_X, y: ly, size: 8.5, font: fontRegular, color: C.muted });
+          ly -= 9.5;
+          current.page.drawText(nl, { x: COLX[0] + PAD, y: ly, size: 9.3, font: fontBold, color: C.ink });
           ly -= 2.5;
         }
-        qtyLines.forEach((ql, qi) =>
-          current.page.drawText(ql, { x: QTY_X, y: top - 19 - qi * 12, size: 9.5, font: fontRegular, color: C.muted })
-        );
-        let ry = top - 19;
-        if (row.list) {
-          const lw = textW(row.list, fontRegular, 8);
-          drawRight(current.page, row.list, top - 16, 8, fontRegular, C.faint);
-          current.page.drawRectangle({ x: RIGHT_X - lw, y: top - 13.2, width: lw, height: 0.5, color: C.faint });
-          ry = top - 29;
+        for (const dl of descLines) {
+          ly -= 8;
+          current.page.drawText(dl, { x: COLX[0] + PAD, y: ly, size: 7.8, font: fontRegular, color: C.muted });
+          ly -= 2;
         }
-        drawRight(current.page, row.price, ry, 10.5, fontBold, C.ink);
-        noteLines.forEach((nl, ni) => drawRight(current.page, nl, ry - 12 - ni * 10, 8, fontRegular, C.muted));
+        qtyLines.forEach((ql, qi) => current.page.drawText(ql, { x: COLX[1] + PAD, y: top - 15.5 - qi * 11, size: 8.8, font: fontRegular, color: C.body }));
+        if (row.list) drawRight(current.page, row.list, top - 15.5, 8.8, fontRegular, C.muted, COLX[2] + COLW[2] - PAD);
+        drawRight(current.page, row.price, top - 15.5, 9.8, fontBold, C.ink, RIGHT_X - PAD);
+        noteLines.forEach((nl, ni) => drawRight(current.page, nl, top - 27 - ni * 9.5, 7.5, fontRegular, C.muted, RIGHT_X - PAD));
         current.y = top - rowH;
-        hLine(current.page, current.y);
+        gridLine(current.y);
+        vLines(top, current.y);
       };
 
       const eurRate = Number(quote.eurHufRate || config.defaultEurHufRate || 400);
@@ -721,7 +727,7 @@ export async function renderEditableQuotePdfBytes(
           description: replaceTemplateVariables(r.description || '', varCtx),
           qty: r.quantityLabel || '1 db',
           price: isGift ? 'Ajándék' : `${formatDotNumber(price)} EUR`,
-          list: !isGift && list > price ? `${formatDotNumber(list)} EUR` : undefined,
+          list: list > 0 ? `${formatDotNumber(list)}` : isGift ? '' : `${formatDotNumber(price)}`,
           // Az általános kedvezménycímke már a fejlécben van, nem ismételjük soronként
           note: note && note !== discountLabel && !/aj[aá]nd[eé]k/i.test(note) ? note : undefined,
         });
@@ -734,13 +740,8 @@ export async function renderEditableQuotePdfBytes(
       // Részösszeg a szerkezetre, ha vannak kiválasztott extrák
       if (chosenExtraRows.length > 0 && structureRows.length > 0) {
         const sub = structureRows.reduce((sum, r) => sum + (r.itemRole === 'gift' ? 0 : rowPrice(r)), 0);
-        ensureSpace(40);
-        const top = current.y;
-        current.page.drawText('Szerkezet összesen', { x: MARGIN_X, y: top - 17, size: 10, font: fontBold, color: C.ink });
-        drawRight(current.page, `${formatDotNumber(sub)} EUR`, top - 17, 11, fontBold, C.ink);
-        current.y = top - 28;
-        hLine(current.page, current.y, 0.9, C.ink);
-        current.y -= 14;
+        drawRow({ name: 'Szerkezet összesen', qty: '', price: `${formatDotNumber(sub)} EUR`, fill: C.totalFill });
+        current.y -= 16;
         drawHeading('Kiválasztott extrák', 11);
         current.y -= 2;
         drawTableHeader();
@@ -757,18 +758,20 @@ export async function renderEditableQuotePdfBytes(
         });
       }
 
-      // ---- Végösszeg ----
-      ensureSpace(64);
-      current.y -= 2;
-      hLine(current.page, current.y, 1.4, C.ink);
-      const totalTop = current.y;
-      current.page.drawText('Összesen', { x: MARGIN_X, y: totalTop - 22, size: 12, font: fontBold, color: C.ink });
-      current.page.drawText(`nettó ár  ·  ${eurRate} Ft/EUR`, {
-        x: MARGIN_X, y: totalTop - 36, size: 8.5, font: fontRegular, color: C.muted,
+      // ---- Végösszeg: összesítő sor + jobbra igazított összeg forintban is ----
+      const listTotal = baseRows.reduce((sum, r) => sum + (Number(r.listPriceEur) || 0), 0);
+      drawRow({
+        name: 'Összesen',
+        qty: '',
+        list: listTotal > blockTotals.totalEur ? formatDotNumber(listTotal) : '',
+        price: `${formatDotNumber(blockTotals.totalEur)} EUR`,
+        fill: C.totalFill,
       });
-      drawRight(current.page, `${formatDotNumber(blockTotals.totalEur)} EUR (+ ÁFA)`, totalTop - 24, 18, fontBold, C.ink);
-      drawRight(current.page, `${formatDotNumber(blockTotals.totalHuf)} Ft (+ ÁFA)`, totalTop - 38, 9.5, fontRegular, C.muted);
-      current.y = totalTop - 56;
+      ensureSpace(48);
+      const totalTop = current.y - 8;
+      drawRight(current.page, `${formatDotNumber(blockTotals.totalEur)} EUR (+ ÁFA)`, totalTop - 16, 15, fontBold, C.ink);
+      drawRight(current.page, `Az ajánlat írásának napján, ${eurRate} Ft/EUR árfolyammal: ${formatDotNumber(blockTotals.totalHuf)} Ft (+ ÁFA)`, totalTop - 31, 8.5, fontRegular, C.muted);
+      current.y = totalTop - 44;
 
       // ---- Választható extrák ----
       if (optionalRows.length > 0) {
@@ -784,7 +787,7 @@ export async function renderEditableQuotePdfBytes(
             description: replaceTemplateVariables(r.description || '', varCtx),
             qty: r.quantityLabel || '',
             price: `+ ${formatDotNumber(r.discountPriceEur)} EUR`,
-            list: r.listPriceEur > r.discountPriceEur ? `${formatDotNumber(r.listPriceEur)} EUR` : undefined,
+            list: r.listPriceEur > 0 ? formatDotNumber(r.listPriceEur) : '',
             note: `${formatDotNumber(huf)} Ft`,
           });
         }
@@ -829,18 +832,28 @@ export async function renderEditableQuotePdfBytes(
       h = 95;
       w = h / ratio;
     }
-    ensureSpace(h + 15);
+    // az aláírás ne kerüljön egyedül új oldalra: ha kell, kisebb lesz
+    const room = current.y - BOTTOM_Y - 10;
+    if (room < h && room >= 60) {
+      w *= room / h;
+      h = room;
+    }
+    ensureSpace(h + 10);
     current.page.drawImage(sigCardImg, { x: MARGIN_X, y: current.y - h, width: w, height: h });
     current.y -= h + 10;
   }
 
-  // Lábléc: cégnév + elérhetőség, oldalszám
+  // Lábléc: sötétkék sáv a weboldallal (mint a Word ajánlatokban), mellette elérhetőség és oldalszám
   if (!bgImg) {
-    const footer = [companyName, contactLine].filter(Boolean).join('  ·  ');
+    const site = (config.companyWebsite || 'www.openskypergola.hu').replace(/^https?:\/\//, '');
+    const siteText = site.startsWith('www.') ? site : `www.${site}`;
+    const contact = [config.companyPhone, config.companyEmail].filter(Boolean).join('  ·  ');
     pages.forEach((p, i) => {
-      hLine(p, 46);
-      p.drawText(footer, { x: MARGIN_X, y: 32, size: 7.8, font: fontRegular, color: C.faint });
-      drawRight(p, `${i + 1} / ${pages.length}`, 32, 7.8, fontRegular, C.faint);
+      p.drawRectangle({ x: 0, y: 0, width: A4_W, height: 46, color: C.navy });
+      p.drawText(siteText, { x: (A4_W - textW(siteText, fontRegular, 10)) / 2, y: 22, size: 10, font: fontRegular, color: C.white });
+      if (contact) p.drawText(contact, { x: (A4_W - textW(contact, fontRegular, 7)) / 2, y: 10, size: 7, font: fontRegular, color: C.navyText });
+      drawRight(p, `${i + 1} / ${pages.length}`, 22, 8, fontRegular, C.navyText, A4_W - 28);
+      if (i > 0) drawRight(p, `Árajánlat ${quoteNumber}`, A4_H - 24, 7.5, fontRegular, C.faint);
     });
   }
 
