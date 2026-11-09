@@ -821,7 +821,7 @@ export function PdfBlockEditorView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSaveAndDownload = async (mode: 'save' | 'download' | 'docx' | 'send') => {
+  const handleSaveAndDownload = async (mode: 'save' | 'download' | 'docx' | 'word-open' | 'gdocs' | 'send') => {
     const downloadImmediately = mode !== 'save';
     setSavingPdf(true);
     try {
@@ -858,6 +858,22 @@ export function PdfBlockEditorView({
       }
       if (saved && mode === 'docx') {
         await downloadSavedPdf(saved.id, saved.quoteNumber, 'docx');
+      }
+      // Megnyitás a Word asztali alkalmazásban: aláírt, 15 percig érvényes link + ms-word: protokoll
+      if (saved && mode === 'word-open') {
+        const r = await fetch(`/api/quotes/${saved.id}/open-link`);
+        const data = await r.json().catch(() => null);
+        if (data?.url) window.location.href = `ms-word:ofe|u|${data.url}`;
+        else await downloadSavedPdf(saved.id, saved.quoteNumber, 'docx');
+      }
+      // Google Dokumentumok: a .docx letöltése, és a Google Drive megnyitása új lapon (oda behúzva Google Docsként nyitható)
+      if (saved && mode === 'gdocs') {
+        const drive = window.open('https://drive.google.com/drive/my-drive', '_blank');
+        await downloadSavedPdf(saved.id, saved.quoteNumber, 'docx');
+        window.alert(
+          'Az ajánlat Word fájlként letöltődött.\n\nA megnyílt Google Drive-ba húzd be a letöltött fájlt, majd jobb klikk → Megnyitás → Google Dokumentumok.' +
+            (drive ? '' : '\n\n(A böngésző letiltotta az új lapot: nyisd meg a drive.google.com oldalt.)')
+        );
       }
       if (saved && mode === 'send') {
         onSendQuote?.(saved);
@@ -1015,6 +1031,26 @@ export function PdfBlockEditorView({
             >
               <FileText className="w-4 h-4" />
               Word
+            </button>
+            <button
+              type="button"
+              disabled={savingPdf}
+              onClick={() => handleSaveAndDownload('word-open')}
+              className={btn.secondary}
+              title="Mentés, majd megnyitás a Word asztali alkalmazásban szerkesztésre (a Wordben mentett példány a gépen marad)"
+            >
+              <FileText className="w-4 h-4 text-blue-700" />
+              Megnyitás Wordben
+            </button>
+            <button
+              type="button"
+              disabled={savingPdf}
+              onClick={() => handleSaveAndDownload('gdocs')}
+              className={btn.secondary}
+              title="Mentés, a Word fájl letöltése és a Google Drive megnyitása: oda behúzva Google Dokumentumként szerkeszthető"
+            >
+              <FileText className="w-4 h-4 text-emerald-700" />
+              Google Docs
             </button>
           </>
         }
