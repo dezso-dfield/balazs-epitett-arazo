@@ -226,7 +226,7 @@ export async function renderQuoteHtml(quote: Partial<QuoteRecord>, config: Syste
     await section(block);
   }
   const sig = await dataUrl(config.pdfSignatureCardUrl);
-  if (sig) p(`<img src="${sig}" width="280" style="width:280px">`);
+  if (sig) p(`<img src="${sig}" width="400" style="width:400px">`);
 
   return `<html><head><meta charset="utf-8"></head><body style="font-family:${font},sans-serif;font-size:${pageD.bodySize}pt;color:${pageD.text}">${out.join('\n')}</body></html>`;
 }

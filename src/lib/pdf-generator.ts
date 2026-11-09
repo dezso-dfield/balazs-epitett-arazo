@@ -687,6 +687,23 @@ export async function renderEditableQuotePdfBytes(
     }
   };
 
+  /**
+   * A táblázat utáni fotók (további termékfotók + a tételek képei) egy rácsban, egyforma magassággal:
+   * páros darabszámnál kettesével, páratlannál az első sor hármas; egy kép esetén közepes méretben.
+   * Így nem marad fél oldal üresen egy álló kép miatt, és nem kerül egy kis kép egyedül új oldalra.
+   */
+  const drawAfterPhotos = async (photos: PhotoCaptionBlock[]) => {
+    const items = await loadAll(photos);
+    if (!items.length) return;
+    if (items.length === 1) return drawPhotoWithCaption({ ...items[0].p, widthPct: items[0].p.sizePct || 60 }, 230);
+    let i = 0;
+    if (items.length % 2 === 1) {
+      drawJustifiedRow(items.slice(0, 3), 170, 10);
+      i = 3;
+    }
+    for (; i < items.length; i += 2) drawJustifiedRow(items.slice(i, i + 2), 210, 12);
+  };
+
   // ---- Cím és alapadatok (csak az első oldalon, ha a sablonban be van kapcsolva) ----
   if (!config.docShowTitleBlock) current.y -= 6;
   else {
@@ -960,10 +977,9 @@ export async function renderEditableQuotePdfBytes(
     }
     useDesign(mainD);
     if (D.photoLayout === 'stacked') {
-      for (const ph of sectionPhotos.slice(D.photosBeforeTable)) {
+      // a kézzel méretezett fotók a saját méretükben, a többi a tételek képeivel együtt rácsban (lent)
+      for (const ph of sectionPhotos.slice(D.photosBeforeTable).filter((x) => x.sizePct)) {
         await drawPhotoWithCaption({ ...ph, widthPct: photoWidthPct(ph) }, photoMaxH(ph));
-        const subs = (ph.subPhotos || []).filter((p) => p.imageUrl);
-        if (subs.length) await drawSubPhotoRow(subs);
       }
     }
 
@@ -973,11 +989,14 @@ export async function renderEditableQuotePdfBytes(
         .filter((rp) => rp.imageUrl)
         .map((rp) => ({ ...rp, titleAbove: rp.titleAbove || row.name }))
     );
-    if (rowPhotos.length > 0) {
+    // a részletképek is ugyanabba a rácsba kerülnek (nem külön, egyedül egy sorba)
+    const afterPhotos = [...(D.photoLayout === 'stacked' ? sectionPhotos.slice(D.photosBeforeTable).filter((x) => !x.sizePct) : []), ...rowPhotos].flatMap((p) => [
+      p,
+      ...(p.subPhotos || []).filter((x) => x.imageUrl),
+    ]);
+    if (afterPhotos.length > 0) {
       current.y -= 6;
-      await drawPhotoGrid(rowPhotos);
-      const rowSubs = rowPhotos.flatMap((p) => (p.subPhotos || []).filter((x) => x.imageUrl));
-      if (rowSubs.length) await drawSubPhotoRow(rowSubs);
+      await drawAfterPhotos(afterPhotos);
     }
 
     // Színválaszték a bekerült tételeknél (alapszínek, választható RAL színek)
@@ -1094,10 +1113,10 @@ export async function renderEditableQuotePdfBytes(
   if (sigCardImg) {
     const dims = sigCardImg.scale(1);
     const ratio = dims.height / Math.max(1, dims.width);
-    let w = 210;
+    let w = 300;
     let h = w * ratio;
-    if (h > 95) {
-      h = 95;
+    if (h > 140) {
+      h = 140;
       w = h / ratio;
     }
     // az aláírás ne kerüljön egyedül új oldalra: ha kell, kisebb lesz

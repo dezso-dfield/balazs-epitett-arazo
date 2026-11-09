@@ -678,7 +678,20 @@ export function DocumentEditor({
                 {variants.map(attEl)}
                 <RichInline readOnly={ro} value={promo} onChange={(v) => save(v, rest)} className="font-bold" style={{ ...body, ...headC, marginTop: ptPx(D.bodySize), paddingLeft: ptPx(30) }} placeholder="Akció (pl. Ha …-ig megrendeli…)" />
                 {atts.map(attEl)}
-                {D.photoLayout === 'stacked' && photos.length > D.photosBeforeTable && stacked(photos.slice(D.photosBeforeTable))}
+                {D.photoLayout === 'stacked' && photos.length > D.photosBeforeTable && (
+                  <>
+                    {stacked(photos.slice(D.photosBeforeTable).filter((x) => x.sizePct))}
+                    {/* a többi fotó rácsban, egyforma magassággal (mint a PDF-ben) */}
+                    <div className="grid grid-cols-2 gap-3 items-end">
+                      {photos
+                        .slice(D.photosBeforeTable)
+                        .filter((x) => !x.sizePct)
+                        .map((x) => (
+                          <div key={x.id || x.imageUrl}>{stacked([x])}</div>
+                        ))}
+                    </div>
+                  </>
+                )}
                 <RichInline readOnly={ro} value={rest} onChange={(v) => save(promo, v)} style={{ ...body, marginTop: ptPx(D.bodySize) }} placeholder="Záró szöveg (színek, opcionálisan rendelhető…)" />
               </>
             );

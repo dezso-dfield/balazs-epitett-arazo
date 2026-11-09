@@ -373,16 +373,27 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
     for (const t of closing.filter(isPromo)) push(paras(t, { size: D.bodySize, bold: true, color: D.heading, after: gap0, indent: 30 }));
     for (const att of blocks.filter((b) => b.attachedTo === block.id && b.type === 'template_section' && !b.sizeOverride)) await drawSection(att, designOf(att), true);
     if (D.photoLayout === 'stacked') {
-      for (const ph of photos.slice(D.photosBeforeTable)) {
+      for (const ph of photos.slice(D.photosBeforeTable).filter((x) => x.sizePct)) {
         (await photo(ph, (CONTENT_PT * photoWidthPct(ph)) / 100, photoMaxH(ph), D)).forEach(push);
-        const subs = (ph.subPhotos || []).filter((p) => p.imageUrl);
-        if (subs.length) await photoGrid(subs, 3, 135, D);
       }
     }
 
     // tételek képei (LED, színek, ZIP…) és a színválaszték
     const rowPhotos = active.flatMap((r) => (r.photos || []).filter((p) => p.imageUrl).map((p) => ({ ...p, titleAbove: p.titleAbove || r.name })));
-    if (rowPhotos.length) await photoGrid(rowPhotos, 2, 200, D);
+    // a táblázat utáni fotók egy rácsban, egyforma magassággal (nem marad üres fél oldal egy álló kép miatt)
+    const afterPhotos = [...(D.photoLayout === 'stacked' ? photos.slice(D.photosBeforeTable).filter((x) => !x.sizePct) : []), ...rowPhotos].flatMap((p) => [
+      p,
+      ...(p.subPhotos || []).filter((x) => x.imageUrl),
+    ]);
+    if (afterPhotos.length === 1) (await photo(afterPhotos[0], CONTENT_PT * 0.6, 230, D)).forEach(push);
+    else if (afterPhotos.length) {
+      let i = 0;
+      if (afterPhotos.length % 2 === 1) {
+        await photoGrid(afterPhotos.slice(0, 3), 3, 170, D);
+        i = 3;
+      }
+      if (i < afterPhotos.length) await photoGrid(afterPhotos.slice(i), 2, 210, D);
+    }
     for (const r of active) {
       const colors = r.algorithm?.colorOptions || [];
       if (!colors.length) continue;
@@ -492,7 +503,7 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
   }
 
   const sig = await img(config.pdfSignatureCardUrl);
-  if (sig) push(new Paragraph({ children: [imageRun(sig, 210, 95)] }));
+  if (sig) push(new Paragraph({ children: [imageRun(sig, 300, 140)] }));
 
   // fejléc: középre igazított logó + sorszám jobbra; lábléc: színes sáv a weboldallal és oldalszámmal
   const logo = await img(config.pdfLogoUrl);
