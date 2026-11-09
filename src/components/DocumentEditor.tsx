@@ -465,7 +465,7 @@ export function DocumentEditor({
             <NumCell bold value={r.discountPriceEur} onChange={(n) => setRow(i, { discountPriceEur: n }, true)} />
           </td>
           <td className="border border-[var(--tb)] px-1 py-0 align-bottom font-bold">
-            <Inline value={r.note || (gift ? 'Ajándék' : r.itemRole === 'optional' || (attached && Number(r.listPriceEur) > 0) ? 'Opció' : '')} single onChange={(v) => setRow(i, { note: v })} className="font-bold" />
+            <Inline value={r.note || (gift ? 'Ajándék' : r.itemRole === 'optional' || (attached && Number(r.listPriceEur) > Number(r.discountPriceEur)) ? 'Opció' : '')} single onChange={(v) => setRow(i, { note: v })} className="font-bold" />
           </td>
         </tr>
       );

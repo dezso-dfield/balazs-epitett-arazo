@@ -322,7 +322,7 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
             name: withQty(stripRich(fill(r.name)), r.quantityLabel),
             list: list > price || (gift && list > 0) ? plain(list) : '',
             price: plain(gift ? 0 : price),
-            note: gift ? 'Ajándék' : note && note !== discountLabel && !/aj[aá]nd[eé]k/i.test(note) ? note : attached && list > 0 ? 'Opció' : undefined,
+            note: gift ? 'Ajándék' : note && note !== discountLabel && !/aj[aá]nd[eé]k/i.test(note) ? note : attached && list > price ? 'Opció' : undefined,
           })
         );
       }

@@ -879,7 +879,7 @@ export async function renderEditableQuotePdfBytes(
             ? 'Ajándék'
             : note && note !== discountLabel && !/aj[aá]nd[eé]k/i.test(note)
               ? note
-              : attached && list > 0
+              : attached && list > price
                 ? 'Opció'
                 : undefined,
         });

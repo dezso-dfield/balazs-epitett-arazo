@@ -867,14 +867,7 @@ export function PdfBlockEditorView({
         else await downloadSavedPdf(saved.id, saved.quoteNumber, 'docx');
       }
       // Google Dokumentumok: a .docx letöltése, és a Google Drive megnyitása új lapon (oda behúzva Google Docsként nyitható)
-      if (saved && mode === 'gdocs') {
-        const drive = window.open('https://drive.google.com/drive/my-drive', '_blank');
-        await downloadSavedPdf(saved.id, saved.quoteNumber, 'docx');
-        window.alert(
-          'Az ajánlat Word fájlként letöltődött.\n\nA megnyílt Google Drive-ba húzd be a letöltött fájlt, majd jobb klikk → Megnyitás → Google Dokumentumok.' +
-            (drive ? '' : '\n\n(A böngésző letiltotta az új lapot: nyisd meg a drive.google.com oldalt.)')
-        );
-      }
+      if (saved && mode === 'gdocs') await prepareGoogleDocs();
       if (saved && mode === 'send') {
         onSendQuote?.(saved);
       }
@@ -883,6 +876,96 @@ export function PdfBlockEditorView({
     }
     // az előnézet frissítése ne tartsa vissza a gombokat
     void refreshLivePdfPreview();
+  };
+
+  // ---- Google Dokumentumok ----
+  // 1) Beállítás nélkül: a formázott ajánlat a vágólapra kerül, és megnyílik egy új Google dokumentum (docs.new) → Ctrl+V.
+  // 2) Ha van NEXT_PUBLIC_GOOGLE_CLIENT_ID: feltöltés a Google Drive-ra Google dokumentumként (Google bejelentkezéssel), és megnyitás.
+  const [gdocs, setGdocs] = useState<{ html: string; msg?: string; busy?: boolean } | null>(null);
+  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
+  const currentPayload = () => ({
+    ...initialQuote,
+    quoteNumber: initialQuote.quoteNumber || 'ELŐNÉZET',
+    customerName, greetingName, city, email, phone, widthCm, projectionCm, heightCm, mountType, eurHufRate, deliveryFeeHuf, blocks,
+  });
+  const prepareGoogleDocs = async () => {
+    setGdocs({ html: '', busy: true, msg: 'Az ajánlat előkészítése…' });
+    const r = await fetch('/api/quotes/preview-html', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(currentPayload()) });
+    setGdocs({ html: r.ok ? await r.text() : '', msg: r.ok ? '' : 'Nem sikerült előkészíteni az ajánlatot.' });
+  };
+  const copyAndOpenDocs = async () => {
+    if (!gdocs?.html) return;
+    const plain = gdocs.html.replace(/<style[\s\S]*?<\/style>/g, '').replace(/<br\s*\/?>/g, '\n').replace(/<\/p>/g, '\n').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ');
+    let copied = false;
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({ 'text/html': new Blob([gdocs.html], { type: 'text/html' }), 'text/plain': new Blob([plain], { type: 'text/plain' }) }),
+      ]);
+      copied = true;
+    } catch {
+      // régebbi böngésző: kijelölés + másolás egy rejtett elemből
+      const div = document.createElement('div');
+      div.contentEditable = 'true';
+      div.style.position = 'fixed';
+      div.style.left = '-99999px';
+      div.innerHTML = gdocs.html;
+      document.body.appendChild(div);
+      const range = document.createRange();
+      range.selectNodeContents(div);
+      const sel = window.getSelection();
+      sel?.removeAllRanges();
+      sel?.addRange(range);
+      copied = document.execCommand('copy');
+      sel?.removeAllRanges();
+      div.remove();
+    }
+    const w = window.open('https://docs.new', '_blank');
+    setGdocs({
+      html: gdocs.html,
+      msg: copied
+        ? `Az ajánlat a vágólapon van. ${w ? 'A megnyílt új Google dokumentumban' : 'Nyiss egy új Google dokumentumot (docs.new), és ott'} nyomd meg a Ctrl+V (Mac: Cmd+V) billentyűt.`
+        : 'A másolás nem sikerült; próbáld újra, vagy használd a Word letöltést.',
+    });
+  };
+  const uploadToGoogleDocs = async () => {
+    if (!googleClientId) return;
+    const win = window.open('about:blank', '_blank');
+    setGdocs((g) => (g ? { ...g, busy: true, msg: 'Feltöltés a Google Drive-ra…' } : g));
+    try {
+      const w = window as unknown as { google?: any };
+      if (!w.google?.accounts?.oauth2) {
+        await new Promise<void>((res, rej) => {
+          const sc = document.createElement('script');
+          sc.src = 'https://accounts.google.com/gsi/client';
+          sc.onload = () => res();
+          sc.onerror = () => rej(new Error('A Google bejelentkezés nem töltődött be'));
+          document.head.appendChild(sc);
+        });
+      }
+      const token: string = await new Promise((res, rej) => {
+        const client = w.google.accounts.oauth2.initTokenClient({
+          client_id: googleClientId,
+          scope: 'https://www.googleapis.com/auth/drive.file',
+          callback: (t: { access_token?: string; error?: string }) => (t.access_token ? res(t.access_token) : rej(new Error(t.error || 'Nincs engedély'))),
+        });
+        client.requestAccessToken();
+      });
+      const docx = await (await fetch('/api/quotes/preview-docx', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(currentPayload()) })).blob();
+      const meta = { name: `Árajánlat ${initialQuote.quoteNumber || ''} ${customerName}`.trim(), mimeType: 'application/vnd.google-apps.document' };
+      const form = new FormData();
+      form.append('metadata', new Blob([JSON.stringify(meta)], { type: 'application/json' }));
+      form.append('file', docx);
+      const up = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink', { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: form });
+      const file = await up.json();
+      if (!up.ok || !file.id) throw new Error(file?.error?.message || 'A feltöltés nem sikerült');
+      const url = file.webViewLink || `https://docs.google.com/document/d/${file.id}/edit`;
+      if (win) win.location.href = url;
+      else window.open(url, '_blank');
+      setGdocs((g) => (g ? { ...g, busy: false, msg: 'Kész: az ajánlat Google dokumentumként megnyílt (a Google Drive-odban is megtalálod).' } : g));
+    } catch (e: any) {
+      win?.close();
+      setGdocs((g) => (g ? { ...g, busy: false, msg: `Google feltöltés: ${e?.message || 'hiba'}` } : g));
+    }
   };
 
   // Ctrl+S / Cmd+S: az ajánlat mentése (mint a Wordben)
@@ -1057,6 +1140,30 @@ export function PdfBlockEditorView({
       >
         <Stepper steps={EDITOR_STEPS} current={editorStep} onSelect={(n) => setEditorStep(n)} />
       </PageHeader>
+
+      {gdocs && (
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4 flex flex-wrap items-center gap-3">
+          <FileText className="w-5 h-5 text-emerald-700" />
+          <div className="flex-1 min-w-[240px] text-sm text-emerald-950">
+            <b>Megnyitás Google Dokumentumokban</b>
+            <div className="text-[13px] text-emerald-900/80">
+              {gdocs.msg ||
+                'Az ajánlat készen áll. A gombbal a formázott ajánlat (szövegek, táblázatok, fotók) a vágólapra kerül, és megnyílik egy új Google dokumentum: ott csak Ctrl+V.'}
+            </div>
+          </div>
+          <button type="button" disabled={!gdocs.html || gdocs.busy} onClick={copyAndOpenDocs} className={btn.primary}>
+            Másolás és új Google dokumentum
+          </button>
+          {googleClientId && (
+            <button type="button" disabled={!gdocs.html || gdocs.busy} onClick={uploadToGoogleDocs} className={btn.secondary}>
+              Feltöltés Google Docsként
+            </button>
+          )}
+          <button type="button" onClick={() => setGdocs(null)} className={btn.ghost}>
+            Bezárás
+          </button>
+        </div>
+      )}
 
       {editorStep === 1 && (<>
       {/* Customer Name Automation & Dimensions Quick Bar */}
