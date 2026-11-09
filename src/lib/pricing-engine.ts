@@ -3,6 +3,7 @@ import {
   replaceTemplateVariables,
   VariableReplacementContext,
   huList,
+  huWith,
   LEGACY_INTRO_TEMPLATES,
   LONG_INTRO_TEMPLATE,
 } from './constants';
@@ -1282,11 +1283,17 @@ export function buildFullQuoteDocumentBlocks(params: {
   };
   blocks.push(introBlock);
 
-  // 1/b. Kategória sablonok bevezetője (miért ez a termékcsalád…), a Word ajánlatok szerkezetében
-  // a termékek kategóriánként egymás után, a kategória első megjelenésének sorrendjében
-  const catOrder = [...new Set(selectedTemplates.map((t) => t.categoryId))];
-  const orderedTemplates = [...selectedTemplates].sort((a, b) => catOrder.indexOf(a.categoryId) - catOrder.indexOf(b.categoryId));
+  // 1/b. A Word ajánlatok szerkezete: fő szerkezetek (pergolák) kategóriánként, mindegyik alatt a hozzá
+  // ajánlott kiegészítők (oldalsó árnyékoló, üvegfal) táblázata; a kiegészítők leírása a végén, az Információ előtt
   const catOf = (id: string) => categories.find((c) => c.id === id);
+  const catOrder0 = [...new Set(selectedTemplates.map((t) => t.categoryId))];
+  const hasMain = catOrder0.some((cid) => catOf(cid)?.categoryType !== 'accessory');
+  // kiegészítő csak akkor kerül a pergolák alá, ha van mellette fő szerkezet (önálló ZIP / üvegfal ajánlatnál önálló termék)
+  const isAccessory = (cid: string) => hasMain && catOf(cid)?.categoryType === 'accessory';
+  const catOrder = [...catOrder0.filter((c) => !isAccessory(c)), ...catOrder0.filter(isAccessory)];
+  const orderedTemplates = [...selectedTemplates].sort((a, b) => catOrder.indexOf(a.categoryId) - catOrder.indexOf(b.categoryId));
+  const mainTemplates = orderedTemplates.filter((t) => !isAccessory(t.categoryId));
+  const accessoryTemplates = orderedTemplates.filter((t) => isAccessory(t.categoryId));
   const tb = (key: string, style: QuoteDocumentBlock['textStyle'], content: string, title = ''): QuoteDocumentBlock => ({
     id: `blk_${key}_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
     type: 'text_box',
@@ -1296,52 +1303,55 @@ export function buildFullQuoteDocumentBlocks(params: {
     bold: false,
     align: 'left',
   });
-  // fő szerkezetek leírása a bevezető után; a kiegészítőké (üvegfal, árnyékoló…) a végén, az Információ előtt
-  const hasMain = catOrder.some((cid) => catOf(cid)?.categoryType !== 'accessory');
-  // kiegészítő csak akkor kerül a végére, ha van mellette fő szerkezet (önálló ZIP / üvegfal ajánlatnál elöl)
-  const isAccessory = (cid: string) => hasMain && catOf(cid)?.categoryType === 'accessory';
-  const catIntro = (cid: string) => {
-    const intro = replaceTemplateVariables(catOf(cid)?.docIntro || '', varCtx).trim();
-    if (intro) blocks.push({ ...tb('catintro', 'category_intro', intro), docCategoryId: cid });
-  };
-  catOrder.filter((cid) => !isAccessory(cid)).forEach(catIntro);
+  // fő kategóriák bevezetője (tartalmát a termékek után töltjük ki: termékenkénti ajánló bekezdés, hó- és szélterhelés)
+  const catIntroBlocks = new Map<string, QuoteDocumentBlock>();
+  for (const cid of catOrder.filter((c) => !isAccessory(c))) {
+    const blk = { ...tb('catintro', 'category_intro', ''), docCategoryId: cid };
+    catIntroBlocks.set(cid, blk);
+    blocks.push(blk);
+  }
 
   // 2. Kiválasztott Sablonok és Termékek blokkjai
   let primaryTotalEur = 0;
   let primaryTotalHuf = 0;
+  const calc = { widthCm, projectionCm, heightCm, mountType, eurHufRate, customerName, greetingName, city, deliveryFeeHuf };
+  const buildBlock = (tpl: QuoteTemplate, no: number) => {
+    const blk = buildEditableBlockFromTemplate(tpl, no, calc, config, selectedMaterialsByTemplate?.[tpl.id], adjustmentsByTemplate?.[tpl.id]);
+    const cat = catOf(tpl.categoryId);
+    if (cat?.docTotalLabel?.trim()) blk.totalLabel = replaceTemplateVariables(cat.docTotalLabel, varCtx);
+    return blk;
+  };
+  // a kiegészítők táblázatai egyszer kiszámolva, minden pergola alá másolva
+  const accessoryBlocks = accessoryTemplates.map((tpl) => {
+    const blk = buildBlock(tpl, 0);
+    blk.sectionTitle = (blk.sectionTitle || '').replace(/^0\.\s*/, '');
+    const cat = catOf(tpl.categoryId);
+    blk.attachTitle = replaceTemplateVariables(cat?.docHeading || '', varCtx).trim();
+    return blk;
+  });
 
   let promoShown = false;
-  orderedTemplates.forEach((tpl, idx) => {
+  const mainSections: { tpl: QuoteTemplate; block: QuoteDocumentBlock }[] = [];
+  mainTemplates.forEach((tpl, idx) => {
     const cat = catOf(tpl.categoryId);
-    if (idx === 0 || orderedTemplates[idx - 1].categoryId !== tpl.categoryId) {
+    if (idx === 0 || mainTemplates[idx - 1].categoryId !== tpl.categoryId) {
       const heading = replaceTemplateVariables(cat?.docHeading || '', varCtx).trim();
       if (heading) blocks.push({ ...tb('cathead', 'category_heading', '', heading), docCategoryId: tpl.categoryId });
     }
-    const selectedMatIds = selectedMaterialsByTemplate?.[tpl.id];
-    const tplBlock = buildEditableBlockFromTemplate(
-      tpl,
-      idx + 1,
-      {
-        widthCm,
-        projectionCm,
-        heightCm,
-        mountType,
-        eurHufRate,
-        customerName,
-        greetingName,
-        city,
-        deliveryFeeHuf,
-      },
-      config,
-      selectedMatIds,
-      adjustmentsByTemplate?.[tpl.id]
-    );
-    if (cat?.docTotalLabel?.trim()) tplBlock.totalLabel = replaceTemplateVariables(cat.docTotalLabel, varCtx);
+    const tplBlock = buildBlock(tpl, idx + 1);
     blocks.push(tplBlock);
+    mainSections.push({ tpl, block: tplBlock });
+    for (const acc of accessoryBlocks) {
+      blocks.push({
+        ...JSON.parse(JSON.stringify(acc)),
+        id: `blk_att_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        attachedTo: tplBlock.id,
+      });
+    }
     // a kategória utolsó terméke után: opcionálisan rendelhető tételek és akció
-    if (idx === orderedTemplates.length - 1 || orderedTemplates[idx + 1].categoryId !== tpl.categoryId) {
+    if (idx === mainTemplates.length - 1 || mainTemplates[idx + 1].categoryId !== tpl.categoryId) {
       // ha a kategória valamelyik terméke már saját listát / akciót ad (záró szövegében), nem ismételjük
-      const group = orderedTemplates.filter((t) => t.categoryId === tpl.categoryId);
+      const group = mainTemplates.filter((t) => t.categoryId === tpl.categoryId);
       const own = (re: RegExp) => group.some((t) => re.test(`${t.closingText || ''}\n${(t.textBlocks || []).map((x) => x.content).join('\n')}`));
       const opts = replaceTemplateVariables(cat?.docOptions || '', varCtx).trim();
       if (opts && !own(/opcion[aá]lisan rendelhet/i)) blocks.push({ ...tb('catopts', 'options', opts), docCategoryId: tpl.categoryId });
@@ -1351,39 +1361,109 @@ export function buildFullQuoteDocumentBlocks(params: {
         promoShown = true;
       }
     }
-
     if (idx === 0) {
       primaryTotalEur = tplBlock.customTotalBaseEur || 0;
       primaryTotalHuf = tplBlock.customTotalBaseHuf || 0;
     }
   });
+  // csak kiegészítők (pl. önálló ZIP ajánlat): ha nincs fő szerkezet, a fenti ág nem fut, mert isAccessory hamis
 
   (manualSections || []).forEach((ms, idx) => {
     blocks.push(
       buildManualSectionBlock(
         ms.title,
-        selectedTemplates.length + idx + 1,
+        mainTemplates.length + idx + 1,
         { widthCm, projectionCm, heightCm },
         ms.categoryId
       )
     );
   });
 
-  // a Word ajánlatok nyitó bekezdése: mit ajánlunk, mi opcionális, mi ajándék
-  const sections = blocks.filter((b) => b.type === 'template_section');
-  const productNames = orderedTemplates.map((tpl) => {
-    const name = (tpl.name || '').trim();
-    return catOf(tpl.categoryId)?.categoryType === 'accessory' ? name : `1 db ${widthCm}x${projectionCm}x${heightCm} cm-es ${name}`;
-  });
-  const lc = (t: string) => t.replace(/\s*\(.*?\)\s*/g, ' ').trim().replace(/^(\p{Lu})(\p{Ll})/u, (m, a, b) => a.toLowerCase() + b);
-  const rowsOf = (pred: (r: NonNullable<QuoteDocumentBlock['rows']>[number]) => boolean) =>
-    [...new Set(sections.flatMap((b) => (b.rows || []).filter((r) => r.included !== false && !r.systemRole && pred(r)).map((r) => lc(stripRichText(r.name || '')))))].filter(Boolean);
-  const optNames = rowsOf((r) => r.itemRole === 'optional').slice(0, 6);
-  const giftNames = rowsOf((r) => r.itemRole === 'gift');
+  // 2/b. Fő kategóriák bevezetője, mint a Word ajánlatokban: „Azért ajánljuk…” → termékenként egy ajánló bekezdés
+  // (a termék leírásának első bekezdése, a termék neve félkövér) → többi leírás → hóterhelés modellenként → szélterhelés
+  const modelName = (tpl: QuoteTemplate) => {
+    const catWords = new Set((catOf(tpl.categoryId)?.name || '').toLowerCase().split(/\s+/));
+    const words = (tpl.name || '').split(/\s+/);
+    while (words.length > 1 && catWords.has(words[words.length - 1].toLowerCase())) words.pop();
+    return words.join(' ').replace(/\s*\(.*\)\s*$/, '').trim();
+  };
+  const titleCase = (t: string) => t.replace(/\p{L}+/gu, (w) => (/\d/.test(w) ? w : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()));
+  const snowOf = (tpl: QuoteTemplate) =>
+    `${tpl.introText || ''}\n${(tpl.textBlocks || []).map((x) => x.content).join('\n')}\n${tpl.closingText || ''}`.match(
+      /h[óo]terhel[ée]s(?:e)?[^:\n]{0,30}:\s*(?:max\.?\s*)?(\d[\d.,]*\s*kg\/m[²2])/i
+    )?.[1];
+  for (const [cid, introBlk] of catIntroBlocks) {
+    const inCat = mainSections.filter((m) => m.tpl.categoryId === cid);
+    const pitches: string[] = [];
+    for (const { tpl, block } of inCat) {
+      const paras = (block.sectionIntroText || '').split(/\n\s*\n/).filter((x) => x.trim());
+      if (paras.length < 2) continue;
+      // az első bekezdés az ajánló a bevezetőben (mint a Word ajánlatokban), a többi a termék szakaszában marad
+      const name = modelName(tpl);
+      let pitch = paras[0].replace(/\s*\(\d+\s*[x×]\s*\d+[^)]*\)/g, '').replace(/\s+([,.;:])/g, '$1');
+      const at = name ? pitch.toLowerCase().indexOf(name.toLowerCase()) : -1;
+      if (at >= 0) pitch = `${pitch.slice(0, at)}[b]${pitch.slice(at, at + name.length)}[/b]${pitch.slice(at + name.length)}`;
+      pitches.push(pitch);
+      block.sectionIntroText = paras.slice(1).join('\n\n');
+    }
+    const catParas = replaceTemplateVariables(catOf(cid)?.docIntro || '', varCtx)
+      .split(/\n\s*\n/)
+      .map((x) => x.trim())
+      .filter(Boolean);
+    const loads = inCat.map((m) => [titleCase(modelName(m.tpl)), snowOf(m.tpl)] as const);
+    const dynamicSnow = loads.length > 0 && loads.every(([, l]) => l);
+    const isSnow = (t: string) => /^h[óo]terhel/i.test(t);
+    const isWind = (t: string) => /^sz[ée]lterhel/i.test(t);
+    const [first, ...rest] = catParas;
+    let wind = rest.find(isWind) || '';
+    if (wind && inCat.length > 1) wind = wind.replace(/^(sz[ée]lterhel[ée]se)\s*/i, `$1 (mind a ${inCat.length} szerkezetnek) `);
+    const out = [
+      ...(first && !isSnow(first) && !isWind(first) ? [first] : []),
+      ...pitches,
+      ...rest.filter((t) => !isWind(t) && !(dynamicSnow && isSnow(t))),
+      ...(dynamicSnow ? [`Hóterhelése a szerkezeteknek:\n${loads.map(([n, l]) => `- ${n} modellnél: ${String(l).replace('²', '2')}`).join('\n')}`] : []),
+      ...(wind ? [wind] : []),
+    ];
+    if (first && (isSnow(first) || isWind(first))) out.splice(out.length - (wind ? 1 : 0), 0, ...(isWind(first) ? [] : [first]));
+    introBlk.content = out.join('\n\n');
+  }
+  // üres bevezető blokk (nincs kategória szöveg és ajánló sem) nem marad az ajánlatban
+  for (const [, introBlk] of catIntroBlocks) {
+    if (!introBlk.content?.trim()) blocks.splice(blocks.indexOf(introBlk), 1);
+  }
+
+  // a Word ajánlatok nyitó bekezdése: mit ajánlunk, mi opcionális, mi ajándék, mely kiegészítők szerepelnek
+  const dims = `[b]1db ${widthCm}x${projectionCm}x${heightCm} cm-es[/b]`;
+  const lcFirst = (t: string) => t.replace(/^(\p{Lu})(\p{Ll})/u, (_m, a, b) => a.toLowerCase() + b);
+  const mainCats = [...new Set(mainTemplates.map((t) => t.categoryId))];
+  const products =
+    mainTemplates.length === 1
+      ? `${dims} ${mainTemplates[0].name}`
+      : mainTemplates.length > 1
+        ? `${dims} ${huList(mainCats.map((c) => lcFirst(catOf(c)?.name || '')))} termékeinkre`
+        : huList(orderedTemplates.map((t) => t.name));
+  const rowsOf = (secs: QuoteDocumentBlock[], pred: (r: NonNullable<QuoteDocumentBlock['rows']>[number]) => boolean) => {
+    const seen = new Set<string>();
+    const out: string[] = [];
+    for (const r of secs.flatMap((b) => b.rows || [])) {
+      if (r.included === false || r.systemRole || !pred(r)) continue;
+      const w = huWith(stripRichText(r.name || ''));
+      const key = w.split(/\s+a\s|\s+az\s/)[0].toLowerCase();
+      if (!w || seen.has(key)) continue;
+      seen.add(key);
+      out.push(w);
+    }
+    return out;
+  };
+  const mainBlocks = mainSections.length ? mainSections.map((m) => m.block) : blocks.filter((b) => b.type === 'template_section');
+  const optNames = rowsOf(mainBlocks, (r) => r.itemRole === 'optional').slice(0, 3);
+  const giftNames = rowsOf(mainBlocks, (r) => r.itemRole === 'gift' || (Number(r.discountPriceEur) === 0 && Number(r.listPriceEur) > 0));
+  const accCats = [...new Set(accessoryTemplates.map((t) => t.categoryId))];
   const introVars = {
-    products: huList(productNames) || undefined,
-    optionsSentence: optNames.length ? `Opcionálisan rendelhető hozzá: ${huList(optNames)}.` : '',
-    giftsSentence: giftNames.length ? `Ajándékba adjuk hozzá: ${huList(giftNames)}.` : '',
+    products: products || undefined,
+    optionsSentence: optNames.length ? `Opcionálisan ${huList(optNames)}.` : '',
+    giftsSentence: giftNames.length ? `Ajándék ${giftNames.join(' és ajándék ')}.` : '',
+    accessoriesSentence: accCats.map((c) => `Opcionálisan feltüntetjük a pergola oldalainak beépítését ${huWith(catOf(c)?.name || '')} is.`).join(' '),
   };
   introBlock.content = replaceTemplateVariables(introTemplate, { ...varCtx, ...introVars })
     .replace(/[ \t]{2,}/g, ' ')
@@ -1391,7 +1471,10 @@ export function buildFullQuoteDocumentBlocks(params: {
     .trim();
 
   // kiegészítő kategóriák leírása (Guillotine, Thermo Glass, oldalsó árnyékoló…) az Információ előtt
-  catOrder.filter(isAccessory).forEach(catIntro);
+  for (const cid of catOrder.filter(isAccessory)) {
+    const intro = replaceTemplateVariables(catOf(cid)?.docIntro || '', varCtx).trim();
+    if (intro) blocks.push({ ...tb('catintro', 'category_intro', intro), docCategoryId: cid });
+  }
 
   // 3. Záró Információs Szövegdoboz Blokk (az első termék saját feltételei, ha vannak)
   const closingText = replaceTemplateVariables(
@@ -1401,6 +1484,8 @@ export function buildFullQuoteDocumentBlocks(params: {
     varCtx
   );
 
+  // a termékek saját záró szövegében álló akció („Ha …-ig megrendeli…”) is számít: az Információban nem ismétlődik
+  if (mainSections.some((m) => /^\s*ha\s.{0,60}megrendeli/im.test(m.block.sectionClosingText || ''))) promoShown = true;
   // ha a kategóriáknál már volt akció, az Információ elején álló akció-bekezdés nem ismétlődik
   const closingContent = promoShown
     ? closingText

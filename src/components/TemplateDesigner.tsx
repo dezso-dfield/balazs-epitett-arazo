@@ -147,12 +147,16 @@ export function TemplateDesigner({
   templates: QuoteTemplate[];
 }) {
   const live = templates.filter((t) => t.enabled !== false && t.status !== 'inactive');
-  const usedCats = categories.filter((c) => live.some((t) => t.categoryId === c.id));
+  // minden kategória választható, az új (még termék nélküli) is: ott egy minta termékkel látszik a kategória sablonja
+  const usedCats = [...categories].sort((a, b) => Number(live.some((t) => t.categoryId === b.id)) - Number(live.some((t) => t.categoryId === a.id)));
   const [catId, setCatId] = React.useState(usedCats.find((c) => c.categoryType !== 'accessory')?.id || usedCats[0]?.id || '');
   const sampleCtx = { ...SAMPLE_VARIABLE_CONTEXT, greetingName: 'János' };
 
   const build = React.useCallback(() => {
-    const tpls = live.filter((t) => t.categoryId === catId).slice(0, 1).map((t) => ({ ...t, infoText: '' }));
+    const own = live.filter((t) => t.categoryId === catId);
+    const cat = categories.find((c) => c.id === catId);
+    const fallback = live.find((t) => categories.find((c) => c.id === t.categoryId)?.categoryType === cat?.categoryType) || live[0];
+    const tpls = (own.length ? own.slice(0, 1) : fallback ? [{ ...fallback, id: `sample_${catId}`, categoryId: catId, name: `${cat?.name || 'Minta'} (minta termék)` }] : []).map((t) => ({ ...t, infoText: '' }));
     const res = buildFullQuoteDocumentBlocks({
       ...sampleCtx,
       eurHufRate: Number(form.defaultEurHufRate) || 400,
@@ -219,6 +223,7 @@ export function TemplateDesigner({
                 <option key={c.id} value={c.id}>
                   {c.name}
                   {c.docDesign && Object.keys(c.docDesign).length ? ' (saját dizájn)' : ''}
+                  {live.some((t) => t.categoryId === c.id) ? '' : ' (még nincs terméke)'}
                 </option>
               ))}
             </select>

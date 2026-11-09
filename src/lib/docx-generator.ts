@@ -218,6 +218,216 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
     }
   };
 
+  /** Egy termék szakasz, vagy a fő szerkezethez csatolt kiegészítő táblázat */
+  const drawSection = async (block: QuoteDocumentBlock, D: DocDesign, attached = false): Promise<void> => {
+    // ---- Termék szakasz ----
+    // attached: kiegészítő (ZIP, üvegfal) táblázata a fő szerkezet alatt, cím, leírás és fotók nélkül
+    if (attached) {
+      const at = fill(block.attachTitle || '').trim();
+      if (at) push(para(at, { size: D.bodySize, bold: true, color: D.heading, indent: 30 }));
+    }
+    if (!attached && block.sectionTitle) {
+      const raw = fill(block.sectionTitle);
+      const sz = raw.match(/\((\d+)\s*[×x]\s*(\d+)\s*[×x]\s*(\d+)\s*cm(?:\s*-\s*([^)]*))?\)\s*$/);
+      const title = raw.replace(/\s*\(\d+\s*[×x]\s*\d+[^)]*\)\s*$/, '').replace(/:\s*$/, '');
+      push(para(`${title}:`, { size: D.headingSize, bold: true, color: D.heading, shade: D.highlight || undefined }));
+      if (sz) {
+        const line = replaceTemplateVariables(
+          config.docSizeLine || 'Méretek: {{szelesseg}} cm hosszú x {{kinyulas}} cm széles (kinyúlás) x {{magassag}} cm magas (belső) – {{beepites}}',
+          { ...varCtx, widthCm: Number(sz[1]), projectionCm: Number(sz[2]), heightCm: Number(sz[3]), mountType: (sz[4] || varCtx.mountType).trim() }
+        );
+        const cut = line.indexOf(':');
+        push(para(cut > 0 && cut < 20 ? `[b]${line.slice(0, cut + 1)}[/b] [b][i]${line.slice(cut + 1).trim()}[/i][/b]` : `[b][i]${line}[/i][/b]`, { size: D.bodySize, color: D.heading }));
+      }
+    }
+    if (!attached && block.sectionSubtitle) push(para(fill(block.sectionSubtitle), { size: Math.max(8, D.bodySize - 2), italic: true, color: D.muted }));
+    if (!attached && block.sectionIntroText) push(paras(fill(block.sectionIntroText), { size: D.bodySize, color: D.text, lineHeight: D.lineHeight }));
+    if (!attached) push(para('', { size: D.bodySize }));
+
+    const photos = attached ? [] : (block.sectionPhotos || []).filter((p) => p.imageUrl);
+    if (photos.length && D.photoLayout === 'stacked') {
+      for (const ph of photos) {
+        (await photo(ph, CONTENT_PT, 330, D)).forEach(push);
+        const subs = (ph.subPhotos || []).filter((p) => p.imageUrl);
+        if (subs.length) await photoGrid(subs, 3, 135, D);
+      }
+    } else if (photos.length) {
+      (await photo(photos[0], CONTENT_PT * 0.75, 290, D)).forEach(push);
+      const heroSubs = (photos[0].subPhotos || []).filter((p) => p.imageUrl);
+      if (heroSubs.length) await photoGrid(heroSubs, 3, 135, D);
+      if (photos.length > 1) await photoGrid(photos.slice(1), 2, 200, D);
+    }
+
+    const active = (block.rows || []).filter((r) => r.included !== false);
+    if (active.length) {
+      const discountLabel = (block.tableHeaders?.[3] || '').match(/\(([^)]*%[^)]*)\)/)?.[1] || config.defaultDiscountLabel || '';
+      const TBL_TW = D.tableWide ? 10620 : CONTENT_TW;
+      const COLW = [4160, 1780, 2960, 1720].map((tw) => Math.round((tw / 10620) * TBL_TW));
+      const border = { style: BorderStyle.SINGLE, size: 4, color: hex(D.tableBorder) };
+      const borders = { top: border, bottom: border, left: border, right: border };
+      // Összesen sor: halvány kiemelés, vastagabb felső vonal (a fejléc színének világosabb árnyalata)
+      const sumFill = (() => {
+        const h = D.tableHead.replace('#', '');
+        const ch = [0, 2, 4].map((i) => Math.round(255 - (255 - parseInt(h.slice(i, i + 2), 16)) * 0.55));
+        return ch.map((c) => c.toString(16).padStart(2, '0')).join('').toUpperCase();
+      })();
+      const strongTop = { style: BorderStyle.SINGLE, size: 12, color: hex(D.tableBorder) };
+      const cell = (text: string, i: number, o: { bold?: boolean; right?: boolean; head?: boolean; strong?: boolean } = {}) =>
+        new TableCell({
+          width: { size: COLW[i], type: WidthType.DXA },
+          borders: o.strong ? { ...borders, top: strongTop } : borders,
+          verticalAlign: o.head ? VerticalAlign.TOP : VerticalAlign.BOTTOM,
+          shading: o.head ? { type: ShadingType.CLEAR, color: 'auto', fill: hex(D.tableHead) } : o.strong ? { type: ShadingType.CLEAR, color: 'auto', fill: sumFill } : undefined,
+          margins: { left: 70, right: 70, top: 0, bottom: 0 },
+          children: [
+            new Paragraph({
+              alignment: o.right ? AlignmentType.RIGHT : o.head && i === 0 ? AlignmentType.CENTER : AlignmentType.LEFT,
+              spacing: { after: 0, line: 240 },
+              children: [new TextRun({ text, bold: o.bold || o.head, size: Math.round(D.tableSize * 2), font: FONT.name, color: hex(D.heading) })],
+            }),
+          ],
+        });
+      const row = (r: { name: string; list?: string; listLabel?: string; price: string; note?: string; strong?: boolean }) =>
+        new TableRow({
+          height: { value: 290, rule: HeightRule.ATLEAST },
+          children: [
+            cell(r.name, 0, { strong: r.strong }),
+            r.listLabel ? cell(r.listLabel, 1, { strong: r.strong, bold: r.strong }) : cell(r.list || '', 1, { right: true, strong: r.strong }),
+            cell(r.price, 2, { bold: true, right: true, strong: r.strong }),
+            cell(r.note || '', 3, { bold: true, strong: r.strong }),
+          ],
+        });
+
+      const rate = Number(quote.eurHufRate || config.defaultEurHufRate || 400);
+      const totals = computeBlockTotals(block, rate);
+      const baseRows = active.filter((r) => r.itemRole === 'base' || r.itemRole === 'gift');
+      const optRows = active.filter((r) => r.itemRole === 'optional');
+      const hiddenAdjTargetId = baseRows.find((r) => r.itemRole === 'base' && r.discountPriceEur > 0)?.id;
+      const plain = (n: number) => String(Math.round(n));
+      const withQty = (name: string, qty?: string) => {
+        const q = (qty || '').trim();
+        if (!q || name.includes(q)) return name;
+        return /\d\s*[×x]\s*\d/.test(q) ? `${name} (${q})` : `${name} – ${q.replace(/\s+/g, '')}`;
+      };
+      const rows: TableRow[] = [
+        new TableRow({
+          tableHeader: true,
+          height: { value: 290, rule: HeightRule.ATLEAST },
+          children: ['Megnevezés', 'Listaár (EUR)', discountLabel ? `Kedvezményes ár: ${discountLabel} (EUR)` : 'Ár (EUR)', ''].map((l, i) => cell(l, i, { head: true })),
+        }),
+      ];
+      for (const r of baseRows) {
+        const price = (Number(r.discountPriceEur) || 0) + (r.id === hiddenAdjTargetId ? totals.hiddenAdjustmentsEur : 0);
+        const list = r.listPriceEur > 0 && r.discountPriceEur > 0 ? Math.round((r.listPriceEur / r.discountPriceEur) * price) : Number(r.listPriceEur) || 0;
+        const gift = r.itemRole === 'gift' || price === 0;
+        const note = (r.note || '').trim();
+        rows.push(
+          row({
+            name: withQty(stripRich(fill(r.name)), r.quantityLabel),
+            list: list > price || (gift && list > 0) ? plain(list) : '',
+            price: plain(gift ? 0 : price),
+            note: gift ? 'Ajándék' : note && note !== discountLabel && !/aj[aá]nd[eé]k/i.test(note) ? note : attached && list > 0 ? 'Opció' : undefined,
+          })
+        );
+      }
+      for (const adj of (block.adjustments || []).filter((a) => a.visibleToCustomer && Number(a.amountEur) !== 0)) {
+        const amount = Number(adj.amountEur) || 0;
+        rows.push(row({ name: fill(adj.label || 'Árkorrekció'), price: `${amount > 0 ? '' : '-'}${plain(Math.abs(amount))}` }));
+      }
+      rows.push(row({ name: '', listLabel: (block.sumLabel || 'Összesen:').trim(), price: plain(totals.totalEur), strong: true }));
+      for (const r of optRows)
+        rows.push(
+          row({
+            name: withQty(stripRich(fill(r.name)), r.quantityLabel),
+            list: r.listPriceEur > r.discountPriceEur ? plain(r.listPriceEur) : '',
+            price: plain(r.discountPriceEur),
+            note: (r.note || '').trim() && r.note !== discountLabel ? r.note : 'Opció',
+          })
+        );
+      push(para('', { after: 2 }));
+      push(new Table({ width: { size: TBL_TW, type: WidthType.DXA }, columnWidths: COLW, layout: TableLayoutType.FIXED, alignment: AlignmentType.CENTER, rows }));
+
+      const dot = (n: number) => formatDotNumber(Math.round(n));
+      const label = (block.totalLabel || config.docTotalLabel || 'Az alapszerkezet szereléssel Összesen:').trim();
+      const plus = /^opci/i.test(label) ? '+ ' : '';
+      const hufLine = replaceTemplateVariables(config.docHufLine || 'Az ajánlat írásának napján, {{arfolyam}} Ft/EUR árfolyamon az összeg:', { ...varCtx, eurHufRate: rate });
+      push(para('', { after: 2 }));
+      if (plus) {
+        push(mixed([[`-   ${label} `, false, D.bodySize], [`+ ${dot(totals.totalEur)} EUR (+Áfa)`, true, D.bodySize]], 'left', D.heading, 18, 0));
+        push(mixed([[`${hufLine} `, false, D.bodySize - 2], [`${dot(totals.totalHuf)} Ft (+Áfa)`, true, D.bodySize - 2]], 'left', D.heading, 36, D.bodySize * 1.22));
+      } else {
+        push(mixed([[`${label} `, false, D.bodySize], [`${dot(totals.totalEur)} EUR (+ Áfa)`, true, D.bodySize]], 'right', D.heading, 0, 0));
+        push(mixed([[`${hufLine} `, false, D.bodySize - 2], [`${dot(totals.totalHuf)} Ft (+Áfa)`, true, D.bodySize - 2]], 'right', D.heading, 0, D.bodySize * 1.22));
+      }
+      for (const r of optRows) {
+        const huf = Math.round(((Number(r.discountPriceEur) || 0) * rate) / 1000) * 1000;
+        push(mixed([[`-   ${config.docOptionLabel || 'Opció:'} ${stripRich(fill(r.name))}: `, false, D.bodySize], [`+ ${dot(r.discountPriceEur)} EUR (+Áfa)`, true, D.bodySize]], 'left', D.heading, 18, 0));
+        push(mixed([[`${hufLine} `, false, D.bodySize - 2], [`${dot(huf)} Ft (+Áfa)`, true, D.bodySize - 2]], 'left', D.heading, 36, D.bodySize * 1.22));
+      }
+    }
+
+    if (attached) return;
+    // akció („Ha …”) a táblázat után, majd a csatolt kiegészítők, utána a színek és a többi záró szöveg
+    const gap0 = D.bodySize * 1.22;
+    const closing = fill(block.sectionClosingText || '').split(/\n\s*\n/).map((t) => t.replace(/^\s+|\s+$/g, '')).filter(Boolean);
+    const isPromo = (t: string) => /^ha\s/i.test(stripRich(t));
+    for (const t of closing.filter(isPromo)) push(paras(t, { size: D.bodySize, bold: true, color: D.heading, after: gap0, indent: 30 }));
+    for (const att of blocks.filter((b) => b.attachedTo === block.id && b.type === 'template_section')) await drawSection(att, designOf(att), true);
+
+    // tételek képei (LED, színek, ZIP…) és a színválaszték
+    const rowPhotos = active.flatMap((r) => (r.photos || []).filter((p) => p.imageUrl).map((p) => ({ ...p, titleAbove: p.titleAbove || r.name })));
+    if (rowPhotos.length) await photoGrid(rowPhotos, 2, 200, D);
+    for (const r of active) {
+      const colors = r.algorithm?.colorOptions || [];
+      if (!colors.length) continue;
+      const t2 = stripRich(r.algorithm?.colorTitle || r.name);
+      push(para(colors.length > 4 ? `${t2}: ${colors.length} db alapszín` : `${t2}:`, { size: D.bodySize, color: D.heading, after: D.bodySize }));
+      const cw = Math.round(CONTENT_TW / 5);
+      const trs: TableRow[] = [];
+      for (let i = 0; i < colors.length; i += 5) {
+        const cs = colors.slice(i, i + 5).map(
+          (c) =>
+            new TableCell({
+              width: { size: cw, type: WidthType.DXA },
+              borders: noBorders,
+              shading: { type: ShadingType.CLEAR, color: 'auto', fill: hex(c.hex || '#cccccc') },
+              verticalAlign: VerticalAlign.CENTER,
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  spacing: { after: 0 },
+                  children: [
+                    new TextRun({
+                      text: `${c.code || ''}${/struktúr|structure/i.test(c.name || '') ? ' STRUKTÚR' : ''}`.toUpperCase(),
+                      bold: true,
+                      size: 13,
+                      font: FONT.name,
+                      color: isDark(c.hex) ? 'FFFFFF' : '111111',
+                    }),
+                  ],
+                }),
+              ],
+            })
+        );
+        while (cs.length < 5) cs.push(new TableCell({ width: { size: cw, type: WidthType.DXA }, borders: noBorders, children: [new Paragraph('')] }));
+        trs.push(new TableRow({ height: { value: 800, rule: HeightRule.EXACT }, children: cs }));
+      }
+      push(new Table({ width: { size: CONTENT_TW, type: WidthType.DXA }, columnWidths: Array(5).fill(cw), layout: TableLayoutType.FIXED, borders: noBorders, rows: trs }));
+      push(para('', { size: D.bodySize }));
+    }
+    if (closing.some((t) => !isPromo(t))) {
+      for (const t of closing.filter((x) => !isPromo(x))) {
+        const plain = stripRich(t);
+        const gap = gap0;
+        if (/^\+\s*opcion/i.test(plain)) {
+          const [first, ...rest] = t.split('\n');
+          push(para(first, { size: D.bodySize, bold: true, color: D.heading, shade: D.highlight || undefined }));
+          rest.forEach((l, i) => push(para(l.replace(/^\s*•\s*/, '- '), { size: D.bodySize, color: D.text, after: i === rest.length - 1 ? gap : 0 })));
+        } else push(paras(t, { size: D.bodySize, color: D.text, after: gap }));
+      }
+    } else push(para('', { size: D.bodySize }));
+  };
+
   for (const block of blocks) {
     const D = designOf(block);
     if (block.type === 'page_break') {
@@ -271,182 +481,8 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
     }
     if (block.type !== 'template_section') continue;
 
-    // ---- Termék szakasz ----
-    if (block.sectionTitle) {
-      const raw = fill(block.sectionTitle);
-      const sz = raw.match(/\((\d+)\s*[×x]\s*(\d+)\s*[×x]\s*(\d+)\s*cm(?:\s*-\s*([^)]*))?\)\s*$/);
-      const title = raw.replace(/\s*\(\d+\s*[×x]\s*\d+[^)]*\)\s*$/, '').replace(/:\s*$/, '');
-      push(para(`${title}:`, { size: D.headingSize, bold: true, color: D.heading, shade: D.highlight || undefined }));
-      if (sz) {
-        const line = replaceTemplateVariables(
-          config.docSizeLine || 'Méretek: {{szelesseg}} cm hosszú x {{kinyulas}} cm széles (kinyúlás) x {{magassag}} cm magas (belső) – {{beepites}}',
-          { ...varCtx, widthCm: Number(sz[1]), projectionCm: Number(sz[2]), heightCm: Number(sz[3]), mountType: (sz[4] || varCtx.mountType).trim() }
-        );
-        const cut = line.indexOf(':');
-        push(para(cut > 0 && cut < 20 ? `[b]${line.slice(0, cut + 1)}[/b] [b][i]${line.slice(cut + 1).trim()}[/i][/b]` : `[b][i]${line}[/i][/b]`, { size: D.bodySize, color: D.heading }));
-      }
-    }
-    if (block.sectionSubtitle) push(para(fill(block.sectionSubtitle), { size: Math.max(8, D.bodySize - 2), italic: true, color: D.muted }));
-    if (block.sectionIntroText) push(paras(fill(block.sectionIntroText), { size: D.bodySize, color: D.text, lineHeight: D.lineHeight }));
-    push(para('', { size: D.bodySize }));
-
-    const photos = (block.sectionPhotos || []).filter((p) => p.imageUrl);
-    if (photos.length && D.photoLayout === 'stacked') {
-      for (const ph of photos) {
-        (await photo(ph, CONTENT_PT, 330, D)).forEach(push);
-        const subs = (ph.subPhotos || []).filter((p) => p.imageUrl);
-        if (subs.length) await photoGrid(subs, 3, 135, D);
-      }
-    } else if (photos.length) {
-      (await photo(photos[0], CONTENT_PT * 0.75, 290, D)).forEach(push);
-      const heroSubs = (photos[0].subPhotos || []).filter((p) => p.imageUrl);
-      if (heroSubs.length) await photoGrid(heroSubs, 3, 135, D);
-      if (photos.length > 1) await photoGrid(photos.slice(1), 2, 200, D);
-    }
-
-    const active = (block.rows || []).filter((r) => r.included !== false);
-    if (active.length) {
-      const discountLabel = (block.tableHeaders?.[3] || '').match(/\(([^)]*%[^)]*)\)/)?.[1] || config.defaultDiscountLabel || '';
-      const TBL_TW = D.tableWide ? 10620 : CONTENT_TW;
-      const COLW = [4160, 1780, 2960, 1720].map((tw) => Math.round((tw / 10620) * TBL_TW));
-      const border = { style: BorderStyle.SINGLE, size: 4, color: hex(D.tableBorder) };
-      const borders = { top: border, bottom: border, left: border, right: border };
-      const cell = (text: string, i: number, o: { bold?: boolean; right?: boolean; head?: boolean } = {}) =>
-        new TableCell({
-          width: { size: COLW[i], type: WidthType.DXA },
-          borders,
-          verticalAlign: o.head ? VerticalAlign.TOP : VerticalAlign.BOTTOM,
-          shading: o.head ? { type: ShadingType.CLEAR, color: 'auto', fill: hex(D.tableHead) } : undefined,
-          margins: { left: 70, right: 70, top: 0, bottom: 0 },
-          children: [
-            new Paragraph({
-              alignment: o.right ? AlignmentType.RIGHT : o.head && i === 0 ? AlignmentType.CENTER : AlignmentType.LEFT,
-              spacing: { after: 0, line: 240 },
-              children: [new TextRun({ text, bold: o.bold || o.head, size: Math.round(D.tableSize * 2), font: FONT.name, color: hex(D.heading) })],
-            }),
-          ],
-        });
-      const row = (r: { name: string; list?: string; listLabel?: string; price: string; note?: string }) =>
-        new TableRow({ height: { value: 290, rule: HeightRule.ATLEAST }, children: [cell(r.name, 0), r.listLabel ? cell(r.listLabel, 1) : cell(r.list || '', 1, { right: true }), cell(r.price, 2, { bold: true, right: true }), cell(r.note || '', 3, { bold: true })] });
-
-      const rate = Number(quote.eurHufRate || config.defaultEurHufRate || 400);
-      const totals = computeBlockTotals(block, rate);
-      const baseRows = active.filter((r) => r.itemRole === 'base' || r.itemRole === 'gift');
-      const optRows = active.filter((r) => r.itemRole === 'optional');
-      const hiddenAdjTargetId = baseRows.find((r) => r.itemRole === 'base' && r.discountPriceEur > 0)?.id;
-      const plain = (n: number) => String(Math.round(n));
-      const withQty = (name: string, qty?: string) => {
-        const q = (qty || '').trim();
-        if (!q || name.includes(q)) return name;
-        return /\d\s*[×x]\s*\d/.test(q) ? `${name} (${q})` : `${name} – ${q.replace(/\s+/g, '')}`;
-      };
-      const rows: TableRow[] = [
-        new TableRow({
-          tableHeader: true,
-          height: { value: 290, rule: HeightRule.ATLEAST },
-          children: ['Megnevezés', 'Listaár (EUR)', discountLabel ? `Kedvezményes ár: ${discountLabel} (EUR)` : 'Ár (EUR)', ''].map((l, i) => cell(l, i, { head: true })),
-        }),
-      ];
-      for (const r of baseRows) {
-        const price = (Number(r.discountPriceEur) || 0) + (r.id === hiddenAdjTargetId ? totals.hiddenAdjustmentsEur : 0);
-        const list = r.listPriceEur > 0 && r.discountPriceEur > 0 ? Math.round((r.listPriceEur / r.discountPriceEur) * price) : Number(r.listPriceEur) || 0;
-        const gift = r.itemRole === 'gift' || price === 0;
-        const note = (r.note || '').trim();
-        rows.push(
-          row({
-            name: withQty(stripRich(fill(r.name)), r.quantityLabel),
-            list: list > price || (gift && list > 0) ? plain(list) : '',
-            price: plain(gift ? 0 : price),
-            note: gift ? 'Ajándék' : note && note !== discountLabel && !/aj[aá]nd[eé]k/i.test(note) ? note : undefined,
-          })
-        );
-      }
-      for (const adj of (block.adjustments || []).filter((a) => a.visibleToCustomer && Number(a.amountEur) !== 0)) {
-        const amount = Number(adj.amountEur) || 0;
-        rows.push(row({ name: fill(adj.label || 'Árkorrekció'), price: `${amount > 0 ? '' : '-'}${plain(Math.abs(amount))}` }));
-      }
-      rows.push(row({ name: '', listLabel: 'Összesen:', price: plain(totals.totalEur) }));
-      for (const r of optRows)
-        rows.push(
-          row({
-            name: withQty(stripRich(fill(r.name)), r.quantityLabel),
-            list: r.listPriceEur > r.discountPriceEur ? plain(r.listPriceEur) : '',
-            price: plain(r.discountPriceEur),
-            note: (r.note || '').trim() && r.note !== discountLabel ? r.note : 'Opció',
-          })
-        );
-      push(para('', { after: 2 }));
-      push(new Table({ width: { size: TBL_TW, type: WidthType.DXA }, columnWidths: COLW, layout: TableLayoutType.FIXED, alignment: AlignmentType.CENTER, rows }));
-
-      const dot = (n: number) => formatDotNumber(Math.round(n));
-      const label = (block.totalLabel || config.docTotalLabel || 'Az alapszerkezet szereléssel Összesen:').trim();
-      const plus = /^opci/i.test(label) ? '+ ' : '';
-      const hufLine = replaceTemplateVariables(config.docHufLine || 'Az ajánlat írásának napján, {{arfolyam}} Ft/EUR árfolyamon az összeg:', { ...varCtx, eurHufRate: rate });
-      push(para('', { after: 2 }));
-      push(mixed([[`${label} `, false, D.bodySize], [`${plus}${dot(totals.totalEur)} EUR (+ Áfa)`, true, D.bodySize]], 'right', D.heading, 0, 0));
-      push(mixed([[`${hufLine} `, false, D.bodySize - 2], [`${plus}${dot(totals.totalHuf)} Ft (+Áfa)`, true, D.bodySize - 2]], 'right', D.heading, 0, D.bodySize * 1.22));
-      for (const r of optRows) {
-        const huf = Math.round(((Number(r.discountPriceEur) || 0) * rate) / 1000) * 1000;
-        push(mixed([[`-   ${config.docOptionLabel || 'Opció:'} ${stripRich(fill(r.name))}: `, false, D.bodySize], [`+ ${dot(r.discountPriceEur)} EUR (+Áfa)`, true, D.bodySize]], 'left', D.heading, 18, 0));
-        push(mixed([[`${hufLine} `, false, D.bodySize - 2], [`${dot(huf)} Ft (+Áfa)`, true, D.bodySize - 2]], 'left', D.heading, 36, D.bodySize * 1.22));
-      }
-    }
-
-    // tételek képei (LED, színek, ZIP…) és a színválaszték
-    const rowPhotos = active.flatMap((r) => (r.photos || []).filter((p) => p.imageUrl).map((p) => ({ ...p, titleAbove: p.titleAbove || r.name })));
-    if (rowPhotos.length) await photoGrid(rowPhotos, 2, 200, D);
-    for (const r of active) {
-      const colors = r.algorithm?.colorOptions || [];
-      if (!colors.length) continue;
-      const t2 = stripRich(r.algorithm?.colorTitle || r.name);
-      push(para(colors.length > 4 ? `${t2}: ${colors.length} db alapszín` : `${t2}:`, { size: D.bodySize, color: D.heading, after: D.bodySize }));
-      const cw = Math.round(CONTENT_TW / 5);
-      const trs: TableRow[] = [];
-      for (let i = 0; i < colors.length; i += 5) {
-        const cs = colors.slice(i, i + 5).map(
-          (c) =>
-            new TableCell({
-              width: { size: cw, type: WidthType.DXA },
-              borders: noBorders,
-              shading: { type: ShadingType.CLEAR, color: 'auto', fill: hex(c.hex || '#cccccc') },
-              verticalAlign: VerticalAlign.CENTER,
-              children: [
-                new Paragraph({
-                  alignment: AlignmentType.CENTER,
-                  spacing: { after: 0 },
-                  children: [
-                    new TextRun({
-                      text: `${c.code || ''}${/struktúr|structure/i.test(c.name || '') ? ' STRUKTÚR' : ''}`.toUpperCase(),
-                      bold: true,
-                      size: 13,
-                      font: FONT.name,
-                      color: isDark(c.hex) ? 'FFFFFF' : '111111',
-                    }),
-                  ],
-                }),
-              ],
-            })
-        );
-        while (cs.length < 5) cs.push(new TableCell({ width: { size: cw, type: WidthType.DXA }, borders: noBorders, children: [new Paragraph('')] }));
-        trs.push(new TableRow({ height: { value: 800, rule: HeightRule.EXACT }, children: cs }));
-      }
-      push(new Table({ width: { size: CONTENT_TW, type: WidthType.DXA }, columnWidths: Array(5).fill(cw), layout: TableLayoutType.FIXED, borders: noBorders, rows: trs }));
-      push(para('', { size: D.bodySize }));
-    }
-    if (block.sectionClosingText) {
-      for (const raw of fill(block.sectionClosingText).split(/\n\s*\n/)) {
-        const t = raw.replace(/^\s+|\s+$/g, '');
-        if (!t) continue;
-        const plain = stripRich(t);
-        const gap = D.bodySize * 1.22;
-        if (/^ha\s/i.test(plain)) push(paras(t, { size: D.bodySize, bold: true, color: D.heading, after: gap }));
-        else if (/^\+\s*opcion/i.test(plain)) {
-          const [first, ...rest] = t.split('\n');
-          push(para(first, { size: D.bodySize, bold: true, color: D.heading, shade: D.highlight || undefined }));
-          rest.forEach((l, i) => push(para(l.replace(/^\s*•\s*/, '- '), { size: D.bodySize, color: D.text, after: i === rest.length - 1 ? gap : 0 })));
-        } else push(paras(t, { size: D.bodySize, color: D.text, after: gap }));
-      }
-    } else push(para('', { size: D.bodySize }));
+    if (block.attachedTo && blocks.some((b) => b.id === block.attachedTo)) continue;
+    await drawSection(block, D);
   }
 
   const sig = await img(config.pdfSignatureCardUrl);

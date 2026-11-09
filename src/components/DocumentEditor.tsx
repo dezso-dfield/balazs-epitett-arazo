@@ -7,6 +7,7 @@ import { computeBlockTotals, recalculateBlockTotals } from '@/lib/pricing-engine
 import type { PhotoCaptionBlock, ProductCategory, QuoteDocumentBlock, SystemConfig } from '@/lib/types';
 import { blockCategoryId, getDocDesign, LETTERHEAD_URL, primaryCategory, ptPx } from '@/lib/doc-design';
 import { FormatToolbar, RichInline } from '@/components/RichEdit';
+import { stripRich } from '@/lib/richtext';
 
 /**
  * „Word-szerű” szerkesztő: az ajánlat egy A4-es lapon, a PDF kinézetével, közvetlenül a szövegbe kattintva szerkeszthető.
@@ -207,9 +208,9 @@ export function DocumentEditor({
     );
   };
 
-  const renderSection = (blk: QuoteDocumentBlock) => {
+  const renderSection = (blk: QuoteDocumentBlock, attached = false): React.ReactNode => {
     const { D, body, headC } = styles(blk);
-    productNo++;
+    if (!attached) productNo++;
     const sizeM = (blk.sectionTitle || '').match(/\((\d+)\s*[×x]\s*(\d+)\s*[×x]\s*(\d+)\s*cm(?:\s*-\s*([^)]*))?\)\s*$/);
     const rows = blk.rows || [];
     const totals = computeBlockTotals(blk, rate);
@@ -252,7 +253,7 @@ export function DocumentEditor({
             <NumCell bold value={r.discountPriceEur} onChange={(n) => setRow(i, { discountPriceEur: n }, true)} />
           </td>
           <td className="border border-[var(--tb)] px-1 py-0 align-bottom font-bold">
-            <Inline value={r.note || (gift ? 'Ajándék' : r.itemRole === 'optional' ? 'Opció' : '')} single onChange={(v) => setRow(i, { note: v })} className="font-bold" />
+            <Inline value={r.note || (gift ? 'Ajándék' : r.itemRole === 'optional' || (attached && Number(r.listPriceEur) > 0) ? 'Opció' : '')} single onChange={(v) => setRow(i, { note: v })} className="font-bold" />
           </td>
         </tr>
       );
@@ -260,6 +261,19 @@ export function DocumentEditor({
     const hidden = rows.filter((r) => r.included === false && !r.systemRole);
     return (
       <div className="space-y-1">
+        {attached && (
+          <div style={{ paddingLeft: ptPx(30) }}>
+            <Inline
+              value={blk.attachTitle || ''}
+              single
+              placeholder="Cím (pl. Opció üvegfal rendszerek:)"
+              onChange={(v) => updateBlock(blk.id, (b) => ({ ...b, attachTitle: v }))}
+              className="font-bold"
+              style={{ ...headC, fontSize: ptPx(D.bodySize) }}
+            />
+          </div>
+        )}
+        {!attached && (<>
         <div className="inline-flex items-baseline gap-1 max-w-full" style={{ background: D.highlight || undefined }}>
           <span className="font-bold" style={{ ...headC, fontSize: ptPx(D.headingSize) }}>{productNo}.</span>
           <Inline
@@ -295,7 +309,8 @@ export function DocumentEditor({
         <RichInline readOnly={!!lockedReason?.(blk)} value={blk.sectionSubtitle || ''} single onChange={(v) => updateBlock(blk.id, (b) => ({ ...b, sectionSubtitle: v }))} className="italic" style={{ fontSize: ptPx(Math.max(8, D.bodySize - 2)), color: D.muted, lineHeight: D.lineHeight }} placeholder="Alcím" />
         <RichInline readOnly={!!lockedReason?.(blk)} value={blk.sectionIntroText || ''} onChange={(v) => updateBlock(blk.id, (b) => ({ ...b, sectionIntroText: v }))} style={body} placeholder="Termék leírása" />
 
-        {photos.length > 0 && D.photoLayout === 'stacked' && (
+        </>)}
+        {!attached && photos.length > 0 && D.photoLayout === 'stacked' && (
           <div className="space-y-3 py-2">
             {photos.map((p, k) => (
               <figure key={p.id || k} className="mx-auto w-full">
@@ -306,7 +321,7 @@ export function DocumentEditor({
             ))}
           </div>
         )}
-        {photos.length > 0 && D.photoLayout !== 'stacked' && (
+        {!attached && photos.length > 0 && D.photoLayout !== 'stacked' && (
           <div className="space-y-3 py-1">
             <figure className="mx-auto w-[75%]">
               {photos[0].titleAbove && photoCaption(blk, 0, photos[0], 'titleAbove')}
@@ -353,11 +368,36 @@ export function DocumentEditor({
             </thead>
             <tbody>
               {base.map(rowEl)}
-              <tr>
-                <td className="border border-[var(--tb)]" />
-                <td className="border border-[var(--tb)] px-1 py-0">Összesen:</td>
-                <td className="border border-[var(--tb)] px-1 py-0 text-right font-bold tabular-nums">{Math.round(totals.totalEur)}</td>
-                <td className="border border-[var(--tb)]" />
+              {/* Összesen sor: kiemelve; a felirat és az összeg is átírható (az összeg kézi felülírása visszaállítható) */}
+              <tr className="font-bold" style={{ background: `color-mix(in srgb, ${D.tableHead} 55%, white)`, borderTop: `1.5px solid ${D.tableBorder}` }}>
+                <td className="border border-[var(--tb)]" style={{ borderTopWidth: 1.5 }} />
+                <td className="border border-[var(--tb)] px-1 py-0" style={{ borderTopWidth: 1.5 }}>
+                  <Inline value={blk.sumLabel ?? 'Összesen:'} single onChange={(v) => updateBlock(blk.id, (b) => ({ ...b, sumLabel: v }))} className="font-bold" />
+                </td>
+                <td className="border border-[var(--tb)] px-1 py-0 text-right tabular-nums" style={{ borderTopWidth: 1.5 }}>
+                  <NumCell
+                    bold
+                    value={totals.totalEur}
+                    onChange={(n) =>
+                      updateBlock(blk.id, (b) => {
+                        const auto = Math.round(computeBlockTotals({ ...b, manualTotalEur: null, manualTotalHuf: null }, rate).totalEur);
+                        return recalculateBlockTotals({ ...b, manualTotalEur: n === auto ? null : n, manualTotalHuf: null }, rate);
+                      })
+                    }
+                  />
+                </td>
+                <td className="border border-[var(--tb)] px-1 py-0 text-[10px] font-normal text-slate-500 print:hidden" style={{ borderTopWidth: 1.5 }}>
+                  {blk.manualTotalEur !== null && blk.manualTotalEur !== undefined && (
+                    <button
+                      type="button"
+                      title={`Számolt összeg: ${Math.round(computeBlockTotals({ ...blk, manualTotalEur: null, manualTotalHuf: null }, rate).totalEur)} EUR`}
+                      onClick={() => updateBlock(blk.id, (b) => recalculateBlockTotals({ ...b, manualTotalEur: null, manualTotalHuf: null }, rate))}
+                      className="underline hover:text-indigo-700"
+                    >
+                      kézi összeg · vissza
+                    </button>
+                  )}
+                </td>
               </tr>
               {opt.map(rowEl)}
             </tbody>
@@ -374,13 +414,23 @@ export function DocumentEditor({
           </div>
         )}
 
-        {visible.length > 0 && (
+        {visible.length > 0 && plus && (
+          <div style={{ paddingLeft: ptPx(18) }} className="pt-1">
+            <div style={{ fontSize: ptPx(D.bodySize) }}>
+              -&nbsp;&nbsp; {label} <b>+ {formatDotNumber(Math.round(totals.totalEur))} EUR (+Áfa)</b>
+            </div>
+            <div style={{ fontSize: ptPx(D.bodySize - 2), paddingLeft: ptPx(18) }}>
+              {hufLine} <b>{formatDotNumber(Math.round(totals.totalHuf))} Ft (+Áfa)</b>
+            </div>
+          </div>
+        )}
+        {visible.length > 0 && !plus && (
           <div className="text-right space-y-0.5 pt-1">
             <div style={{ fontSize: ptPx(D.bodySize) }}>
-              {label} <b>{plus}{formatDotNumber(Math.round(totals.totalEur))} EUR (+ Áfa)</b>
+              {label} <b>{formatDotNumber(Math.round(totals.totalEur))} EUR (+ Áfa)</b>
             </div>
             <div style={{ fontSize: ptPx(D.bodySize - 2) }}>
-              {hufLine} <b>{plus}{formatDotNumber(Math.round(totals.totalHuf))} Ft (+Áfa)</b>
+              {hufLine} <b>{formatDotNumber(Math.round(totals.totalHuf))} Ft (+Áfa)</b>
             </div>
           </div>
         )}
@@ -394,7 +444,35 @@ export function DocumentEditor({
             </div>
           </div>
         ))}
-        <RichInline readOnly={!!lockedReason?.(blk)} value={blk.sectionClosingText || ''} onChange={(v) => updateBlock(blk.id, (b) => ({ ...b, sectionClosingText: v }))} style={{ ...body, marginTop: ptPx(D.bodySize) }} placeholder="Záró szöveg (opcionálisan rendelhető, színek…)" />
+        {!attached &&
+          (() => {
+            const paras = (blk.sectionClosingText || '').split(/\n\s*\n/).filter((x) => x.trim());
+            const isPromo = (t: string) => /^ha\s/i.test(stripRich(t).trim());
+            const promo = paras.filter(isPromo).join('\n\n');
+            const rest = paras.filter((t) => !isPromo(t)).join('\n\n');
+            const save = (p: string, r: string) => updateBlock(blk.id, (b) => ({ ...b, sectionClosingText: [p, r].filter((x) => x.trim()).join('\n\n') }));
+            const ro = !!lockedReason?.(blk);
+            const atts = blocks.filter((b) => b.attachedTo === blk.id && b.type === 'template_section');
+            return (
+              <>
+                <RichInline readOnly={ro} value={promo} onChange={(v) => save(v, rest)} className="font-bold" style={{ ...body, ...headC, marginTop: ptPx(D.bodySize), paddingLeft: ptPx(30) }} placeholder="Akció (pl. Ha …-ig megrendeli…)" />
+                {atts.map((a) => (
+                  <div key={a.id} className="group/att relative pt-3">
+                    <button
+                      type="button"
+                      title="Kiegészítő táblázat törlése ennél a terméknél"
+                      onClick={() => window.confirm('Törlöd ezt a kiegészítő táblázatot ennél a terméknél?') && removeBlock(a.id)}
+                      className="absolute -left-[30px] top-3 p-1 rounded-md bg-white border border-slate-200 text-slate-400 hover:text-rose-600 opacity-0 group-hover/att:opacity-100 print:hidden"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                    {renderSection(a, true)}
+                  </div>
+                ))}
+                <RichInline readOnly={ro} value={rest} onChange={(v) => save(promo, v)} style={{ ...body, marginTop: ptPx(D.bodySize) }} placeholder="Záró szöveg (színek, opcionálisan rendelhető…)" />
+              </>
+            );
+          })()}
       </div>
     );
   };
@@ -428,7 +506,7 @@ export function DocumentEditor({
         )}
         <div className="pb-10 space-y-1" style={{ paddingLeft: ptPx(D.marginPt), paddingRight: ptPx(D.marginPt) }}>
           {insertBar(-1)}
-          {blocks.map((blk, idx) => (
+          {blocks.map((blk, idx) => blk.attachedTo && blocks.some((b) => b.id === blk.attachedTo) ? null : (
             <React.Fragment key={blk.id}>
               <div className={`group relative py-1.5 ${lockedReason?.(blk) ? 'opacity-90' : ''}`} onFocus={() => setFocusId(blk.id)}>
                 {lockedReason?.(blk) && (

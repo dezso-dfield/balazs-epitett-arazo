@@ -327,7 +327,7 @@ export function GuidedQuoteWizardView({
     setSelectedTemplateIds((prev) => {
       if (prev.includes(tpl.id)) return prev.filter((id) => id !== tpl.id);
       // Ha a kategóriában csak egy sablon választható, a többit kivesszük
-      if (cat && !cat.allowMultipleTemplates) {
+      if (cat && cat.allowMultipleTemplates === false) {
         const sameCat = templates
           .filter((t) => isTemplateInCategory(t, cat.id))
           .map((t) => t.id);

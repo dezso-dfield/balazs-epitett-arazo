@@ -215,6 +215,7 @@ export const TEMPLATE_VARIABLES_HELP = [
   { token: '{{termekek}}', name: 'Termékek', label: 'Az ajánlott termékek felsorolva (pl. 1 db 600x300x250 cm-es SOLARE 400 bioklimatikus pergola és ZIP oldalsó árnyékoló)' },
   { token: '{{opciok}}', name: 'Opciók mondat', label: 'Mondat az opcionális tételekről (pl. Opcionálisan LED világítással…). Üres, ha nincs opció.' },
   { token: '{{ajandekok}}', name: 'Ajándék mondat', label: 'Mondat az ajándék tételekről (pl. Ajándék esőérzékelővel és infrafűtéssel.). Üres, ha nincs.' },
+  { token: '{{kiegeszitok}}', name: 'Kiegészítők mondat', label: 'Mondat a kiegészítőkről (pl. Opcionálisan feltüntetjük a pergola oldalainak beépítését vertikális ZIP árnyékolóval is.). Üres, ha nincs.' },
   { token: '{{hatarido}}', name: 'Határidő', label: 'Megrendelési határidő: a hónap utolsó napja, 10 napon belül a következő hónapé (pl. Október 31)' },
 ];
 
@@ -579,17 +580,60 @@ export interface VariableReplacementContext {
   products?: string;
   optionsSentence?: string;
   giftsSentence?: string;
+  accessoriesSentence?: string;
 }
 
 /** A régi, rövid alapértelmezett bevezető: ha ez van mentve, a hosszú (ajánlatokból vett) változat érvényes */
 export const LEGACY_INTRO_TEMPLATES = [
+  'Örömmel fogadtuk megkeresését! Kérésének megfelelően küldjük tájékoztató árajánlatunkat az Ön által megadott paraméterek alapján: {{termekek}}. {{opciok}} {{ajandekok}}',
   'Örömmel fogadtuk megkeresését! Kérésének megfelelően küldjük személyre szabott árajánlatunkat az Ön által megadott ({{meret_m}} / {{meret}}, {{beepites}}) paraméterek alapján.',
   'Örömmel fogadtuk megkeresését! Kérésének megfelelően küldjük személyre szabott árajánlatunkat ({{meret_m}} / {{meret}}, {{beepites}}).',
 ];
 
 /** A saját Word ajánlatok nyitó bekezdése (pl. Vadnai, Debrei, Körmendi ajánlatok) */
 export const LONG_INTRO_TEMPLATE =
-  'Örömmel fogadtuk megkeresését! Kérésének megfelelően küldjük tájékoztató árajánlatunkat az Ön által megadott paraméterek alapján: {{termekek}}. {{opciok}} {{ajandekok}}';
+  'Örömmel fogadtuk megkeresését! Kérésének megfelelően küldjük tájékoztató jellegű árajánlatunkat az Ön által meghatározott paraméterek alapján: {{termekek}}. {{opciok}} {{ajandekok}} {{kiegeszitok}}';
+
+/**
+ * Magyar „-val/-vel” rag egy tételnévre, a Word ajánlatok mondataihoz:
+ * „LED világítás a gerendák belső felén” → „LED világítással a gerendák belső felén”,
+ * „Esőérzékelő” → „esőérzékelővel”, „Infrafűtés (2000 W)” → „infrafűtéssel”, „Eltolható üvegfal” → „eltolható üvegfallal”.
+ */
+export function huWith(phrase: string): string {
+  let p = String(phrase || '')
+    .replace(/\s*[-–]?\s*\d+\s*db\b.*$/i, '')
+    .trim();
+  const m = p.match(/^(.*?)(\s+(?:a|az)\s.*|\s*[-–(,:].*)?$/);
+  const head = (m?.[1] || p).trim();
+  let tail = m?.[2] || '';
+  tail = /^\s+(a|az)\s/.test(tail) ? tail.replace(/\s*[(,–-].*$/, '') : '';
+  const words = head.split(/\s+/);
+  const last = words.pop() || '';
+  words.push(withSuffix(last));
+  p = words.join(' ');
+  // a mondat közepén kisbetű (a betűszavak, pl. LED, ZIP maradnak)
+  p = p.replace(/^(\p{Lu})(\p{Ll})/u, (_x, a, b) => a.toLowerCase() + b);
+  return p + tail;
+}
+
+function withSuffix(w: string): string {
+  if (!w) return w;
+  const vowels = (w.match(/[aáeéiíoóöőuúüű]/gi) || []).map((v) => v.toLowerCase());
+  if (!vowels.length || /^[A-Z0-9-]+$/.test(w)) return `${w}-val`;
+  const lastV = vowels[vowels.length - 1];
+  const back = /[aáoóuú]/.test(lastV) || (/[eéií]/.test(lastV) && /[aáoóuú]/.test(vowels.join('')) && /[ií]/.test(lastV));
+  const suf = back ? 'a' : 'e';
+  const lc = w.slice(-1).toLowerCase();
+  if (/[aáeéiíoóöőuúüű]/.test(lc)) {
+    const stem = lc === 'a' ? `${w.slice(0, -1)}á` : lc === 'e' ? `${w.slice(0, -1)}é` : w;
+    return `${stem}v${suf}l`;
+  }
+  for (const d of ['dzs', 'sz', 'zs', 'cs', 'gy', 'ny', 'ty', 'ly', 'dz']) {
+    if (w.toLowerCase().endsWith(d)) return `${w.slice(0, -d.length)}${d[0]}${d}${suf}l`;
+  }
+  if (w.length > 1 && w.slice(-1).toLowerCase() === w.slice(-2, -1).toLowerCase()) return `${w}${suf}l`;
+  return `${w}${lc}${suf}l`;
+}
 
 /** Magyar felsorolás: „a, b és c” */
 export function huList(items: string[]): string {
@@ -672,5 +716,6 @@ export function replaceTemplateVariables(
     .replace(/\{\{\s*hatarido\s*\}\}/gi, getOrderDeadline())
     .replace(/\{\{\s*termekek\s*\}\}/gi, ctx.products || `1 db ${w}x${p}x${h} cm-es szerkezet`)
     .replace(/\{\{\s*opciok\s*\}\}/gi, ctx.optionsSentence || '')
-    .replace(/\{\{\s*ajandekok\s*\}\}/gi, ctx.giftsSentence || '');
+    .replace(/\{\{\s*ajandekok\s*\}\}/gi, ctx.giftsSentence || '')
+    .replace(/\{\{\s*kiegeszitok\s*\}\}/gi, ctx.accessoriesSentence || '');
 }

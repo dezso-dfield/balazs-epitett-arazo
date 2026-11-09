@@ -1,9 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronDown, ChevronRight, FileText, Wand2 } from 'lucide-react';
-import type { ProductCategory } from '@/lib/types';
+import { ChevronDown, ChevronRight, FileText, LayoutList, Type, Wand2 } from 'lucide-react';
+import type { ProductCategory, SystemConfig } from '@/lib/types';
 import { btn } from '@/components/ui';
+import { FormatToolbar, insertAtCursor, RichInline } from '@/components/RichEdit';
+import { getDocDesign, LETTERHEAD_URL, ptPx } from '@/lib/doc-design';
+import { TEMPLATE_VARIABLES_HELP } from '@/lib/constants';
 
 /**
  * Kategória sablon: az ajánlatban a kategória termékei köré kerülő szövegek, a saját Word ajánlatok szerkezetében.
@@ -220,9 +223,208 @@ export function suggestCategoryDoc(name: string, description = ''): Partial<DocF
 const field = 'w-full px-3 py-2 rounded-xl border border-slate-300 text-[13px] leading-relaxed';
 const lbl = 'block text-[12px] font-semibold text-slate-700 mb-1';
 
-export function CategoryDocEditor({ category, onChange }: { category: ProductCategory; onChange: (patch: Partial<ProductCategory>) => void }) {
-  const [open, setOpen] = useState(false);
+/** Szürke helyőrző a lapon: ide kerül az ajánlatban automatikusan (termék, táblázat…) */
+function Slot({ children, h = 'auto' }: { children: React.ReactNode; h?: number | 'auto' }) {
+  return (
+    <div className="rounded-md border border-dashed border-slate-300 bg-slate-50 text-slate-400 text-[11px] px-3 py-2 font-sans select-none" style={{ height: h }}>
+      {children}
+    </div>
+  );
+}
+
+/** Kis jelölés a lap szélén: mit szerkesztesz épp */
+function Tag({ children }: { children: React.ReactNode }) {
+  return <div className="text-[10px] uppercase tracking-wide text-indigo-500 font-sans font-semibold mb-0.5 select-none">{children}</div>;
+}
+
+export function CategoryDocEditor({
+  category,
+  onChange,
+  config,
+}: {
+  category: ProductCategory;
+  onChange: (patch: Partial<ProductCategory>) => void;
+  config?: SystemConfig;
+}) {
   const filled = [category.docHeading, category.docIntro, category.docOptions, category.docPromo, category.docTotalLabel].filter((x) => (x || '').trim()).length;
+  const [open, setOpen] = useState(true);
+  const [view, setView] = useState<'page' | 'fields'>('page');
+  const D = getDocDesign(config, category);
+  const accessory = category.categoryType === 'accessory';
+  const body: React.CSSProperties = { fontSize: ptPx(D.bodySize), lineHeight: D.lineHeight, color: D.text };
+  const letterhead = config?.pdfPageBackgroundUrl || (D.letterhead ? LETTERHEAD_URL : '');
+  const font = D.font === 'arial' ? 'Arial, Helvetica, sans-serif' : 'Calibri, Carlito, sans-serif';
+  const label = category.docTotalLabel || (accessory ? 'Opció, árnyékolók szereléssel Összesen:' : 'Az alapszerkezet szereléssel Összesen:');
+  const optLabel = /^opci/i.test(label);
+
+  const table = (
+    <Slot>
+      <div className="font-semibold text-slate-500 mb-1">Ártáblázat (a termék tételeiből, automatikusan)</div>
+      <div className="grid grid-cols-[2fr_1fr_1.4fr_1fr] gap-px bg-slate-300 text-[10px]">
+        {['Megnevezés', 'Listaár (EUR)', 'Kedvezményes ár (EUR)', ''].map((h, i) => (
+          <div key={i} className="px-1 py-0.5" style={{ background: D.tableHead, color: '#000' }}>
+            {h}
+          </div>
+        ))}
+        {['…', '…', '…', accessory ? 'Opció' : ''].map((h, i) => (
+          <div key={`r${i}`} className="px-1 py-0.5 bg-white">
+            {h}
+          </div>
+        ))}
+        {['', 'Összesen:', '…', ''].map((h, i) => (
+          <div key={`s${i}`} className="px-1 py-0.5 font-bold" style={{ background: `color-mix(in srgb, ${D.tableHead} 55%, white)`, color: '#000' }}>
+            {h}
+          </div>
+        ))}
+      </div>
+    </Slot>
+  );
+  const totalLine = (
+    <div style={{ ...body, textAlign: optLabel ? 'left' : 'right', paddingLeft: optLabel ? ptPx(18) : undefined }} className="flex items-baseline gap-1 justify-end">
+      {optLabel && <span>-&nbsp;&nbsp;</span>}
+      <RichInline single value={category.docTotalLabel || ''} placeholder={label} onChange={(v) => onChange({ docTotalLabel: v })} style={{ display: 'inline-block', width: 'auto', minWidth: '12ch' }} />
+      <b className="whitespace-nowrap">{optLabel ? '+ ' : ''}12.345 EUR (+ Áfa)</b>
+    </div>
+  );
+
+  const page = (
+    <div className="bg-slate-200/70 rounded-2xl p-3 sm:p-5 overflow-x-auto space-y-3">
+      <div className="mx-auto" style={{ width: ptPx(595.28) }}>
+        <FormatToolbar
+          accent={D.accent}
+          extra={
+            <select
+              defaultValue=""
+              title="Változó beszúrása a kurzor helyére"
+              onChange={(e) => {
+                const v = e.target.value;
+                e.target.value = '';
+                if (v) insertAtCursor(v);
+              }}
+              className="h-8 rounded-md border border-slate-200 bg-white px-1.5 text-[13px]"
+            >
+              <option value="">{'{{ }}'} Változó…</option>
+              {TEMPLATE_VARIABLES_HELP.map((v) => (
+                <option key={v.token} value={v.token}>
+                  {v.name} {v.token}
+                </option>
+              ))}
+            </select>
+          }
+        />
+      </div>
+      <div className="mx-auto bg-white shadow-xl" style={{ width: ptPx(595.28), fontFamily: font, color: D.text }}>
+        {letterhead ? (
+          <div style={{ height: ptPx(93), backgroundImage: `url(${letterhead})`, backgroundSize: '100% auto', backgroundRepeat: 'no-repeat', backgroundPosition: `0 ${ptPx(7)}` }} />
+        ) : (
+          <div className="h-12" />
+        )}
+        <div className="space-y-3 pb-8" style={{ paddingLeft: ptPx(D.marginPt), paddingRight: ptPx(D.marginPt) }}>
+          {!accessory ? (
+            <>
+              <Slot>Kedves …! · bevezető (Beállítások › Dizájn és sablon)</Slot>
+              <div>
+                <Tag>Kategória leírás · a bevezető után</Tag>
+                <RichInline value={category.docIntro || ''} onChange={(v) => onChange({ docIntro: v })} style={body} placeholder="Azért ajánljuk ezeket a szerkezeteket, mert…" />
+              </div>
+              <Slot>
+                Automatikusan, a fenti leírás első bekezdése után: a kiválasztott termékek ajánló bekezdése (a termék leírásának első bekezdése,
+                a név félkövér). A „Hóterhelése…” bekezdés helyére modellenkénti lista kerül, ha a termékeknél meg van adva; a szélterhelésnél
+                több termék esetén „(mind a N szerkezetnek)”.
+              </Slot>
+              <div>
+                <Tag>Cím a termékek előtt (ha kell)</Tag>
+                <RichInline single value={category.docHeading || ''} onChange={(v) => onChange({ docHeading: v })} className="font-bold underline underline-offset-2" style={{ ...body, color: D.heading }} placeholder="pl. Karos napellenzők:" />
+              </div>
+              <Slot>
+                <span style={{ background: D.highlight || undefined }} className="font-bold text-slate-600">
+                  1. TERMÉK NEVE:
+                </span>{' '}
+                Méretek… · leírás · fotók (a termék sablonjából)
+              </Slot>
+              {table}
+              <div>
+                <Tag>Összesítő sor felirata</Tag>
+                {totalLine}
+              </div>
+              <div>
+                <Tag>Akció (félkövér, a táblázat után)</Tag>
+                <RichInline value={category.docPromo || ''} onChange={(v) => onChange({ docPromo: v })} className="font-bold" style={{ ...body, color: D.heading, paddingLeft: ptPx(30) }} placeholder="Ha {{hatarido}}-ig megrendeli az alapszerkezetet kedvezményt tudok biztosítani!" />
+              </div>
+              <Slot>Ha a vevő kiegészítőt is kér (oldalsó árnyékoló, üvegfal): azok táblázata ide kerül, minden termék alá.</Slot>
+              <div>
+                <Tag>Opcionálisan rendelhető (első sor félkövér, szürke kiemeléssel)</Tag>
+                <RichInline
+                  value={category.docOptions || ''}
+                  onChange={(v) => onChange({ docOptions: v })}
+                  className="first-line:font-bold first-line:bg-[var(--hl)]"
+                  style={{ ...body, ['--hl' as string]: D.highlight || 'transparent' }}
+                  placeholder={'+Opcionálisan rendelhető a termékhez:\n- egyedi RAL színek…'}
+                />
+              </div>
+              <Slot>Információ · aláírás</Slot>
+            </>
+          ) : (
+            <>
+              <Slot>Kedves …! · bevezető · a pergola leírása, táblázata, összesítője és akciója</Slot>
+              <div>
+                <Tag>Táblázat címe a pergola alatt</Tag>
+                <RichInline single value={category.docHeading || ''} onChange={(v) => onChange({ docHeading: v })} className="font-bold" style={{ ...body, color: D.heading, paddingLeft: ptPx(30) }} placeholder="pl. Opció üvegfal rendszerek:" />
+              </div>
+              {table}
+              <div>
+                <Tag>Összesítő sor felirata („Opció…” kezdetű: kötőjeles opció sor, + előjellel)</Tag>
+                {totalLine}
+              </div>
+              <Slot>… a többi termék, mindegyik alatt ugyanez a táblázat …</Slot>
+              <div>
+                <Tag>Kiegészítő leírása · az ajánlat végén, az Információ előtt</Tag>
+                <RichInline value={category.docIntro || ''} onChange={(v) => onChange({ docIntro: v })} style={body} placeholder="Keret nélküli, elcsúsztatható üvegfalrendszereink: …" />
+              </div>
+              <Slot>Információ · aláírás</Slot>
+            </>
+          )}
+        </div>
+        {letterhead ? (
+          <div style={{ height: ptPx(57), backgroundImage: `url(${letterhead})`, backgroundSize: '100% auto', backgroundRepeat: 'no-repeat', backgroundPosition: `left 0 bottom ${ptPx(-15.5)}` }} />
+        ) : (
+          <div className="h-10" style={{ background: D.accent }} />
+        )}
+      </div>
+    </div>
+  );
+
+  const fields = (
+    <div className="space-y-3">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <div>
+          <label className={lbl}>{accessory ? 'Táblázat címe a pergola alatt' : 'Cím a termékek előtt (félkövér, aláhúzott)'}</label>
+          <input className={field} value={category.docHeading || ''} placeholder={accessory ? 'pl. Opció üvegfal rendszerek:' : 'pl. Karos napellenzők:'} onChange={(e) => onChange({ docHeading: e.target.value })} />
+        </div>
+        <div>
+          <label className={lbl}>Összesítő sor felirata</label>
+          <input className={field} value={category.docTotalLabel || ''} placeholder={label} onChange={(e) => onChange({ docTotalLabel: e.target.value })} />
+        </div>
+      </div>
+      <div>
+        <label className={lbl}>Kategória leírás {accessory ? '(az ajánlat végén, az Információ előtt)' : '(a megszólítás és bevezető után)'}</label>
+        <textarea className={field} rows={6} value={category.docIntro || ''} onChange={(e) => onChange({ docIntro: e.target.value })} />
+      </div>
+      {!accessory && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          <div>
+            <label className={lbl}>Opcionálisan rendelhető (első sor félkövér)</label>
+            <textarea className={field} rows={5} value={category.docOptions || ''} onChange={(e) => onChange({ docOptions: e.target.value })} />
+          </div>
+          <div>
+            <label className={lbl}>Akció (félkövér)</label>
+            <textarea className={field} rows={5} value={category.docPromo || ''} onChange={(e) => onChange({ docPromo: e.target.value })} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div className="border-b border-slate-200 bg-slate-50/60">
       <button type="button" onClick={() => setOpen((o) => !o)} className="w-full flex items-center gap-2 px-4 py-2.5 text-left">
@@ -239,8 +441,8 @@ export function CategoryDocEditor({ category, onChange }: { category: ProductCat
             <div className="flex gap-1 p-1 rounded-xl bg-white border border-slate-200">
               {(
                 [
-                  ['main_structure', 'Fő szerkezet', 'leírás a megszólítás után'],
-                  ['accessory', 'Kiegészítő', 'leírás az Információ előtt'],
+                  ['main_structure', 'Fő szerkezet', 'pl. pergola, napellenző: saját szakasz, leírás a bevezető után'],
+                  ['accessory', 'Kiegészítő', 'pl. oldalsó árnyékoló, üvegfal: táblázat a pergolák alatt, leírás a végén'],
                 ] as const
               ).map(([v, l, d]) => (
                 <button
@@ -248,9 +450,21 @@ export function CategoryDocEditor({ category, onChange }: { category: ProductCat
                   type="button"
                   title={d}
                   onClick={() => onChange({ categoryType: v })}
-                  className={`px-3 py-1.5 rounded-lg text-[12px] font-medium ${category.categoryType === v ? 'bg-slate-900 text-white' : 'text-slate-600'}`}
+                  className={`px-3 py-1.5 rounded-lg text-[12px] font-medium ${(category.categoryType || 'main_structure') === v ? 'bg-slate-900 text-white' : 'text-slate-600'}`}
                 >
                   {l}
+                </button>
+              ))}
+            </div>
+            <div className="flex gap-1 p-1 rounded-xl bg-white border border-slate-200">
+              {(
+                [
+                  ['page', Type, 'Lapon (mint a Word)'],
+                  ['fields', LayoutList, 'Mezők'],
+                ] as const
+              ).map(([v, Icon, l]) => (
+                <button key={v} type="button" onClick={() => setView(v)} className={`px-3 py-1.5 rounded-lg text-[12px] font-medium inline-flex items-center gap-1 ${view === v ? 'bg-slate-900 text-white' : 'text-slate-600'}`}>
+                  <Icon className="w-3.5 h-3.5" /> {l}
                 </button>
               ))}
             </div>
@@ -261,40 +475,14 @@ export function CategoryDocEditor({ category, onChange }: { category: ProductCat
                 const s = suggestCategoryDoc(category.name, category.description);
                 if (filled && !window.confirm('A meglévő kategória szövegek helyére a saját ajánlataidból vett minta kerül. Folytatod?')) return;
                 onChange(s);
-                setOpen(true);
               }}
             >
               <Wand2 className="w-4 h-4" /> Minta a saját ajánlatokból
             </button>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            <div>
-              <label className={lbl}>Cím a termékek előtt (félkövér, aláhúzott)</label>
-              <input className={field} value={category.docHeading || ''} placeholder="pl. Karos napellenzők, Kazetta nélküli szerkezetek:" onChange={(e) => onChange({ docHeading: e.target.value })} />
-            </div>
-            <div>
-              <label className={lbl}>Összesítő sor felirata</label>
-              <input className={field} value={category.docTotalLabel || ''} placeholder="pl. Az alapszerkezet szereléssel Összesen:" onChange={(e) => onChange({ docTotalLabel: e.target.value })} />
-            </div>
-          </div>
-          <div>
-            <label className={lbl}>
-              Kategória leírás {category.categoryType === 'accessory' ? '(az ajánlat végén, az Információ előtt)' : '(a megszólítás és bevezető után)'}
-            </label>
-            <textarea className={field} rows={6} value={category.docIntro || ''} placeholder="Miért ez a termékcsalád, minőség, hó- és szélterhelés…" onChange={(e) => onChange({ docIntro: e.target.value })} />
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            <div>
-              <label className={lbl}>Opcionálisan rendelhető (a kategória termékei után; első sor félkövér)</label>
-              <textarea className={field} rows={5} value={category.docOptions || ''} placeholder={'+Opcionálisan rendelhető a termékhez:\n- egyedi RAL színek…'} onChange={(e) => onChange({ docOptions: e.target.value })} />
-            </div>
-            <div>
-              <label className={lbl}>Akció (félkövér)</label>
-              <textarea className={field} rows={5} value={category.docPromo || ''} placeholder="Ha {{hatarido}}-ig megrendeli az alapszerkezetet kedvezményt tudok biztosítani!" onChange={(e) => onChange({ docPromo: e.target.value })} />
-            </div>
-          </div>
+          {view === 'page' ? page : fields}
           <p className="text-[11px] text-slate-500">
-            Változók: {'{{megszolitas}} {{ugyfel_nev}} {{telepules}} {{meret}} {{szelesseg}} {{kinyulas}} {{magassag}} {{beepites}} {{hatarido}} {{arfolyam}}'} · A módosítás a jobb felső „Mentés” gombbal mentődik, és az új ajánlatokban érvényes.
+            A szürke dobozok helyére az ajánlatban automatikusan kerül a tartalom. A módosítás a jobb felső „Mentés” gombbal mentődik, és az új ajánlatokban érvényes.
           </p>
         </div>
       )}

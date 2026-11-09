@@ -408,6 +408,9 @@ export interface QuoteDocumentBlock {
   content?: string;
   totalLabel?: string;        // termékszakasz összesítő sorának felirata (a kategória sablonból)
   docCategoryId?: string;     // kategória szövegdoboz forrása (visszamenthető a kategória sablonba)
+  attachedTo?: string;        // kiegészítő (ZIP, üvegfal) a fő szerkezet blokkja alatt, mint a Word ajánlatokban
+  attachTitle?: string;
+  sumLabel?: string;          // a táblázat összesítő sorának felirata (alapból „Összesen:”)       // a csatolt táblázat címe (pl. „Opció üvegfal rendszerek:”)
   textStyle?: 'greeting' | 'normal' | 'highlight' | 'footer_info' | 'category_heading' | 'category_intro' | 'options' | 'promo';
   bold?: boolean;
   align?: 'left' | 'center' | 'right';
