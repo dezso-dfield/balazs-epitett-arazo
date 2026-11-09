@@ -5,7 +5,7 @@ import fontkit from '@pdf-lib/fontkit';
 import { degrees, PDFDocument, PDFFont, PDFImage, PDFPage, rgb } from 'pdf-lib';
 import { formatDotNumber, replaceTemplateVariables } from './constants';
 import { hasRich, parseRich, stripRich } from './richtext';
-import { blockCategoryId, getDocDesign, primaryCategory, type DocDesign } from './doc-design';
+import { blockCategoryId, getDocDesign, LETTERHEAD_URL, primaryCategory, type DocDesign } from './doc-design';
 import { getDb, SAVED_PDFS_DIR } from './db';
 import { blobEnabled, readUploadFromBlob } from './blob-store';
 import { computeBlockTotals } from './pricing-engine';
@@ -262,19 +262,29 @@ export async function renderEditableQuotePdfBytes(
 
   const fontDir = path.join(process.cwd(), 'public', 'template-assets', 'fonts');
   // Csak a használt karakterek kerülnek a PDF-be (a teljes Arial ~1,5 MB lenne)
-  const fontRegular = await pdfDoc.embedFont(fs.readFileSync(path.join(fontDir, 'arial.ttf')), { subset: true });
-  const fontBold = await pdfDoc.embedFont(fs.readFileSync(path.join(fontDir, 'arialbd.ttf')), { subset: true });
+  const useCalibri = pageD.font !== 'arial';
+  // ligatúrák (fi, ti) nélkül: a pdf-lib a ligatúrás jelek szélességét rosszul számolja (rések a szövegben)
+  const embedTtf = (n: string) =>
+    // a Carlito előre szűkített (latin + magyar, ~45 KB), a pdf-lib részhalmazolása ennél a betűnél hiányos jeleket ad
+    pdfDoc.embedFont(fs.readFileSync(path.join(fontDir, n)), { subset: !/^Carlito/.test(n), features: { liga: false, clig: false, dlig: false, calt: false } });
+  const fontRegular = await embedTtf(useCalibri ? 'Carlito-Regular.ttf' : 'arial.ttf');
+  const fontBold = await embedTtf(useCalibri ? 'Carlito-Bold.ttf' : 'arialbd.ttf');
+  const fontItalic = useCalibri ? await embedTtf('Carlito-Italic.ttf') : null;
+  const fontBoldItalic = useCalibri ? await embedTtf('Carlito-BoldItalic.ttf') : null;
+  /** betű a stílushoz; Arialnál nincs dőlt változat, ott ferdítéssel */
+  const pickFont = (b?: boolean, i?: boolean): PDFFont => (i && b ? fontBoldItalic || fontBold : i ? fontItalic || fontRegular : b ? fontBold : fontRegular);
+  const skewFor = (i?: boolean) => (i && !useCalibri ? { ySkew: degrees(11) } : {});
 
-  const bgImg = await embedImageFromSource(pdfDoc, config.pdfPageBackgroundUrl);
+  const bgImg = await embedImageFromSource(pdfDoc, config.pdfPageBackgroundUrl || (pageD.letterhead ? LETTERHEAD_URL : ''));
   const logoImg = await embedImageFromSource(pdfDoc, config.pdfLogoUrl);
   const sigCardImg = await embedImageFromSource(pdfDoc, config.pdfSignatureCardUrl);
 
   const A4_W = 595.28;
   const A4_H = 841.89;
-  const MARGIN_X = 52;
+  const MARGIN_X = pageD.marginPt;
   const CONTENT_W = A4_W - MARGIN_X * 2;
   const RIGHT_X = MARGIN_X + CONTENT_W;
-  const BOTTOM_Y = 84; // a sötét láblécsáv fölött
+  const BOTTOM_Y = 76; // a sötét láblécsáv fölött (Word alsó margó: 2,5 cm)
 
   const companyName = config.companyName || 'OpenSky Pergola Kft.';
   const quoteNumber = quote.quoteNumber || 'ELŐNÉZET';
@@ -316,8 +326,9 @@ export async function renderEditableQuotePdfBytes(
     const page = pdfDoc.addPage([A4_W, A4_H]);
     pages.push(page);
     if (bgImg) {
-      page.drawImage(bgImg, { x: 0, y: 0, width: A4_W, height: A4_H });
-      return { page, y: A4_H - 100 };
+      // a Word ajánlatban a fejléces kép 595,25 × 850,35 pt, a margóterülethez középre igazítva (7 pt-tal lejjebb, alul kilóg)
+      page.drawImage(bgImg, { x: 0, y: A4_H - 7 - 850.35, width: A4_W, height: 850.35 });
+      return { page, y: A4_H - 93 }; // Word felső margó: 3,29 cm
     }
     const top = A4_H - 34;
     if (logoImg) {
@@ -370,12 +381,13 @@ export async function renderEditableQuotePdfBytes(
       lineHeight?: number;
       italic?: boolean;
       underline?: boolean;
+      highlight?: string;
     }
   ) => {
     const resolved = replaceTemplateVariables(rawText, varCtx);
     if (!stripRich(resolved).trim()) return;
     if (hasRich(resolved)) return drawRichParagraph(resolved, opts);
-    const f = opts?.bold ? fontBold : fontRegular;
+    const f = pickFont(opts?.bold, opts?.italic);
     const sz = opts?.size ?? 10;
     const indent = opts?.indentX ?? 0;
     const maxW = opts?.maxWidth ?? CONTENT_W - indent;
@@ -389,7 +401,8 @@ export async function renderEditableQuotePdfBytes(
       let x = MARGIN_X + indent;
       if (opts?.align === 'center') x = MARGIN_X + indent + (maxW - lw) / 2;
       else if (opts?.align === 'right') x = MARGIN_X + indent + maxW - lw;
-      current.page.drawText(line, { x, y: current.y, size: sz, font: f, color: opts?.color ?? C.body, ...(opts?.italic ? { ySkew: degrees(11) } : {}) });
+      if (opts?.highlight) current.page.drawRectangle({ x: x - 1, y: current.y - sz * 0.24, width: lw + 2, height: sz * 1.18, color: hexC(opts.highlight) });
+      current.page.drawText(line, { x, y: current.y, size: sz, font: f, color: opts?.color ?? C.body, ...skewFor(opts?.italic) });
       if (opts?.underline) current.page.drawRectangle({ x, y: current.y - 1.6, width: lw, height: 0.7, color: opts?.color ?? C.ink });
     }
   };
@@ -400,7 +413,7 @@ export async function renderEditableQuotePdfBytes(
    */
   const drawRichParagraph = (
     text: string,
-    opts?: { bold?: boolean; size?: number; color?: ReturnType<typeof rgb>; align?: 'left' | 'center' | 'right'; indentX?: number; maxWidth?: number; lineHeight?: number; italic?: boolean; underline?: boolean }
+    opts?: { bold?: boolean; size?: number; color?: ReturnType<typeof rgb>; align?: 'left' | 'center' | 'right'; indentX?: number; maxWidth?: number; lineHeight?: number; italic?: boolean; underline?: boolean; highlight?: string }
   ) => {
     const base = opts?.size ?? 10;
     const indent = opts?.indentX ?? 0;
@@ -410,7 +423,7 @@ export async function renderEditableQuotePdfBytes(
     const hexRgb = (h: string) => rgb(parseInt(h.slice(1, 3), 16) / 255, parseInt(h.slice(3, 5), 16) / 255, parseInt(h.slice(5, 7), 16) / 255);
     const lines: Tok[][] = [[]];
     for (const r of parseRich(text)) {
-      const f = r.b || opts?.bold ? fontBold : fontRegular;
+      const f = pickFont(r.b || opts?.bold, r.i || opts?.italic);
       const sz = r.size ?? base;
       const color = r.color ? hexRgb(r.color) : opts?.color ?? C.body;
       for (const part of r.text.split(/(\n| +)/)) {
@@ -463,8 +476,9 @@ export async function renderEditableQuotePdfBytes(
       let x = MARGIN_X + indent;
       if (opts?.align === 'center') x += (maxW - lw) / 2;
       else if (opts?.align === 'right') x += maxW - lw;
+      if (opts?.highlight) current.page.drawRectangle({ x: x - 1, y: current.y - maxSz * 0.24, width: lw + 2, height: maxSz * 1.18, color: hexC(opts.highlight) });
       for (const tk of line) {
-        if (!tk.space) current.page.drawText(tk.t, { x, y: current.y, size: tk.sz, font: tk.f, color: tk.color, ...(tk.i ? { ySkew: degrees(11) } : {}) });
+        if (!tk.space) current.page.drawText(tk.t, { x, y: current.y, size: tk.sz, font: tk.f, color: tk.color, ...skewFor(tk.i) });
         if (tk.u) current.page.drawRectangle({ x, y: current.y - tk.sz * 0.16, width: tk.w, height: Math.max(0.5, tk.sz * 0.07), color: tk.color });
         x += tk.w;
       }
@@ -560,30 +574,28 @@ export async function renderEditableQuotePdfBytes(
     if (!colors.length) return;
     // a Word ajánlatok színtáblája: kitöltött csempék, bennük a kód és a név
     const COLS = 5;
-    const GAP = 3;
+    const GAP = 0;
     const cellW = (CONTENT_W - GAP * (COLS - 1)) / COLS;
-    const TILE_H = 30;
+    const TILE_H = 40;
     const rows = Math.ceil(colors.length / COLS);
     const blockH = 20 + rows * (TILE_H + GAP);
     // egyben marad, ha egy oldalra kifér; különben legalább a cím + 2 sor együtt
     if (current.y - blockH < BOTTOM_Y && blockH < A4_H - 200) current = createNewPage();
     else ensureSpace(20 + Math.min(rows, 2) * (TILE_H + GAP));
     const t2 = title.replace(/[:\s]+$/, '');
-    drawTextParagraph(colors.length > 4 ? `${t2}: ${colors.length} db alapszín` : `${t2}:`, { size: 10, color: C.ink, lineHeight: 1.3 });
-    current.y -= 6;
+    drawTextParagraph(colors.length > 4 ? `${t2}: ${colors.length} db alapszín` : `${t2}:`, { size: D.bodySize, color: C.ink, lineHeight: D.lineHeight });
+    current.y -= D.bodySize;
     for (let i = 0; i < colors.length; i += COLS) {
       ensureSpace(TILE_H + GAP);
       const top = current.y;
       colors.slice(i, i + COLS).forEach((c, idx) => {
         const x = MARGIN_X + idx * (cellW + GAP);
-        current.page.drawRectangle({ x, y: top - TILE_H, width: cellW, height: TILE_H, color: hexToRgb(c.hex), borderColor: C.grid, borderWidth: 0.4 });
+        current.page.drawRectangle({ x, y: top - TILE_H, width: cellW, height: TILE_H, color: hexToRgb(c.hex) });
         const fg = lum(c.hex) > 0.6 ? C.ink : C.white;
-        const code = wrapTextLines(c.code.toUpperCase(), fontBold, 7, cellW - 8)[0] || '';
-        current.page.drawText(code, { x: x + (cellW - textW(code, fontBold, 7)) / 2, y: top - TILE_H / 2 + (c.name ? 2 : -2.5), size: 7, font: fontBold, color: fg });
-        if (c.name) {
-          const nm = wrapTextLines(c.name, fontRegular, 6, cellW - 8)[0] || '';
-          current.page.drawText(nm, { x: x + (cellW - textW(nm, fontRegular, 6)) / 2, y: top - TILE_H / 2 - 7, size: 6, font: fontRegular, color: fg });
-        }
+        // mint a Word ajánlat RAL táblája: csak a kód (pl. „RAL 9016 MAT”), középen, kis félkövér betűvel
+        const finish = /struktúr|structure/i.test(c.name || '') ? ' STRUKTÚR' : '';
+        const code = wrapTextLines(`${c.code}${finish}`.toUpperCase(), fontBold, 6.5, cellW - 6)[0] || '';
+        current.page.drawText(code, { x: x + (cellW - textW(code, fontBold, 6.5)) / 2, y: top - TILE_H / 2 - 2.5, size: 6.5, font: fontBold, color: fg });
       });
       current.y = top - TILE_H - GAP;
     }
@@ -727,47 +739,53 @@ export async function renderEditableQuotePdfBytes(
       const style = block.textStyle || 'normal';
       const title = replaceTemplateVariables(block.title || '', varCtx).trim();
       const content = block.content || '';
+      // a Word ajánlatokban a bekezdések között egy üres sor van (egyszeres sorköz, térköz nélkül)
+      const BL = D.bodySize * D.lineHeight;
+      const hl = D.highlight || undefined;
       if (style === 'category_heading') {
-        ensureSpace(60);
-        drawTextParagraph(title || content, { bold: true, size: 11.5, color: C.ink, underline: true, lineHeight: 1.4 });
-        current.y -= 12;
+        ensureSpace(BL * 4);
+        drawTextParagraph(title || content, { bold: true, size: D.bodySize, color: C.ink, underline: true, lineHeight: D.lineHeight });
+        current.y -= BL;
         continue;
       }
       if (style === 'promo') {
-        drawTextParagraph(title ? `${title} ${content}` : content, { bold: true, size: 10.5, color: C.ink, lineHeight: 1.45 });
-        current.y -= 16;
+        drawTextParagraph(title ? `${title} ${content}` : content, { bold: true, size: D.bodySize, color: C.ink, lineHeight: D.lineHeight });
+        current.y -= BL;
         continue;
       }
       if (style === 'options') {
-        // első sor félkövér („+Opcionálisan rendelhető a termékhez:”), utána a lista
+        // „+Opcionálisan rendelhető … termékhez:” félkövér, szürke kiemeléssel; alatta a lista
         const lines = replaceTemplateVariables(content, varCtx).split('\n');
-        if (title) drawTextParagraph(title, { bold: true, size: 10, color: C.ink });
-        lines.forEach((l, i) => drawTextParagraph(l.replace(/^\s*•\s*/, '- '), { bold: !title && i === 0, size: 9.8, color: i === 0 && !title ? C.ink : C.body, lineHeight: 1.45 }));
-        current.y -= 16;
+        ensureSpace(BL * 3);
+        if (title) drawTextParagraph(title, { bold: true, size: D.bodySize, color: C.ink, lineHeight: D.lineHeight, highlight: hl });
+        lines.forEach((l, i) =>
+          drawTextParagraph(l.replace(/^\s*•\s*/, '- '), { bold: !title && i === 0, size: D.bodySize, color: i === 0 && !title ? C.ink : C.body, lineHeight: D.lineHeight, highlight: !title && i === 0 ? hl : undefined })
+        );
+        current.y -= BL;
         continue;
       }
       if (style === 'footer_info') {
-        // „Információ:” félkövér, aláhúzva; „Ha …-ig” akció félkövér; „Megjegyzés” dőlt, kisebb
+        // „Információ:” félkövér, szürke kiemeléssel; „Ha …-ig” akció félkövér; „Megjegyzés” dőlt, 8 pt
         if (title) {
-          ensureSpace(60);
-          drawTextParagraph(title, { bold: true, size: 11, color: C.ink, underline: true, lineHeight: 1.4 });
-          current.y -= 4;
+          ensureSpace(BL * 4);
+          drawTextParagraph(title, { bold: true, size: D.bodySize, color: C.ink, lineHeight: D.lineHeight, highlight: hl });
         }
         const paras = replaceTemplateVariables(content, varCtx).split(/\n\s*\n/);
         for (const para of paras) {
           const t = para.trim();
           if (!t) continue;
-          if (/^megjegyz/i.test(t)) drawTextParagraph(t, { size: 8.3, color: C.muted, italic: true, lineHeight: 1.45 });
-          else if (/^ha\s/i.test(t)) drawTextParagraph(t, { bold: true, size: 10, color: C.ink });
-          else drawTextParagraph(t.replace(/^\s*•\s*/gm, '- '), { size: 9.6, color: C.body, lineHeight: 1.5 });
-          current.y -= 8;
+          if (/^megjegyz/i.test(stripRich(t))) drawTextParagraph(t, { size: 8, color: C.muted, italic: true, lineHeight: D.lineHeight });
+          else if (/^ha\s/i.test(stripRich(t))) drawTextParagraph(t, { bold: true, size: D.bodySize, color: C.ink, lineHeight: D.lineHeight });
+          else drawTextParagraph(t.replace(/^\s*•\s*/gm, '- '), { size: D.bodySize, color: C.body, lineHeight: D.lineHeight });
+          current.y -= BL;
         }
-        current.y -= 10;
         continue;
       }
       if (title) {
-        drawHeading(title, style === 'greeting' ? D.greetingSize : D.bodySize + 1);
-        current.y -= 2;
+        const gsz = style === 'greeting' ? D.greetingSize : D.bodySize;
+        ensureSpace(gsz * 3);
+        drawTextParagraph(title, { bold: style === 'greeting' ? D.greetingBold : true, size: gsz, color: C.ink, lineHeight: D.lineHeight });
+        current.y -= BL;
       }
       if (content) {
         drawTextParagraph(content, {
@@ -778,7 +796,7 @@ export async function renderEditableQuotePdfBytes(
           lineHeight: D.lineHeight,
         });
       }
-      current.y -= style === 'category_intro' ? 12 : 20;
+      current.y -= BL;
       continue;
     }
 
@@ -798,28 +816,35 @@ export async function renderEditableQuotePdfBytes(
       const raw = replaceTemplateVariables(block.sectionTitle, varCtx);
       const sz = raw.match(/\((\d+)\s*[×x]\s*(\d+)\s*[×x]\s*(\d+)\s*cm(?:\s*-\s*([^)]*))?\)\s*$/);
       const title = raw.replace(/\s*\(\d+\s*[×x]\s*\d+[^)]*\)\s*$/, '').replace(/:\s*$/, '');
-      drawHeading(`${title}:`, D.headingSize);
+      ensureSpace(D.headingSize * 5);
+      drawTextParagraph(`${title}:`, { bold: true, size: D.headingSize, color: C.ink, lineHeight: D.lineHeight, highlight: D.highlight || undefined });
       if (sz) {
         const line = replaceTemplateVariables(
           config.docSizeLine || 'Méretek: {{szelesseg}} cm hosszú x {{kinyulas}} cm széles (kinyúlás) x {{magassag}} cm magas (belső) – {{beepites}}',
           { ...varCtx, widthCm: Number(sz[1]), projectionCm: Number(sz[2]), heightCm: Number(sz[3]), mountType: (sz[4] || varCtx.mountType).trim() }
         );
-        drawTextParagraph(line, { bold: true, size: 9.8, color: C.ink, italic: true, underline: true, lineHeight: 1.45 });
-        current.y -= 2;
+        const cut = line.indexOf(':');
+        const marked = cut > 0 && cut < 20 ? `[b]${line.slice(0, cut + 1)}[/b] [b][i]${line.slice(cut + 1).trim()}[/i][/b]` : `[b][i]${line}[/i][/b]`;
+        drawTextParagraph(marked, { size: D.bodySize, color: C.ink, lineHeight: D.lineHeight });
       }
     }
     if (block.sectionSubtitle) {
-      drawTextParagraph(block.sectionSubtitle, { size: 9.3, color: C.muted, italic: true });
+      drawTextParagraph(block.sectionSubtitle, { size: Math.max(8, D.bodySize - 2), color: C.muted, italic: true, lineHeight: D.lineHeight });
     }
-    current.y -= 8;
     if (block.sectionIntroText) {
-      drawTextParagraph(block.sectionIntroText, { size: D.bodySize, lineHeight: D.lineHeight });
-      current.y -= 12;
+      drawTextParagraph(block.sectionIntroText, { size: D.bodySize, color: C.body, lineHeight: D.lineHeight });
     }
+    current.y -= D.bodySize * D.lineHeight;
 
     // Termékfotók: az első nagyban, a többi 2 oszlopos rácsban
     const sectionPhotos = (block.sectionPhotos || []).filter((sp) => sp.imageUrl);
-    if (sectionPhotos.length > 0) {
+    if (sectionPhotos.length > 0 && D.photoLayout === 'stacked') {
+      for (const ph of sectionPhotos) {
+        await drawPhotoWithCaption({ ...ph, widthPct: ph.widthPct && Number(ph.widthPct) !== 75 ? ph.widthPct : 100 }, 330);
+        const subs = (ph.subPhotos || []).filter((p) => p.imageUrl);
+        if (subs.length) await drawSubPhotoRow(subs);
+      }
+    } else if (sectionPhotos.length > 0) {
       await drawPhotoWithCaption(sectionPhotos[0], 290);
       const heroSubs = (sectionPhotos[0].subPhotos || []).filter((p) => p.imageUrl);
       if (heroSubs.length) await drawSubPhotoRow(heroSubs);
@@ -837,15 +862,18 @@ export async function renderEditableQuotePdfBytes(
       // Megnevezés | Listaár (EUR) | Kedvezményes ár: -20% (EUR) | megjegyzés (fejléc nélkül);
       // a számok jobbra, a sor aljára igazítva, ezres tagolás nélkül; a kedvezményes ár és a megjegyzés félkövér
       const discountLabel = (block.tableHeaders?.[3] || '').match(/\(([^)]*%[^)]*)\)/)?.[1] || config.defaultDiscountLabel || '';
-      const COLW = [0.42, 0.16, 0.24, 0.18].map((f) => f * CONTENT_W);
-      const COLX = COLW.map((_, i) => MARGIN_X + COLW.slice(0, i).reduce((a2, w) => a2 + w, 0));
-      const PAD = 5;
-      const SZ = 9.2;
-      const LH = 11.6;
+      const TBL_W = D.tableWide ? Math.min(531, A4_W - 40) : CONTENT_W;
+      const TBL_X = D.tableWide ? (A4_W - TBL_W) / 2 : MARGIN_X;
+      const TBL_R = TBL_X + TBL_W;
+      const COLW = [4160, 1780, 2960, 1720].map((tw) => (tw / 10620) * TBL_W);
+      const COLX = COLW.map((_, i) => TBL_X + COLW.slice(0, i).reduce((a2, w) => a2 + w, 0));
+      const PAD = 3.5;
+      const SZ = D.tableSize;
+      const LH = SZ * 1.22;
       const border = hexC(D.tableBorder);
       const cellLines = (top: number, bottom: number) => {
-        for (const x of [...COLX, RIGHT_X]) current.page.drawRectangle({ x: x - 0.3, y: bottom, width: 0.6, height: top - bottom, color: border });
-        current.page.drawRectangle({ x: MARGIN_X, y: bottom - 0.3, width: CONTENT_W, height: 0.6, color: border });
+        for (const x of [...COLX, TBL_R]) current.page.drawRectangle({ x: x - 0.25, y: bottom, width: 0.5, height: top - bottom, color: border });
+        current.page.drawRectangle({ x: TBL_X, y: bottom - 0.25, width: TBL_W, height: 0.5, color: border });
       };
       const plain = (n: number) => String(Math.round(n));
 
@@ -853,11 +881,16 @@ export async function renderEditableQuotePdfBytes(
         ensureSpace(90);
         const labels = ['Megnevezés', 'Listaár (EUR)', discountLabel ? `Kedvezményes ár: ${discountLabel} (EUR)` : 'Ár (EUR)', ''];
         const lines = labels.map((l, i) => (l ? wrapTextLines(l, fontBold, SZ, COLW[i] - PAD * 2) : []));
-        const h = Math.max(1, ...lines.map((l) => l.length)) * LH + 6;
+        const h = Math.max(14.5, Math.max(1, ...lines.map((l) => l.length)) * LH + 3);
         const top = current.y;
-        current.page.drawRectangle({ x: MARGIN_X, y: top - h, width: CONTENT_W, height: h, color: C.headFill });
-        lines.forEach((ls, i) => ls.forEach((l, j) => current.page.drawText(l, { x: COLX[i] + PAD, y: top - 3 - LH * (j + 1) + 2.5, size: SZ, font: fontBold, color: C.ink })));
-        current.page.drawRectangle({ x: MARGIN_X, y: top - 0.3, width: CONTENT_W, height: 0.6, color: border });
+        current.page.drawRectangle({ x: TBL_X, y: top - h, width: TBL_W, height: h, color: C.headFill });
+        // „Megnevezés” középre, a többi balra (mint a Wordben)
+        lines.forEach((ls, i) =>
+          ls.forEach((l, j) =>
+            current.page.drawText(l, { x: i === 0 ? COLX[0] + (COLW[0] - textW(l, fontBold, SZ)) / 2 : COLX[i] + PAD, y: top - 1.5 - LH * (j + 1) + SZ * 0.25, size: SZ, font: fontBold, color: C.ink })
+          )
+        );
+        current.page.drawRectangle({ x: TBL_X, y: top - 0.25, width: TBL_W, height: 0.5, color: border });
         cellLines(top, top - h);
         current.y = top - h;
       };
@@ -866,13 +899,13 @@ export async function renderEditableQuotePdfBytes(
         const nameLines = wrapTextLines(row.name, fontRegular, SZ, COLW[0] - PAD * 2);
         const noteLines = row.note ? wrapTextLines(row.note, fontBold, SZ, COLW[3] - PAD * 2) : [];
         const n = Math.max(nameLines.length, noteLines.length, 1);
-        const h = n * LH + 5;
+        const h = Math.max(14.5, n * LH + 3);
         if (current.y - h < BOTTOM_Y) {
           current = createNewPage();
           drawTableHeader();
         }
         const top = current.y;
-        const lineY = (j: number) => top - 3 - LH * (j + 1) + 2.5;
+        const lineY = (j: number) => top - h + 2 + SZ * 0.22 + LH * (n - 1 - j);
         nameLines.forEach((l, j) => current.page.drawText(l, { x: COLX[0] + PAD, y: lineY(j), size: SZ, font: fontRegular, color: C.ink }));
         const bottomY = lineY(n - 1);
         if (row.listLabel) current.page.drawText(row.listLabel, { x: COLX[1] + PAD, y: bottomY, size: SZ, font: fontRegular, color: C.ink });
@@ -930,16 +963,16 @@ export async function renderEditableQuotePdfBytes(
       const dot = (n: number) => formatDotNumber(Math.round(n));
       const totalLabel = (block.totalLabel || config.docTotalLabel || 'Az alapszerkezet szereléssel Összesen:').trim();
       const plus = /^opci/i.test(totalLabel) ? '+ ' : '';
-      drawMixedLine([[`${totalLabel} `, false, 11.5], [`${plus}${dot(blockTotals.totalEur)} EUR (+ Áfa)`, true, 11.5]], 'right');
+      drawMixedLine([[`${totalLabel} `, false, D.bodySize], [`${plus}${dot(blockTotals.totalEur)} EUR (+ Áfa)`, true, D.bodySize]], 'right');
       const hufLine = replaceTemplateVariables(config.docHufLine || 'Az ajánlat írásának napján, {{arfolyam}} Ft/EUR árfolyamon az összeg:', { ...varCtx, eurHufRate: eurRate });
-      drawMixedLine([[`${hufLine} `, false, 8.6], [`${plus}${dot(blockTotals.totalHuf)} Ft (+Áfa)`, true, 10.5]], 'right');
+      drawMixedLine([[`${hufLine} `, false, D.bodySize - 2], [`${plus}${dot(blockTotals.totalHuf)} Ft (+Áfa)`, true, D.bodySize - 2]], 'right');
       current.y -= 6;
 
       // Opciók: „- Opció: név: + X EUR (+Áfa)” és alatta a forint
       for (const r of optionalRows) {
         const huf = Math.round(((Number(r.discountPriceEur) || 0) * eurRate) / 1000) * 1000;
-        drawMixedLine([[`-   ${config.docOptionLabel || 'Opció:'} ${replaceTemplateVariables(r.name, varCtx)}: `, false, 10.5], [`+ ${dot(r.discountPriceEur)} EUR (+Áfa)`, true, 10.5]], 'left', 6);
-        drawMixedLine([[`${hufLine} `, false, 8.6], [`${dot(huf)} Ft (+Áfa)`, true, 10.5]], 'left', 26);
+        drawMixedLine([[`-   ${config.docOptionLabel || 'Opció:'} ${stripRich(replaceTemplateVariables(r.name, varCtx))}: `, false, D.bodySize], [`+ ${dot(r.discountPriceEur)} EUR (+Áfa)`, true, D.bodySize]], 'left', 18);
+        drawMixedLine([[`${hufLine} `, false, D.bodySize - 2], [`${dot(huf)} Ft (+Áfa)`, true, D.bodySize - 2]], 'left', 36);
         current.y -= 4;
       }
       current.y -= 8;
@@ -967,8 +1000,22 @@ export async function renderEditableQuotePdfBytes(
     }
 
     if (block.sectionClosingText) {
-      current.y -= 4;
-      drawTextParagraph(block.sectionClosingText, { size: 9, color: C.muted });
+      // a Word ajánlatokban a táblázat utáni szöveg normál méretű: „Ha …-ig megrendeli…” félkövér,
+      // „+Opcionálisan rendelhető…” félkövér, szürke kiemeléssel, alatta a lista
+      const BL = D.bodySize * D.lineHeight;
+      const paras = replaceTemplateVariables(block.sectionClosingText, varCtx).split(/\n\s*\n/);
+      for (const para of paras) {
+        const t = para.replace(/^\s+|\s+$/g, '');
+        if (!t) continue;
+        const plain = stripRich(t);
+        if (/^ha\s/i.test(plain)) drawTextParagraph(t, { bold: true, size: D.bodySize, color: C.ink, lineHeight: D.lineHeight });
+        else if (/^\+\s*opcion/i.test(plain)) {
+          const [first, ...rest] = t.split('\n');
+          drawTextParagraph(first, { bold: true, size: D.bodySize, color: C.ink, lineHeight: D.lineHeight, highlight: D.highlight || undefined });
+          rest.forEach((l) => drawTextParagraph(l.replace(/^\s*•\s*/, '- '), { size: D.bodySize, color: C.body, lineHeight: D.lineHeight }));
+        } else drawTextParagraph(t, { size: D.bodySize, color: C.body, lineHeight: D.lineHeight });
+        current.y -= BL;
+      }
     }
     current.y -= 30;
   }

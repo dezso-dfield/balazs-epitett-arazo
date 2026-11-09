@@ -20,23 +20,43 @@ export interface DocDesign {
   lineHeight: number; // sorköz szorzó
   footerText: string; // üresen: weboldal
   showPageNumbers: boolean;
+  font: 'calibri' | 'arial'; // a Word ajánlatok betűje Calibri (a PDF-ben a vele azonos méretű Carlito)
+  letterhead: boolean; // a saját fejléces papír (logó fent, sötétkék sáv a weboldallal lent) a lapok hátterén
+  marginPt: number; // bal/jobb margó (Word: 2,5 cm = 70,85 pt)
+  highlight: string; // termék cím, „+Opcionálisan…”, „Információ:” kiemelő háttere (üresen nincs)
+  greetingBold: boolean;
+  tableSize: number; // táblázat betűmérete (Word: 11 pt)
+  tableWide: boolean; // a táblázat szélesebb a szövegnél (Word: 18,7 cm, középre)
+  photoLayout: 'stacked' | 'grid'; // fotók egymás alatt teljes szélességben (Word) vagy kettesével
 }
 
+/** A saját fejléces papír (a Word ajánlatok fejlécéből) */
+export const LETTERHEAD_URL = '/uploads/legacy/opensky-letterhead.jpg';
+
+/** Alapértékek: pontosan a saját Word ajánlatok (pl. Vadnai, Scholtz, Hild) beállításai */
 export const DEFAULT_DOC_DESIGN: DocDesign = {
-  accent: '#343a55',
+  accent: '#1d2c4f',
   accentText: '#dbe0f0',
-  heading: '#0a0a0a',
-  text: '#333333',
-  muted: '#666666',
-  tableHead: '#d9d9d9',
-  tableBorder: '#404040',
-  bodySize: 10,
-  headingSize: 13,
-  greetingSize: 13,
+  heading: '#000000',
+  text: '#000000',
+  muted: '#000000',
+  tableHead: '#bfbfbf',
+  tableBorder: '#000000',
+  bodySize: 12,
+  headingSize: 12,
+  greetingSize: 12,
   logoHeight: 34,
-  lineHeight: 1.55,
+  lineHeight: 1.22,
   footerText: '',
-  showPageNumbers: true,
+  showPageNumbers: false,
+  font: 'calibri',
+  letterhead: true,
+  marginPt: 70.85,
+  highlight: '#bfbfbf',
+  greetingBold: false,
+  tableSize: 11,
+  tableWide: true,
+  photoLayout: 'stacked',
 };
 
 /** Csak a ténylegesen kitöltött mezők (üres szöveg / NaN nem írja felül az örökölt értéket) */
@@ -50,12 +70,17 @@ export function getDocDesign(config?: Partial<SystemConfig> | null, category?: P
   const d = { ...DEFAULT_DOC_DESIGN, ...filled(config?.docDesign), ...filled(category?.docDesign) } as DocDesign;
   const hex = (v: string, f: string) => (/^#[0-9a-f]{6}$/i.test(v || '') ? v : f);
   for (const k of ['accent', 'accentText', 'heading', 'text', 'muted', 'tableHead', 'tableBorder'] as const) d[k] = hex(d[k], DEFAULT_DOC_DESIGN[k]);
+  d.highlight = d.highlight === 'none' ? '' : hex(d.highlight, '');
+  if (d.font !== 'arial') d.font = 'calibri';
+  if (d.photoLayout !== 'grid') d.photoLayout = 'stacked';
   const num = (v: unknown, f: number, lo: number, hi: number) => (Number.isFinite(Number(v)) && Number(v) >= lo && Number(v) <= hi ? Number(v) : f);
   d.bodySize = num(d.bodySize, 10, 7, 16);
   d.headingSize = num(d.headingSize, 13, 9, 24);
   d.greetingSize = num(d.greetingSize, 13, 9, 24);
   d.logoHeight = num(d.logoHeight, 34, 16, 90);
-  d.lineHeight = num(d.lineHeight, 1.55, 1.1, 2.2);
+  d.lineHeight = num(d.lineHeight, 1.22, 1, 2.2);
+  d.marginPt = num(d.marginPt, 70.85, 30, 100);
+  d.tableSize = num(d.tableSize, 11, 7, 14);
   return d;
 }
 

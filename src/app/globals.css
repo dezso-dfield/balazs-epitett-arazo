@@ -460,3 +460,9 @@ body {
   overflow-x: clip;
   max-width: 100%;
 }
+
+/* Az ajánlatok betűje (Calibri méretű Carlito, OFL), a Word-szerű szerkesztőhöz */
+@font-face { font-family: 'Carlito'; src: url('/template-assets/fonts/Carlito-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Carlito'; src: url('/template-assets/fonts/Carlito-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Carlito'; src: url('/template-assets/fonts/Carlito-Italic.ttf') format('truetype'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Carlito'; src: url('/template-assets/fonts/Carlito-BoldItalic.ttf') format('truetype'); font-weight: 700; font-style: italic; font-display: swap; }

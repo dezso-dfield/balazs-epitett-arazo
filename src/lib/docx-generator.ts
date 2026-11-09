@@ -4,6 +4,8 @@ import {
   Document,
   Footer,
   Header,
+  HorizontalPositionRelativeFrom,
+  HeightRule,
   ImageRun,
   Packer,
   PageNumber,
@@ -15,11 +17,12 @@ import {
   TableRow,
   TextRun,
   VerticalAlign,
+  VerticalPositionRelativeFrom,
   WidthType,
 } from 'docx';
 import { PDFDocument } from 'pdf-lib';
 import { formatDotNumber, replaceTemplateVariables } from './constants';
-import { blockCategoryId, getDocDesign, primaryCategory, type DocDesign } from './doc-design';
+import { blockCategoryId, getDocDesign, LETTERHEAD_URL, primaryCategory, type DocDesign } from './doc-design';
 import { loadImageBytes } from './pdf-generator';
 import { computeBlockTotals } from './pricing-engine';
 import { parseRich, stripRich } from './richtext';
@@ -35,12 +38,14 @@ import type { PhotoCaptionBlock, ProductCategory, QuoteDocumentBlock, QuoteRecor
 // A4, a PDF-fel azonos margók (52 pt)
 const PT = 20; // twip / pt
 const PAGE_W = 595.28;
-const MARGIN = 52;
+const MARGIN = 70.85; // Word ajánlatok: 2,5 cm (1417 twip)
+/** a renderelés elején állítjuk a dizájn szerint (Calibri a Word ajánlatokban) */
+const FONT = { name: 'Calibri' };
 const CONTENT_PT = PAGE_W - MARGIN * 2;
 const CONTENT_TW = Math.round(CONTENT_PT * PT);
 const px = (pt: number) => Math.round((pt * 96) / 72); // docx képméret: pixel (96 dpi)
 const hex = (c: string) => c.replace('#', '').toUpperCase();
-const lineOf = (lh: number) => Math.round((240 * lh) / 1.15); // Word „egyszeres” sorköz ≈ 1,15 × betűméret
+const lineOf = (lh: number) => Math.max(240, Math.round((240 * lh) / 1.22)); // Word „egyszeres” sorköz Calibrival ≈ 1,22 × betűméret
 
 type ParaOpts = {
   size?: number;
@@ -53,6 +58,7 @@ type ParaOpts = {
   before?: number;
   lineHeight?: number;
   indent?: number; // pt
+  shade?: string; // kiemelő háttér a szöveg mögött (mint a Word ajánlatok szürke kiemelése)
 };
 
 const ALIGN = { left: AlignmentType.LEFT, center: AlignmentType.CENTER, right: AlignmentType.RIGHT } as const;
@@ -66,12 +72,13 @@ function runs(text: string, o: ParaOpts): TextRun[] {
         new TextRun({
           text: part,
           break: i > 0 ? 1 : undefined,
-          font: 'Arial',
+          font: FONT.name,
           size: Math.round((r.size ?? o.size ?? 10) * 2),
           bold: r.b || o.bold,
           italics: r.i || o.italic,
           underline: r.u || o.underline ? {} : undefined,
-          color: hex(r.color || o.color || '#333333'),
+          color: hex(r.color || o.color || '#000000'),
+          shading: o.shade ? { type: ShadingType.CLEAR, color: 'auto', fill: hex(o.shade) } : undefined,
         })
       );
     });
@@ -82,7 +89,7 @@ function runs(text: string, o: ParaOpts): TextRun[] {
 function para(text: string, o: ParaOpts = {}): Paragraph {
   return new Paragraph({
     alignment: ALIGN[o.align || 'left'],
-    spacing: { after: Math.round((o.after ?? 6) * PT), before: Math.round((o.before ?? 0) * PT), line: lineOf(o.lineHeight ?? 1.45) },
+    spacing: { after: Math.round((o.after ?? 0) * PT), before: Math.round((o.before ?? 0) * PT), line: lineOf(o.lineHeight ?? 1.22) },
     indent: o.indent ? { left: Math.round(o.indent * PT) } : undefined,
     children: runs(text, o),
   });
@@ -110,7 +117,7 @@ function paras(text: string, o: ParaOpts = {}): Paragraph[] {
     const last = i === lines.length - 1;
     const nextEmpty = !last && !lines[i + 1].trim();
     if (!ln.trim() && i > 0) return; // az üres sor a előző bekezdés utáni köz
-    out.push(para(t, { ...o, after: last ? o.after : nextEmpty ? Math.max(6, (o.size ?? 10) * 0.8) : 0 }));
+    out.push(para(t, { ...o, after: last ? o.after : nextEmpty ? (o.size ?? 12) * 1.22 : 0 }));
   });
   return out;
 }
@@ -120,8 +127,8 @@ function mixed(parts: [string, boolean, number][], align: 'left' | 'right', colo
   return new Paragraph({
     alignment: ALIGN[align],
     indent: indent ? { left: Math.round(indent * PT) } : undefined,
-    spacing: { after: Math.round(after * PT), line: lineOf(1.3) },
-    children: parts.map(([t, b, sz]) => new TextRun({ text: t, bold: b, size: Math.round(sz * 2), font: 'Arial', color: hex(color) })),
+    spacing: { after: Math.round(after * PT), line: 240 },
+    children: parts.map(([t, b, sz]) => new TextRun({ text: t, bold: b, size: Math.round(sz * 2), font: FONT.name, color: hex(color) })),
   });
 }
 
@@ -131,6 +138,7 @@ const noBorders = { top: NONE, bottom: NONE, left: NONE, right: NONE, insideHori
 export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: SystemConfig, categories: ProductCategory[] = []): Promise<Buffer> {
   const blocks: QuoteDocumentBlock[] = Array.isArray(quote.blocks) ? quote.blocks : [];
   const pageD = getDocDesign(config, primaryCategory(blocks, categories));
+  FONT.name = pageD.font === 'arial' ? 'Arial' : 'Calibri';
   const designOf = (b: QuoteDocumentBlock): DocDesign => {
     const cat = categories.find((c) => c.id === blockCategoryId(b));
     return cat ? getDocDesign(config, cat) : pageD;
@@ -195,7 +203,7 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
     for (let i = 0; i < photos.length; i += cols) {
       const row = photos.slice(i, i + cols);
       if (row.length === 1 && cols === 2) {
-        (await photo(row[0], CONTENT_PT * 0.75, 290, D)).forEach(push);
+        (await photo(row[0], CONTENT_PT, 290, D)).forEach(push);
         continue;
       }
       const cells = await Promise.all(
@@ -222,40 +230,41 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
       const title = fill(block.title || '').trim();
       const content = fill(block.content || '');
       if (st === 'category_heading') {
-        push(para(title || content, { size: 11.5, bold: true, underline: true, color: D.heading, before: 6, after: 10 }));
+        push(para(title || content, { size: D.bodySize, bold: true, underline: true, color: D.heading, after: D.bodySize * 1.22 }));
         continue;
       }
       if (st === 'promo') {
-        push(paras(title ? `${title} ${content}` : content, { size: 10.5, bold: true, color: D.heading, after: 14 }));
+        push(paras(title ? `${title} ${content}` : content, { size: D.bodySize, bold: true, color: D.heading, after: D.bodySize * 1.22 }));
         continue;
       }
       if (st === 'options') {
-        if (title) push(para(title, { size: 10, bold: true, color: D.heading, after: 2 }));
+        if (title) push(para(title, { size: D.bodySize, bold: true, color: D.heading, shade: D.highlight || undefined }));
         content.split('\n').forEach((l, i) =>
-          push(para(l.replace(/^\s*•\s*/, '- '), { size: 9.8, bold: !title && i === 0, color: i === 0 && !title ? D.heading : D.text, after: 0, lineHeight: 1.45 }))
+          push(para(l.replace(/^\s*•\s*/, '- '), { size: D.bodySize, bold: !title && i === 0, color: i === 0 && !title ? D.heading : D.text, shade: !title && i === 0 ? D.highlight || undefined : undefined }))
         );
-        push(para('', { after: 10 }));
+        push(para('', { size: D.bodySize }));
         continue;
       }
       if (st === 'footer_info') {
-        if (title) push(para(title, { size: 11, bold: true, underline: true, color: D.heading, before: 6, after: 4 }));
+        if (title) push(para(title, { size: D.bodySize, bold: true, color: D.heading, shade: D.highlight || undefined }));
         for (const raw of content.split(/\n\s*\n/)) {
           const t = raw.trim();
           if (!t) continue;
-          if (/^megjegyz/i.test(stripRich(t))) push(para(t, { size: 8.3, italic: true, color: D.muted, after: 8 }));
-          else if (/^ha\s/i.test(stripRich(t))) push(para(t, { size: 10, bold: true, color: D.heading, after: 8 }));
-          else push(paras(t.replace(/^\s*•\s*/gm, '- '), { size: 9.6, color: D.text, after: 8, lineHeight: 1.5 }));
+          const gap = D.bodySize * 1.22;
+          if (/^megjegyz/i.test(stripRich(t))) push(para(t, { size: 8, italic: true, color: D.muted, after: gap }));
+          else if (/^ha\s/i.test(stripRich(t))) push(para(t, { size: D.bodySize, bold: true, color: D.heading, after: gap }));
+          else push(paras(t.replace(/^\s*•\s*/gm, '- '), { size: D.bodySize, color: D.text, after: gap }));
         }
         continue;
       }
-      if (title) push(para(title, { size: st === 'greeting' ? D.greetingSize : D.bodySize + 1, bold: true, color: D.heading, after: 6 }));
+      if (title) push(para(title, { size: st === 'greeting' ? D.greetingSize : D.bodySize, bold: st === 'greeting' ? D.greetingBold : true, color: D.heading, after: D.bodySize * 1.22 }));
       if (content.trim())
-        push(paras(content, { size: D.bodySize, bold: Boolean(block.bold) || st === 'highlight', color: D.text, align: block.align || 'left', lineHeight: D.lineHeight, after: st === 'category_intro' ? 10 : 16 }));
+        push(paras(content, { size: D.bodySize, bold: Boolean(block.bold) || st === 'highlight', color: D.text, align: block.align || 'left', lineHeight: D.lineHeight, after: D.bodySize * 1.22 }));
       continue;
     }
 
     if (block.type === 'photo_box' && block.photo) {
-      (await photo(block.photo, CONTENT_PT * 0.75, 300, D)).forEach(push);
+      (await photo(block.photo, CONTENT_PT, 330, D)).forEach(push);
       const subs = (block.photo.subPhotos || []).filter((p) => p.imageUrl);
       if (subs.length) await photoGrid(subs, 3, 135, D);
       continue;
@@ -267,20 +276,28 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
       const raw = fill(block.sectionTitle);
       const sz = raw.match(/\((\d+)\s*[×x]\s*(\d+)\s*[×x]\s*(\d+)\s*cm(?:\s*-\s*([^)]*))?\)\s*$/);
       const title = raw.replace(/\s*\(\d+\s*[×x]\s*\d+[^)]*\)\s*$/, '').replace(/:\s*$/, '');
-      push(para(`${title}:`, { size: D.headingSize, bold: true, color: D.heading, before: 10, after: 2 }));
+      push(para(`${title}:`, { size: D.headingSize, bold: true, color: D.heading, shade: D.highlight || undefined }));
       if (sz) {
         const line = replaceTemplateVariables(
           config.docSizeLine || 'Méretek: {{szelesseg}} cm hosszú x {{kinyulas}} cm széles (kinyúlás) x {{magassag}} cm magas (belső) – {{beepites}}',
           { ...varCtx, widthCm: Number(sz[1]), projectionCm: Number(sz[2]), heightCm: Number(sz[3]), mountType: (sz[4] || varCtx.mountType).trim() }
         );
-        push(para(line, { size: 9.8, bold: true, italic: true, underline: true, color: D.heading, after: 4 }));
+        const cut = line.indexOf(':');
+        push(para(cut > 0 && cut < 20 ? `[b]${line.slice(0, cut + 1)}[/b] [b][i]${line.slice(cut + 1).trim()}[/i][/b]` : `[b][i]${line}[/i][/b]`, { size: D.bodySize, color: D.heading }));
       }
     }
-    if (block.sectionSubtitle) push(para(fill(block.sectionSubtitle), { size: 9.3, italic: true, color: D.muted, after: 8 }));
-    if (block.sectionIntroText) push(paras(fill(block.sectionIntroText), { size: D.bodySize, color: D.text, lineHeight: D.lineHeight, after: 12 }));
+    if (block.sectionSubtitle) push(para(fill(block.sectionSubtitle), { size: Math.max(8, D.bodySize - 2), italic: true, color: D.muted }));
+    if (block.sectionIntroText) push(paras(fill(block.sectionIntroText), { size: D.bodySize, color: D.text, lineHeight: D.lineHeight }));
+    push(para('', { size: D.bodySize }));
 
     const photos = (block.sectionPhotos || []).filter((p) => p.imageUrl);
-    if (photos.length) {
+    if (photos.length && D.photoLayout === 'stacked') {
+      for (const ph of photos) {
+        (await photo(ph, CONTENT_PT, 330, D)).forEach(push);
+        const subs = (ph.subPhotos || []).filter((p) => p.imageUrl);
+        if (subs.length) await photoGrid(subs, 3, 135, D);
+      }
+    } else if (photos.length) {
       (await photo(photos[0], CONTENT_PT * 0.75, 290, D)).forEach(push);
       const heroSubs = (photos[0].subPhotos || []).filter((p) => p.imageUrl);
       if (heroSubs.length) await photoGrid(heroSubs, 3, 135, D);
@@ -290,7 +307,8 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
     const active = (block.rows || []).filter((r) => r.included !== false);
     if (active.length) {
       const discountLabel = (block.tableHeaders?.[3] || '').match(/\(([^)]*%[^)]*)\)/)?.[1] || config.defaultDiscountLabel || '';
-      const COLW = [0.42, 0.16, 0.24, 0.18].map((f) => Math.round(f * CONTENT_TW));
+      const TBL_TW = D.tableWide ? 10620 : CONTENT_TW;
+      const COLW = [4160, 1780, 2960, 1720].map((tw) => Math.round((tw / 10620) * TBL_TW));
       const border = { style: BorderStyle.SINGLE, size: 4, color: hex(D.tableBorder) };
       const borders = { top: border, bottom: border, left: border, right: border };
       const cell = (text: string, i: number, o: { bold?: boolean; right?: boolean; head?: boolean } = {}) =>
@@ -299,16 +317,17 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
           borders,
           verticalAlign: o.head ? VerticalAlign.TOP : VerticalAlign.BOTTOM,
           shading: o.head ? { type: ShadingType.CLEAR, color: 'auto', fill: hex(D.tableHead) } : undefined,
-          margins: { left: 100, right: 100, top: 40, bottom: 40 },
+          margins: { left: 70, right: 70, top: 0, bottom: 0 },
           children: [
             new Paragraph({
-              alignment: o.right ? AlignmentType.RIGHT : AlignmentType.LEFT,
-              children: [new TextRun({ text, bold: o.bold || o.head, size: 18, font: 'Arial', color: hex(D.heading) })],
+              alignment: o.right ? AlignmentType.RIGHT : o.head && i === 0 ? AlignmentType.CENTER : AlignmentType.LEFT,
+              spacing: { after: 0, line: 240 },
+              children: [new TextRun({ text, bold: o.bold || o.head, size: Math.round(D.tableSize * 2), font: FONT.name, color: hex(D.heading) })],
             }),
           ],
         });
       const row = (r: { name: string; list?: string; listLabel?: string; price: string; note?: string }) =>
-        new TableRow({ children: [cell(r.name, 0), r.listLabel ? cell(r.listLabel, 1) : cell(r.list || '', 1, { right: true }), cell(r.price, 2, { bold: true, right: true }), cell(r.note || '', 3, { bold: true })] });
+        new TableRow({ height: { value: 290, rule: HeightRule.ATLEAST }, children: [cell(r.name, 0), r.listLabel ? cell(r.listLabel, 1) : cell(r.list || '', 1, { right: true }), cell(r.price, 2, { bold: true, right: true }), cell(r.note || '', 3, { bold: true })] });
 
       const rate = Number(quote.eurHufRate || config.defaultEurHufRate || 400);
       const totals = computeBlockTotals(block, rate);
@@ -324,6 +343,7 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
       const rows: TableRow[] = [
         new TableRow({
           tableHeader: true,
+          height: { value: 290, rule: HeightRule.ATLEAST },
           children: ['Megnevezés', 'Listaár (EUR)', discountLabel ? `Kedvezményes ár: ${discountLabel} (EUR)` : 'Ár (EUR)', ''].map((l, i) => cell(l, i, { head: true })),
         }),
       ];
@@ -356,19 +376,19 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
           })
         );
       push(para('', { after: 2 }));
-      push(new Table({ width: { size: CONTENT_TW, type: WidthType.DXA }, columnWidths: COLW, layout: TableLayoutType.FIXED, rows }));
+      push(new Table({ width: { size: TBL_TW, type: WidthType.DXA }, columnWidths: COLW, layout: TableLayoutType.FIXED, alignment: AlignmentType.CENTER, rows }));
 
       const dot = (n: number) => formatDotNumber(Math.round(n));
       const label = (block.totalLabel || config.docTotalLabel || 'Az alapszerkezet szereléssel Összesen:').trim();
       const plus = /^opci/i.test(label) ? '+ ' : '';
       const hufLine = replaceTemplateVariables(config.docHufLine || 'Az ajánlat írásának napján, {{arfolyam}} Ft/EUR árfolyamon az összeg:', { ...varCtx, eurHufRate: rate });
       push(para('', { after: 2 }));
-      push(mixed([[`${label} `, false, 11.5], [`${plus}${dot(totals.totalEur)} EUR (+ Áfa)`, true, 11.5]], 'right', D.heading));
-      push(mixed([[`${hufLine} `, false, 8.6], [`${plus}${dot(totals.totalHuf)} Ft (+Áfa)`, true, 10.5]], 'right', D.heading, 0, 8));
+      push(mixed([[`${label} `, false, D.bodySize], [`${plus}${dot(totals.totalEur)} EUR (+ Áfa)`, true, D.bodySize]], 'right', D.heading, 0, 0));
+      push(mixed([[`${hufLine} `, false, D.bodySize - 2], [`${plus}${dot(totals.totalHuf)} Ft (+Áfa)`, true, D.bodySize - 2]], 'right', D.heading, 0, D.bodySize * 1.22));
       for (const r of optRows) {
         const huf = Math.round(((Number(r.discountPriceEur) || 0) * rate) / 1000) * 1000;
-        push(mixed([[`-   ${config.docOptionLabel || 'Opció:'} ${stripRich(fill(r.name))}: `, false, 10.5], [`+ ${dot(r.discountPriceEur)} EUR (+Áfa)`, true, 10.5]], 'left', D.heading, 6, 0));
-        push(mixed([[`${hufLine} `, false, 8.6], [`${dot(huf)} Ft (+Áfa)`, true, 10.5]], 'left', D.heading, 26, 6));
+        push(mixed([[`-   ${config.docOptionLabel || 'Opció:'} ${stripRich(fill(r.name))}: `, false, D.bodySize], [`+ ${dot(r.discountPriceEur)} EUR (+Áfa)`, true, D.bodySize]], 'left', D.heading, 18, 0));
+        push(mixed([[`${hufLine} `, false, D.bodySize - 2], [`${dot(huf)} Ft (+Áfa)`, true, D.bodySize - 2]], 'left', D.heading, 36, D.bodySize * 1.22));
       }
     }
 
@@ -379,7 +399,7 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
       const colors = r.algorithm?.colorOptions || [];
       if (!colors.length) continue;
       const t2 = stripRich(r.algorithm?.colorTitle || r.name);
-      push(para(colors.length > 4 ? `${t2}: ${colors.length} db alapszín` : `${t2}:`, { size: 10, color: D.heading, after: 4 }));
+      push(para(colors.length > 4 ? `${t2}: ${colors.length} db alapszín` : `${t2}:`, { size: D.bodySize, color: D.heading, after: D.bodySize }));
       const cw = Math.round(CONTENT_TW / 5);
       const trs: TableRow[] = [];
       for (let i = 0; i < colors.length; i += 5) {
@@ -387,23 +407,46 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
           (c) =>
             new TableCell({
               width: { size: cw, type: WidthType.DXA },
-              borders: { top: { style: BorderStyle.SINGLE, size: 12, color: 'FFFFFF' }, bottom: { style: BorderStyle.SINGLE, size: 12, color: 'FFFFFF' }, left: { style: BorderStyle.SINGLE, size: 12, color: 'FFFFFF' }, right: { style: BorderStyle.SINGLE, size: 12, color: 'FFFFFF' } },
+              borders: noBorders,
               shading: { type: ShadingType.CLEAR, color: 'auto', fill: hex(c.hex || '#cccccc') },
-              verticalAlign: VerticalAlign.BOTTOM,
+              verticalAlign: VerticalAlign.CENTER,
               children: [
-                new Paragraph({ spacing: { before: 360 }, children: [new TextRun({ text: (c.code || '').toUpperCase(), bold: true, size: 14, font: 'Arial', color: isDark(c.hex) ? 'FFFFFF' : '111111' })] }),
-                new Paragraph({ children: [new TextRun({ text: c.name || '', size: 12, font: 'Arial', color: isDark(c.hex) ? 'EEEEEE' : '333333' })] }),
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  spacing: { after: 0 },
+                  children: [
+                    new TextRun({
+                      text: `${c.code || ''}${/struktúr|structure/i.test(c.name || '') ? ' STRUKTÚR' : ''}`.toUpperCase(),
+                      bold: true,
+                      size: 13,
+                      font: FONT.name,
+                      color: isDark(c.hex) ? 'FFFFFF' : '111111',
+                    }),
+                  ],
+                }),
               ],
             })
         );
         while (cs.length < 5) cs.push(new TableCell({ width: { size: cw, type: WidthType.DXA }, borders: noBorders, children: [new Paragraph('')] }));
-        trs.push(new TableRow({ children: cs }));
+        trs.push(new TableRow({ height: { value: 800, rule: HeightRule.EXACT }, children: cs }));
       }
-      push(new Table({ width: { size: CONTENT_TW, type: WidthType.DXA }, columnWidths: Array(5).fill(cw), layout: TableLayoutType.FIXED, rows: trs }));
-      push(para('', { after: 6 }));
+      push(new Table({ width: { size: CONTENT_TW, type: WidthType.DXA }, columnWidths: Array(5).fill(cw), layout: TableLayoutType.FIXED, borders: noBorders, rows: trs }));
+      push(para('', { size: D.bodySize }));
     }
-    if (block.sectionClosingText) push(paras(fill(block.sectionClosingText), { size: 9, color: D.muted, after: 18 }));
-    else push(para('', { after: 12 }));
+    if (block.sectionClosingText) {
+      for (const raw of fill(block.sectionClosingText).split(/\n\s*\n/)) {
+        const t = raw.replace(/^\s+|\s+$/g, '');
+        if (!t) continue;
+        const plain = stripRich(t);
+        const gap = D.bodySize * 1.22;
+        if (/^ha\s/i.test(plain)) push(paras(t, { size: D.bodySize, bold: true, color: D.heading, after: gap }));
+        else if (/^\+\s*opcion/i.test(plain)) {
+          const [first, ...rest] = t.split('\n');
+          push(para(first, { size: D.bodySize, bold: true, color: D.heading, shade: D.highlight || undefined }));
+          rest.forEach((l, i) => push(para(l.replace(/^\s*•\s*/, '- '), { size: D.bodySize, color: D.text, after: i === rest.length - 1 ? gap : 0 })));
+        } else push(paras(t, { size: D.bodySize, color: D.text, after: gap }));
+      }
+    } else push(para('', { size: D.bodySize }));
   }
 
   const sig = await img(config.pdfSignatureCardUrl);
@@ -412,6 +455,29 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
   // fejléc: középre igazított logó + sorszám jobbra; lábléc: színes sáv a weboldallal és oldalszámmal
   const logo = await img(config.pdfLogoUrl);
   const issueDate = new Date(quote.createdAt || Date.now()).toLocaleDateString('hu-HU');
+  // a saját fejléces papír (mint a Word ajánlatokban): teljes oldalas kép a szöveg mögött, 7 pt-tal lejjebb
+  const lh = await img(config.pdfPageBackgroundUrl || (pageD.letterhead ? LETTERHEAD_URL : ''));
+  const letterheadHeader = lh
+    ? new Header({
+        children: [
+          new Paragraph({
+            children: [
+              new ImageRun({
+                type: lh.type,
+                data: lh.bytes,
+                transformation: { width: px(595.25), height: px(850.35) },
+                floating: {
+                  horizontalPosition: { relative: HorizontalPositionRelativeFrom.PAGE, offset: 0 },
+                  verticalPosition: { relative: VerticalPositionRelativeFrom.PAGE, offset: Math.round(7 * 12700) },
+                  behindDocument: true,
+                  allowOverlap: true,
+                },
+              }),
+            ],
+          }),
+        ],
+      })
+    : null;
   const header = new Header({
     children: [
       para(`Árajánlat ${quote.quoteNumber || 'ELŐNÉZET'}  ·  ${issueDate}`, { size: 7.5, color: '#999999', align: 'right', after: 0 }),
@@ -440,13 +506,13 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
                 shading: { type: ShadingType.CLEAR, color: 'auto', fill: hex(pageD.accent) },
                 margins: { top: 120, bottom: 120 },
                 children: [
-                  new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: siteText, size: 20, font: 'Arial', color: 'FFFFFF' })] }),
+                  new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: siteText, size: 20, font: FONT.name, color: 'FFFFFF' })] }),
                   new Paragraph({
                     alignment: AlignmentType.CENTER,
                     children: [
-                      new TextRun({ text: contact, size: 14, font: 'Arial', color: hex(pageD.accentText) }),
+                      new TextRun({ text: contact, size: 14, font: FONT.name, color: hex(pageD.accentText) }),
                       ...(pageD.showPageNumbers
-                        ? [new TextRun({ children: ['    ', PageNumber.CURRENT, ' / ', PageNumber.TOTAL_PAGES], size: 14, font: 'Arial', color: hex(pageD.accentText) })]
+                        ? [new TextRun({ children: ['    ', PageNumber.CURRENT, ' / ', PageNumber.TOTAL_PAGES], size: 14, font: FONT.name, color: hex(pageD.accentText) })]
                         : []),
                     ],
                   }),
@@ -462,17 +528,18 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
   const doc = new Document({
     creator: config.companyName || 'OpenSky Pergola Kft.',
     title: `Árajánlat ${quote.quoteNumber || ''}`.trim(),
-    styles: { default: { document: { run: { font: 'Arial', size: 20 } } } },
+    styles: { default: { document: { run: { font: FONT.name, size: Math.round(pageD.bodySize * 2) } } } },
     sections: [
       {
         properties: {
           page: {
             size: { width: Math.round(PAGE_W * PT), height: Math.round(841.89 * PT) },
-            margin: { top: 1500, bottom: 1300, left: MARGIN * PT, right: MARGIN * PT, header: 500, footer: 300 },
+            // Word ajánlatok: felső 1865, alsó 1418, bal/jobb 1417 twip
+            margin: { top: 1865, bottom: 1418, left: Math.round(MARGIN * PT), right: Math.round(MARGIN * PT), header: 708, footer: 708 },
           },
         },
-        headers: { default: header },
-        footers: { default: footer },
+        headers: { default: letterheadHeader || header },
+        ...(letterheadHeader ? {} : { footers: { default: footer } }),
         children: body.length ? body : [new Paragraph('')],
       },
     ],
