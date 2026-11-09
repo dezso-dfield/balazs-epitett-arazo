@@ -491,7 +491,12 @@ export async function renderEditableQuotePdfBytes(
     const width = parts.reduce((a, [t, b, sz]) => a + textW(t, fOf(b), sz ?? baseSize), 0);
     const maxSz = Math.max(...parts.map(([, , sz]) => sz ?? baseSize));
     if (width > CONTENT_W - indent) {
-      parts.forEach(([t, b, sz]) => drawTextParagraph(t, { bold: b, size: sz ?? baseSize, color: C.ink, indentX: indent, align, lineHeight: 1.35 }));
+      // túl hosszú: egy bekezdésként tördelve (a félkövér összeg a mondat végén marad, mint a Word ajánlatokban)
+      const marked = parts.map(([t, b, sz]) => {
+        const x = b ? `[b]${t}[/b]` : t;
+        return sz && sz !== baseSize ? `[s=${sz}]${x}[/s]` : x;
+      });
+      drawTextParagraph(marked.join(''), { size: baseSize, color: C.ink, indentX: indent, align, lineHeight: D.lineHeight });
       return;
     }
     ensureSpace(maxSz * 1.6);
@@ -894,7 +899,7 @@ export async function renderEditableQuotePdfBytes(
           name: withQty(stripRich(replaceTemplateVariables(r.name, varCtx)), r.quantityLabel),
           list: r.listPriceEur > r.discountPriceEur ? plain(r.listPriceEur) : '',
           price: plain(r.discountPriceEur),
-          note: (r.note || '').trim() && r.note !== discountLabel ? r.note : 'Opció',
+          note: (r.note || '').trim() && r.note !== discountLabel ? r.note : r.listPriceEur > r.discountPriceEur ? 'Opció-kedvezmény-' : 'Opció',
         });
       }
 
@@ -904,6 +909,8 @@ export async function renderEditableQuotePdfBytes(
       const totalLabel = (block.totalLabel || config.docTotalLabel || 'Az alapszerkezet szereléssel Összesen:').trim();
       const plus = /^opci/i.test(totalLabel) ? '+ ' : '';
       const hufLine = replaceTemplateVariables(config.docHufLine || 'Az ajánlat írásának napján, {{arfolyam}} Ft/EUR árfolyamon az összeg:', { ...varCtx, eurHufRate: eurRate });
+      // az összesítő sorok (EUR + forint) együtt maradnak, nem törnek külön oldalra
+      ensureSpace(D.bodySize * D.lineHeight * 4 + 6);
       if (plus) {
         // „- Opció: A két … oldal beépítése … szereléssel: + 7.252 EUR (+Áfa)” balra, mint az opció sorok
         drawMixedLine([[`-   ${totalLabel} `, false, D.bodySize], [`+ ${dot(blockTotals.totalEur)} EUR (+Áfa)`, true, D.bodySize]], 'left', 18);
@@ -934,6 +941,9 @@ export async function renderEditableQuotePdfBytes(
       .map((t) => t.replace(/^\s+|\s+$/g, ''))
       .filter(Boolean);
     const isPromo = (t: string) => /^ha\s/i.test(stripRich(t));
+    const hasColors = activeRows.some((r) => (r.algorithm?.colorOptions || []).length);
+    const colorPara = hasColors ? closingParas.find((t) => /alapsz[ií]n/i.test(stripRich(t)) && stripRich(t).length < 90) : undefined;
+    const colorHeading = colorPara ? stripRich(colorPara).replace(/:\s*\d+\s*(db\s*)?alapsz[ií]n\.?\s*$/i, '').replace(/[:.\s]+$/, '') : '';
     for (const t of closingParas.filter(isPromo)) {
       drawTextParagraph(t, { bold: true, size: D.bodySize, color: C.ink, lineHeight: D.lineHeight, indentX: 30 });
       current.y -= BLs;
@@ -970,7 +980,8 @@ export async function renderEditableQuotePdfBytes(
     for (const row of activeRows) {
       const colors = row.algorithm?.colorOptions || [];
       if (colors.length) {
-        drawColorSwatches(row.algorithm?.colorTitle || row.name, colors);
+        // ha a termék szövege már mondja („A tartó szerkezetek alapszínei: …”), az a csempék címe, és nem ismétlődik
+        drawColorSwatches(colorHeading || row.algorithm?.colorTitle || row.name, colors);
       }
     }
 
@@ -978,7 +989,7 @@ export async function renderEditableQuotePdfBytes(
       // a Word ajánlatokban a táblázat utáni szöveg normál méretű: „+Opcionálisan rendelhető…” félkövér,
       // szürke kiemeléssel, alatta a lista (az akció „Ha …” fentebb, a táblázat után)
       const BL = BLs;
-      for (const t of closingParas.filter((x) => !isPromo(x))) {
+      for (const t of closingParas.filter((x) => !isPromo(x) && x !== colorPara)) {
         const plain = stripRich(t);
         if (/^\+\s*opcion/i.test(plain)) {
           const [first, ...rest] = t.split('\n');

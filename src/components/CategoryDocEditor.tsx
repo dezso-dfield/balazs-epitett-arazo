@@ -105,26 +105,30 @@ Szélterhelése az EN 13561 szabvány szerinti legmagasabb, 6. osztályba sorolt
   [/üveg|guillotine|glass/, {
     categoryType: 'accessory',
     docHeading: 'Opció üvegfal rendszerek:',
-    docIntro: `Keret nélküli, elcsúsztatható üvegfalrendszerünk:
-Üvegfal rendszereinkkel garantáljuk a természetes fény adta pozitívumokat, amik az emberek hangulatát és jó érzését nagymértékben befolyásolják.
+    docIntro: `[b][u]Keret nélküli, elcsúsztatható üvegfalrendszereink:[/u][/b]
+
+1., Üvegfal rendszereinkkel is garantáljuk a természetes fény adta pozitívumokat, amik az emberek hangulatát és jó érzését nagymértékben befolyásolják.
 LINE GLASS rendszerünk, amely síneken csúszó üvegtáblákból áll, könnyen telepíthető és keret nélküli üvegfalakkal biztosítja a zavartalan kilátást, exkluzív kinézetet.
 Ideális megoldás a pergola oldalainak vagy meglévő teraszának beépítésére, ezzel védve a belső terünket a széltől, esőtől és zajtól. Illetve kitűnő választás belső térelválasztó rendszerként.
 Az üvegek 10 mm vastag biztonsági, edzett üvegek.
 
 Az üvegfalak szélterhelése az EN 13561 szabvány szerinti legmagasabb, 6. osztályba sorolt, azaz orkán erejű szélnek is ellenáll (119 km/h).`,
-    docTotalLabel: 'Opció, üvegfalrendszer szereléssel:',
+    // a Word ajánlatokban: „- Opció: A két 340- és 600 cm-es oldal beépítése elcsúsztatható üvegfalrendszer szereléssel: + 7.252 EUR”
+    docTotalLabel: 'Opció: A pergola oldalainak beépítése elcsúsztatható üvegfalrendszer szereléssel:',
     docOptions: '',
     docPromo: '',
   }],
   [/zip|vertik|oldalsó árnyékol/, {
     categoryType: 'accessory',
-    docHeading: 'ZIP-es rendszerű, motoros oldalsó árnyékoló:',
-    docIntro: `Oldalsó árnyékolónk:
+    // a Word ajánlatokban a ZIP táblázat felett nincs cím, az összesítő: „Az árnyékolók szereléssel Összesen: 2.565 EUR (+ Áfa)”
+    docHeading: '',
+    docIntro: `[b][u]Oldalsó árnyékolónk:[/u][/b]
+
 ${SCREENY}
 Ez a termékcsalád csak motoros vezérléssel szerelhető. A motorok vezérlése a távirányítón kívül, okos otthon vezérlővel (applikáción keresztül) is lehetséges.
 
 A motoros-vertikális árnyékolók szélterhelése az EN 13561 szabvány szerinti 5. osztályba sorolt, azaz viharos erejű szélnek is ellenáll (80-100 km/h). A termékhez javasoljuk a szél-érzékelő használatát, ezzel védve az esetleges árnyékoló vászon károsodást.`,
-    docTotalLabel: 'Opció, árnyékolók szereléssel Összesen:',
+    docTotalLabel: 'Az árnyékolók szereléssel Összesen:',
     docOptions: `+Opcionálisan rendelhető a termékhez:
 - okosotthon vezérlő
 - Automatizálási funkciók: - eső, -fény, -szél érzékelők`,
@@ -241,11 +245,15 @@ export function CategoryDocEditor({
   category,
   onChange,
   config,
+  allCategories = [],
 }: {
   category: ProductCategory;
   onChange: (patch: Partial<ProductCategory>) => void;
   config?: SystemConfig;
+  allCategories?: ProductCategory[];
 }) {
+  const accessoryCats = allCategories.filter((c) => c.id !== category.id && c.categoryType === 'accessory');
+  const also = category.docAlsoDescribe || [];
   const filled = [category.docHeading, category.docIntro, category.docOptions, category.docPromo, category.docTotalLabel].filter((x) => (x || '').trim()).length;
   const [open, setOpen] = useState(true);
   const [view, setView] = useState<'page' | 'fields'>('page');
@@ -474,13 +482,33 @@ export function CategoryDocEditor({
               onClick={() => {
                 const s = suggestCategoryDoc(category.name, category.description);
                 if (filled && !window.confirm('A meglévő kategória szövegek helyére a saját ajánlataidból vett minta kerül. Folytatod?')) return;
-                onChange(s);
+                // pergoláknál a Word ajánlatok végén mindig ott van az üvegfal és az oldalsó árnyékoló leírása
+                const wantsAcc = s.categoryType !== 'accessory' && /üvegfalrendszerrel és oldalsó árnyékolókkal/i.test(s.docIntro || '');
+                const accIds = wantsAcc ? accessoryCats.filter((c) => /üvegfal|zip|oldalsó|vertikális/i.test(c.name)).map((c) => c.id) : [];
+                onChange({ ...s, ...(accIds.length ? { docAlsoDescribe: accIds } : {}) });
               }}
             >
               <Wand2 className="w-4 h-4" /> Minta a saját ajánlatokból
             </button>
           </div>
           {view === 'page' ? page : fields}
+          {category.categoryType !== 'accessory' && accessoryCats.length > 0 && (
+            <div className="rounded-xl border border-slate-200 bg-white px-3 py-2">
+              <div className="text-[12px] font-semibold text-slate-700">Ajánlott kiegészítők leírása az ajánlat végén (akkor is, ha nincsenek az ajánlatban)</div>
+              <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1">
+                {accessoryCats.map((c) => (
+                  <label key={c.id} className="inline-flex items-center gap-1.5 text-[12px] text-slate-700">
+                    <input
+                      type="checkbox"
+                      checked={also.includes(c.id)}
+                      onChange={(e) => onChange({ docAlsoDescribe: e.target.checked ? [...also, c.id] : also.filter((x) => x !== c.id) })}
+                    />
+                    {c.name}
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
           <p className="text-[11px] text-slate-500">
             A szürke dobozok helyére az ajánlatban automatikusan kerül a tartalom. A módosítás a jobb felső „Mentés” gombbal mentődik, és az új ajánlatokban érvényes.
           </p>

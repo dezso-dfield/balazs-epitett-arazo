@@ -337,7 +337,7 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
             name: withQty(stripRich(fill(r.name)), r.quantityLabel),
             list: r.listPriceEur > r.discountPriceEur ? plain(r.listPriceEur) : '',
             price: plain(r.discountPriceEur),
-            note: (r.note || '').trim() && r.note !== discountLabel ? r.note : 'Opció',
+            note: (r.note || '').trim() && r.note !== discountLabel ? r.note : r.listPriceEur > r.discountPriceEur ? 'Opció-kedvezmény-' : 'Opció',
           })
         );
       push(para('', { after: 2 }));
@@ -367,6 +367,8 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
     const gap0 = D.bodySize * 1.22;
     const closing = fill(block.sectionClosingText || '').split(/\n\s*\n/).map((t) => t.replace(/^\s+|\s+$/g, '')).filter(Boolean);
     const isPromo = (t: string) => /^ha\s/i.test(stripRich(t));
+    const colorPara = active.some((r) => (r.algorithm?.colorOptions || []).length) ? closing.find((t) => /alapsz[ií]n/i.test(stripRich(t)) && stripRich(t).length < 90) : undefined;
+    const colorHeading = colorPara ? stripRich(colorPara).replace(/:\s*\d+\s*(db\s*)?alapsz[ií]n\.?\s*$/i, '').replace(/[:.\s]+$/, '') : '';
     for (const t of closing.filter(isPromo)) push(paras(t, { size: D.bodySize, bold: true, color: D.heading, after: gap0, indent: 30 }));
     for (const att of blocks.filter((b) => b.attachedTo === block.id && b.type === 'template_section')) await drawSection(att, designOf(att), true);
     if (D.photoLayout === 'stacked') {
@@ -383,7 +385,7 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
     for (const r of active) {
       const colors = r.algorithm?.colorOptions || [];
       if (!colors.length) continue;
-      const t2 = stripRich(r.algorithm?.colorTitle || r.name);
+      const t2 = (colorHeading || stripRich(r.algorithm?.colorTitle || r.name)).replace(/[:\s]+$/, '');
       push(para(colors.length > 4 ? `${t2}: ${colors.length} db alapszín` : `${t2}:`, { size: D.bodySize, color: D.heading, after: D.bodySize }));
       const cw = Math.round(CONTENT_TW / 5);
       const trs: TableRow[] = [];
@@ -418,8 +420,8 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
       push(new Table({ width: { size: CONTENT_TW, type: WidthType.DXA }, columnWidths: Array(5).fill(cw), layout: TableLayoutType.FIXED, borders: noBorders, rows: trs }));
       push(para('', { size: D.bodySize }));
     }
-    if (closing.some((t) => !isPromo(t))) {
-      for (const t of closing.filter((x) => !isPromo(x))) {
+    if (closing.some((t) => !isPromo(t) && t !== colorPara)) {
+      for (const t of closing.filter((x) => !isPromo(x) && x !== colorPara)) {
         const plain = stripRich(t);
         const gap = gap0;
         if (/^\+\s*opcion/i.test(plain)) {

@@ -29,6 +29,8 @@ export interface DocDesign {
   tableWide: boolean; // a táblázat szélesebb a szövegnél (Word: 18,7 cm, középre)
   photoLayout: 'stacked' | 'grid'; // fotók egymás alatt teljes szélességben (Word) vagy kettesével
   photosBeforeTable: number; // ennyi termékfotó áll a táblázat előtt, a többi utána (Word ajánlatok: 3)
+  productNewPage: boolean; // minden termék új oldalon kezdődik (Word ajánlatok)
+  infoNewPage: boolean; // az Információ (és az aláírás) új oldalon (Word ajánlatok)
 }
 
 /** A saját fejléces papír (a Word ajánlatok fejlécéből) */
@@ -59,6 +61,8 @@ export const DEFAULT_DOC_DESIGN: DocDesign = {
   tableWide: true,
   photoLayout: 'stacked',
   photosBeforeTable: 3,
+  productNewPage: true,
+  infoNewPage: true,
 };
 
 /** Csak a ténylegesen kitöltött mezők (üres szöveg / NaN nem írja felül az örökölt értéket) */

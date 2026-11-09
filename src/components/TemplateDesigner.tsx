@@ -89,6 +89,22 @@ export function DesignFields({
             />
           </label>
         ))}
+        {(
+          [
+            ['productNewPage', 'Termék új oldalon'],
+            ['infoNewPage', 'Információ új oldalon'],
+          ] as const
+        ).map(([k, l]) => (
+          <label key={k} className={`block text-[12px] ${inherit && !isSet(k) ? 'opacity-60' : ''}`}>
+            <span className="flex items-center gap-1 text-slate-600 mb-1">
+              {l} {reset(k)}
+            </span>
+            <select value={eff[k] ? '1' : '0'} onChange={(e) => set(k, e.target.value === '1')} className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-sm">
+              <option value="1">Igen</option>
+              <option value="0">Nem</option>
+            </select>
+          </label>
+        ))}
         <label className={`block text-[12px] ${inherit && !isSet('showPageNumbers') ? 'opacity-60' : ''}`}>
           <span className="flex items-center gap-1 text-slate-600 mb-1">Oldalszám {reset('showPageNumbers')}</span>
           <select

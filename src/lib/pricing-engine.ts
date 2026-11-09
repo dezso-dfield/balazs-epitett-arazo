@@ -24,6 +24,7 @@ import {
   ProductCategory,
 } from './types';
 import { stripRich as stripRichText } from './richtext';
+import { getDocDesign } from './doc-design';
 
 export function roundHuf(eur: number, rate: number): number {
   return Math.round((eur * rate) / 1000) * 1000;
@@ -1340,8 +1341,12 @@ export function buildFullQuoteDocumentBlocks(params: {
 
   let promoShown = false;
   const mainSections: { tpl: QuoteTemplate; block: QuoteDocumentBlock }[] = [];
+  // a Word ajánlatokban minden termék új oldalon kezdődik (az oldaltörés a szerkesztőben törölhető)
+  const design = getDocDesign(config);
+  const pageBreak = (): QuoteDocumentBlock => ({ id: `blk_brk_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`, type: 'page_break' });
   mainTemplates.forEach((tpl, idx) => {
     const cat = catOf(tpl.categoryId);
+    if (design.productNewPage) blocks.push(pageBreak());
     if (idx === 0 || mainTemplates[idx - 1].categoryId !== tpl.categoryId) {
       // kiegészítő kategória címe („Opció üvegfal rendszerek:”) önálló ajánlatnál nem kell
       const heading = cat?.categoryType === 'accessory' ? '' : replaceTemplateVariables(cat?.docHeading || '', varCtx).trim();
@@ -1494,8 +1499,10 @@ export function buildFullQuoteDocumentBlocks(params: {
     .replace(/\.\s*\./g, '.')
     .trim();
 
-  // kiegészítő kategóriák leírása (Guillotine, Thermo Glass, oldalsó árnyékoló…) az Információ előtt
-  for (const cid of catOrder.filter(isAccessory)) {
+  // kiegészítő kategóriák leírása (Guillotine, Thermo Glass, oldalsó árnyékoló…) az Információ előtt; a fő kategóriánál
+  // beállított kiegészítők leírása akkor is, ha nincsenek az ajánlatban (a Word ajánlatokban a pergolák után mindig ott van)
+  const describe = [...new Set([...catOrder.filter(isAccessory), ...mainCats.flatMap((c) => catOf(c)?.docAlsoDescribe || [])])].filter((c) => catOf(c));
+  for (const cid of describe) {
     const intro = replaceTemplateVariables(catOf(cid)?.docIntro || '', varCtx).trim();
     if (intro) blocks.push({ ...tb('catintro', 'category_intro', intro), docCategoryId: cid });
   }
@@ -1525,6 +1532,7 @@ export function buildFullQuoteDocumentBlocks(params: {
         .filter((par) => !/^\s*ha\s.{0,60}megrendeli/i.test(par))
         .join('\n\n')
     : closingText;
+  if (design.infoNewPage && blocks.length > 1) blocks.push(pageBreak());
   blocks.push({
     id: `blk_closing_${Date.now()}`,
     type: 'text_box',

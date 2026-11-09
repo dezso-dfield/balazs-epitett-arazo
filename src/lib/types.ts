@@ -309,6 +309,7 @@ export interface ProductCategory {
   docOptions?: string;        // a kategória termékei után: „+Opcionálisan rendelhető a termékhez:” lista
   docPromo?: string;          // félkövér akció, pl. „Ha {{hatarido}}-ig megrendeli az alapszerkezetet…”
   docDesign?: Partial<import('./doc-design').DocDesign>; // a kategória saját dizájnja (csak az eltérések az általánoshoz képest)
+  docAlsoDescribe?: string[]; // kiegészítő kategóriák, amelyek leírása mindig az ajánlat végére kerül (pl. üvegfal, oldalsó árnyékoló a pergoláknál)
   docTotalLabel?: string;     // összesítő sor felirata, pl. „Opció, árnyékolók szereléssel Összesen:” (üresen az általános)
 }
 

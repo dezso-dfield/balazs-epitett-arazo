@@ -1283,7 +1283,7 @@ export function CatalogManagerView({
                     </button>
                   </div>
 
-                  <CategoryDocEditor category={selectedCategory} config={config} onChange={(patch) => updateCategory(selectedCategory.id, patch)} />
+                  <CategoryDocEditor category={selectedCategory} config={config} allCategories={draftCategories} onChange={(patch) => updateCategory(selectedCategory.id, patch)} />
                   <details className="border-b border-slate-100 px-5 py-3 group/design">
                     <summary className="cursor-pointer text-sm font-semibold text-slate-800 select-none">
                       Kategória dizájn{' '}

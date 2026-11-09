@@ -128,7 +128,7 @@ export async function renderQuoteHtml(quote: Partial<QuoteRecord>, config: Syste
       rowsHtml.push(`<tr>${td('', strong)}${td(`<b>${esc(block.sumLabel || 'Összesen:')}</b>`, strong)}${td(`<b>${Math.round(totals.totalEur)}</b>`, `${strong};text-align:right`)}${td('', strong)}</tr>`);
       for (const r of opt)
         rowsHtml.push(
-          `<tr>${td(esc(stripRich(fill(r.name))))}${td(r.listPriceEur > r.discountPriceEur ? String(Math.round(r.listPriceEur)) : '', 'text-align:right')}${td(`<b>${Math.round(r.discountPriceEur)}</b>`, 'text-align:right')}${td(`<b>${esc((r.note || '').trim() || 'Opció')}</b>`)}</tr>`
+          `<tr>${td(esc(stripRich(fill(r.name))))}${td(r.listPriceEur > r.discountPriceEur ? String(Math.round(r.listPriceEur)) : '', 'text-align:right')}${td(`<b>${Math.round(r.discountPriceEur)}</b>`, 'text-align:right')}${td(`<b>${esc((r.note || '').trim() || (r.listPriceEur > r.discountPriceEur ? 'Opció-kedvezmény-' : 'Opció'))}</b>`)}</tr>`
         );
       blank();
       out.push(
@@ -155,13 +155,15 @@ export async function renderQuoteHtml(quote: Partial<QuoteRecord>, config: Syste
     if (attached) return;
     const closing = fill(block.sectionClosingText).split(/\n\s*\n/).map((t) => t.trim()).filter(Boolean);
     const isPromo = (t: string) => /^ha\s/i.test(stripRich(t));
+    const colorPara = active.some((r) => (r.algorithm?.colorOptions || []).length) ? closing.find((t) => /alapsz[ií]n/i.test(stripRich(t)) && stripRich(t).length < 90) : undefined;
+    const colorHeading = colorPara ? stripRich(colorPara).replace(/:\s*\d+\s*(db\s*)?alapsz[ií]n\.?\s*$/i, '').replace(/[:.\s]+$/, '') : '';
     for (const t of closing.filter(isPromo)) p(`<b>${rich(t)}</b>`, `${body(D)};margin-left:30pt`), blank();
     for (const att of blocks.filter((b) => b.attachedTo === block.id && b.type === 'template_section')) await section(att, true);
     if (D.photoLayout === 'stacked') for (const ph of photos.slice(D.photosBeforeTable)) await photo(ph, photoWidthPct(ph));
     for (const r of active) {
       const colors = r.algorithm?.colorOptions || [];
       if (!colors.length) continue;
-      const t2 = stripRich(r.algorithm?.colorTitle || r.name).replace(/[:\s]+$/, '');
+      const t2 = (colorHeading || stripRich(r.algorithm?.colorTitle || r.name)).replace(/[:\s]+$/, '');
       p(esc(colors.length > 4 ? `${t2}: ${colors.length} db alapszín` : `${t2}:`), body(D));
       const cells = colors.map(
         (c) =>
@@ -172,7 +174,7 @@ export async function renderQuoteHtml(quote: Partial<QuoteRecord>, config: Syste
       out.push(`<table style="border-collapse:collapse;width:100%">${trs.join('')}</table>`);
       blank();
     }
-    for (const t of closing.filter((x) => !isPromo(x))) {
+    for (const t of closing.filter((x) => !isPromo(x) && x !== colorPara)) {
       if (/^\+\s*opcion/i.test(stripRich(t))) {
         const [first, ...rest] = t.split('\n');
         p(`<b>${hl(D, rich(first))}</b>`, body(D));
