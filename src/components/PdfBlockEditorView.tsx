@@ -37,6 +37,9 @@ import {
   MOUNT_TYPES,
   PRICING_MODE_OPTIONS,
   toTemplateText,
+  keepEmptyIntroTokens,
+  LEGACY_INTRO_TEMPLATES,
+  LONG_INTRO_TEMPLATE,
 } from '@/lib/constants';
 import {
   buildEditableBlockFromTemplate,
@@ -82,6 +85,9 @@ interface PdfBlockEditorViewProps {
   onSendQuote?: (saved: QuoteRecord) => void;
   // Egy termékszakasz alcímének és bevezetőjének mentése a termék sablonjába
   onSaveTemplate?: (template: QuoteTemplate) => Promise<void>;
+  // a Word-szerű nézetből: kategória szövegek és az általános sablon (megszólítás, bevezető, Információ) mentése
+  onSaveCategory?: (category: ProductCategory) => Promise<void>;
+  onSaveConfigPatch?: (patch: Partial<SystemConfig>) => Promise<void>;
 }
 
 export function PdfBlockEditorView({
@@ -96,6 +102,8 @@ export function PdfBlockEditorView({
   onBackToWizard,
   onSendQuote,
   onSaveTemplate,
+  onSaveCategory,
+  onSaveConfigPatch,
 }: PdfBlockEditorViewProps) {
   const isExistingSavedQuote = Boolean(initialQuote.id);
 
@@ -520,11 +528,29 @@ export function PdfBlockEditorView({
     if (!window.confirm(msg)) return;
     setSavingTplFor(blk.id);
     try {
+      // az ajánló bekezdés a bevezetőben van (Word ajánlatok szerkezete): onnan vesszük vissza, a félkövér név nélkül
+      const pitch = blk.pitchName
+        ? blocks
+            .filter((b) => b.textStyle === 'category_intro')
+            .flatMap((b) => (b.content || '').split(/\n\s*\n/))
+            .find((par) => par.includes(`[b]${blk.pitchName}[/b]`))
+            ?.replace(`[b]${blk.pitchName}[/b]`, blk.pitchName)
+        : '';
+      // a hóterhelés a bevezetőbe került (modellenként): a sablonból nem veszhet el
+      const snowRe = /h[óo]terhel[ée]s/i;
+      let introOut = [T(pitch || ''), T(blk.sectionIntroText)].filter((x) => x.trim()).join('\n\n');
+      let closingOut = T(blk.sectionClosingText);
+      if (!snowRe.test(introOut) && !snowRe.test(closingOut)) {
+        const lines = [tpl.introText || '', ...(tpl.textBlocks || []).map((x) => x.content || '')].join('\n').split('\n').filter((l) => snowRe.test(l));
+        if (lines.length) introOut = `${introOut}\n${lines.join('\n')}`;
+        const sentence = (tpl.closingText || '').match(/h[óo]terhel[ée]s(?:e)?[^:\n]{0,30}:\s*(?:[^.\n]|\.(?=\s*\d))*?kg\/m[²2](?:[^.\n]*?kg\/m[²2])?\.?/i)?.[0];
+        if (!lines.length && sentence) closingOut = `${sentence} ${closingOut}`.trim();
+      }
       await onSaveTemplate({
         ...tpl,
         subtitle: T(blk.sectionSubtitle),
-        introText: T(blk.sectionIntroText),
-        closingText: T(blk.sectionClosingText),
+        introText: introOut,
+        closingText: closingOut,
         // a bevezető / záró szöveg már tartalmazza a külön szövegdobozokat, ezért azok beolvadnak
         textBlocks: (tpl.textBlocks || []).filter((tb) => !['before_photos', 'before_table', 'after_table'].includes(tb.position)),
         photos: (blk.sectionPhotos || []).map((ph) => ({ ...ph, titleAbove: T(ph.titleAbove), captionBelow: T(ph.captionBelow) })),
@@ -533,6 +559,72 @@ export function PdfBlockEditorView({
     } finally {
       setSavingTplFor(null);
     }
+  };
+
+  /**
+   * Word-szerű nézet: egy blokk mentése oda, ahonnan jött. Termék szakasz → termék sablon; kategória cím / leírás /
+   * opciók / akció és a csatolt táblázat címe → kategória sablon; megszólítás, bevezető, Információ → általános sablon.
+   * A konkrét ügyféladatok (név, méret, település, termékek) változóvá alakulnak vissza.
+   */
+  const templateTargetOf = (blk: QuoteDocumentBlock): string | null => {
+    if (blk.type === 'template_section') {
+      if (blk.attachedTo && onSaveCategory && blk.categoryId) return 'Kategória + termék sablon';
+      return onSaveTemplate && blk.templateId && templates.some((t) => t.id === blk.templateId) ? 'Termék sablonba' : null;
+    }
+    if (blk.type !== 'text_box') return null;
+    if (blk.docCategoryId && onSaveCategory && categories.some((c) => c.id === blk.docCategoryId)) return 'Kategória sablonba';
+    if ((blk.textStyle === 'greeting' || blk.textStyle === 'footer_info') && onSaveConfigPatch) return 'Általános sablonba';
+    return null;
+  };
+  const saveBlockToTemplate = async (blk: QuoteDocumentBlock): Promise<boolean> => {
+    const ctxBase = { customerName, greetingName, city, widthCm, projectionCm, heightCm, mountType, eurHufRate, deliveryFeeHuf };
+    const T = (x?: string, extra = {}) => toTemplateText(x || '', { ...ctxBase, ...extra });
+    if (blk.type === 'template_section') {
+      if (blk.attachedTo && onSaveCategory && blk.categoryId) {
+        const cat = categories.find((c) => c.id === blk.categoryId);
+        if (cat && (blk.attachTitle || '') !== (cat.docHeading || '')) await onSaveCategory({ ...cat, docHeading: T(blk.attachTitle) });
+      }
+      if (blk.templateId && templates.some((t) => t.id === blk.templateId)) await saveSectionToTemplate(blk);
+      return true;
+    }
+    if (blk.docCategoryId && onSaveCategory) {
+      const cat = categories.find((c) => c.id === blk.docCategoryId);
+      if (!cat) return false;
+      const st = blk.textStyle;
+      let patch: Partial<ProductCategory> = {};
+      if (st === 'category_heading') patch = { docHeading: T(blk.title || blk.content) };
+      else if (st === 'options') patch = { docOptions: T(blk.content) };
+      else if (st === 'promo') patch = { docPromo: T(blk.content) };
+      else if (st === 'category_intro') {
+        // az automatikus részek (termékek ajánló bekezdése, „mind a N szerkezetnek”) nem kerülnek a kategória sablonba
+        const pitchNames = blocks.map((b) => b.pitchName).filter(Boolean) as string[];
+        const kept = (blk.content || '')
+          .split(/\n\s*\n/)
+          .filter((par) => !pitchNames.some((n) => par.includes(`[b]${n}[/b]`)))
+          .map((par) => par.replace(/\s*\(mind a \d+ szerkezetnek\)/i, ''))
+          .join('\n\n');
+        patch = { docIntro: T(kept) };
+      }
+      if (!window.confirm(`A „${cat.name}” kategória sablonjába mentés: a következő ajánlatokban ez a szöveg szerepel. Mented?`)) return false;
+      await onSaveCategory({ ...cat, ...patch });
+      return true;
+    }
+    if (onSaveConfigPatch && blk.textStyle === 'greeting') {
+      if (!window.confirm('A megszólítás és a bevezető mentése az általános sablonba (minden új ajánlatban így lesz). Mented?')) return false;
+      const oldTpl =
+        !config.defaultIntroTemplate?.trim() || LEGACY_INTRO_TEMPLATES.includes(config.defaultIntroTemplate.trim()) ? LONG_INTRO_TEMPLATE : config.defaultIntroTemplate;
+      await onSaveConfigPatch({
+        defaultGreetingTemplate: T(blk.title),
+        defaultIntroTemplate: keepEmptyIntroTokens(oldTpl, T(blk.content, blk.templateVars || {}), blk.templateVars || {}),
+      });
+      return true;
+    }
+    if (onSaveConfigPatch && blk.textStyle === 'footer_info') {
+      if (!window.confirm('Az Információ rész mentése az általános sablonba (minden új ajánlatban így lesz). Mented?')) return false;
+      await onSaveConfigPatch({ docInfoTitle: blk.title || '', defaultClosingInfoTemplate: T(blk.content) });
+      return true;
+    }
+    return false;
   };
 
   const handleInsertSavedTemplateBlock = (at?: number, templateId = templateToInsertId) => {
@@ -776,6 +868,20 @@ export function PdfBlockEditorView({
     // az előnézet frissítése ne tartsa vissza a gombokat
     void refreshLivePdfPreview();
   };
+
+  // Ctrl+S / Cmd+S: az ajánlat mentése (mint a Wordben)
+  const saveRef = useRef(handleSaveAndDownload);
+  saveRef.current = handleSaveAndDownload;
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        void saveRef.current('save');
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   // Letöltés fájlként (nem új lapon: a mentés utáni window.open-t a böngésző felugró ablakként blokkolhatja)
   const downloadSavedPdf = async (id: string, quoteNumber?: string, kind: 'pdf' | 'docx' = 'pdf') => {
@@ -1166,6 +1272,8 @@ export function PdfBlockEditorView({
             onAddPhoto={(i) => handleAddStandalonePhotoBox(i)}
             onAddPageBreak={(at) => handleAddPageBreak(at)}
             categories={categories}
+            templateTargetOf={templateTargetOf}
+            onSaveToTemplate={saveBlockToTemplate}
           />
           <div className="hidden 2xl:block min-w-0 2xl:sticky 2xl:top-4">{renderPreviewCard('h-[820px]')}</div>
         </div>

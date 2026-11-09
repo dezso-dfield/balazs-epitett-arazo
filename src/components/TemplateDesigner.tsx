@@ -24,6 +24,8 @@ const NUM_FIELDS: [keyof DocDesign, string, number, number, number][] = [
   ['greetingSize', 'Megszólítás (pt)', 9, 24, 0.5],
   ['lineHeight', 'Sorköz', 1.1, 2.2, 0.05],
   ['logoHeight', 'Logó magassága (pt)', 16, 90, 1],
+  ['photosBeforeTable', 'Fotók a táblázat előtt (db)', 0, 50, 1],
+  ['tableSize', 'Táblázat betű (pt)', 7, 14, 0.5],
 ];
 
 /**

@@ -635,6 +635,27 @@ function withSuffix(w: string): string {
   return `${w}${lc}${suf}l`;
 }
 
+/**
+ * A bevezető sablonba mentésekor az aktuális ajánlatban üres változók ({{opciok}}, ha nincs opció) nem látszanak a szövegben,
+ * így a visszacserélés elveszítené őket: a régi sablon szerinti helyükre (a következő megmaradt változó elé) visszakerülnek.
+ */
+export function keepEmptyIntroTokens(oldTpl: string, next: string, vars: { optionsSentence?: string; giftsSentence?: string; accessoriesSentence?: string; products?: string }) {
+  const empty = [
+    ['{{opciok}}', vars.optionsSentence],
+    ['{{ajandekok}}', vars.giftsSentence],
+    ['{{kiegeszitok}}', vars.accessoriesSentence],
+  ]
+    .filter(([, v]) => !v)
+    .map(([t]) => t as string);
+  let out = next;
+  for (const tok of empty) {
+    if (!oldTpl.includes(tok) || out.includes(tok)) continue;
+    const after = oldTpl.slice(oldTpl.indexOf(tok) + tok.length).match(/\{\{\s*\w+\s*\}\}/)?.[0];
+    out = after && out.includes(after) ? out.replace(after, `${tok} ${after}`) : `${out.trimEnd()} ${tok}`;
+  }
+  return out;
+}
+
 /** Magyar felsorolás: „a, b és c” */
 export function huList(items: string[]): string {
   const xs = items.map((x) => x.trim()).filter(Boolean);

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ImagePlus, Minus, Plus, Scissors, Trash2, Type, X } from 'lucide-react';
+import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, BookmarkPlus, ImagePlus, Minus, Plus, Scissors, Trash2, Type, X } from 'lucide-react';
 import { formatDotNumber } from '@/lib/constants';
 import { computeBlockTotals, recalculateBlockTotals } from '@/lib/pricing-engine';
 import type { PhotoCaptionBlock, ProductCategory, QuoteDocumentBlock, SystemConfig } from '@/lib/types';
@@ -206,6 +206,8 @@ export function DocumentEditor({
   toolbarExtra,
   hideStructureControls,
   categories = [],
+  templateTargetOf,
+  onSaveToTemplate,
 }: {
   blocks: QuoteDocumentBlock[];
   config: SystemConfig;
@@ -222,7 +224,66 @@ export function DocumentEditor({
   toolbarExtra?: React.ReactNode;
   hideStructureControls?: boolean;
   categories?: ProductCategory[];
+  /** hová menthető vissza a blokk (pl. „Termék sablonba”); null: nem menthető */
+  templateTargetOf?: (blk: QuoteDocumentBlock) => string | null;
+  onSaveToTemplate?: (blk: QuoteDocumentBlock) => Promise<boolean>;
 }) {
+  // módosítás figyelése: a blokk első állapota az ajánlat megnyitásakor (vagy az utolsó sablonba mentéskor)
+  const snap = React.useRef(new Map<string, string>());
+  const [, bump] = React.useState(0);
+  for (const b of blocks) if (!snap.current.has(b.id)) snap.current.set(b.id, JSON.stringify(b));
+  const changed = (b: QuoteDocumentBlock) => snap.current.get(b.id) !== JSON.stringify(b);
+  const [savingId, setSavingId] = React.useState<string | null>(null);
+  const saveBtn = (b: QuoteDocumentBlock) => {
+    const target = templateTargetOf?.(b);
+    if (!target || !onSaveToTemplate || !changed(b)) return null;
+    return (
+      <button
+        type="button"
+        disabled={savingId === b.id}
+        title="A módosítás mentése a sablonba: a következő ajánlatokban már így szerepel"
+        onClick={async () => {
+          setSavingId(b.id);
+          try {
+            if (await onSaveToTemplate(b)) {
+              snap.current.set(b.id, JSON.stringify(b));
+              bump((n) => n + 1);
+            }
+          } finally {
+            setSavingId(null);
+          }
+        }}
+        className="absolute -right-2 -top-2 z-20 inline-flex items-center gap-1 rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-900 shadow-sm hover:bg-amber-100 print:hidden font-sans"
+      >
+        <BookmarkPlus className="w-3.5 h-3.5" /> {savingId === b.id ? 'Mentés…' : `Mentés: ${target}`}
+      </button>
+    );
+  };
+  const [zoom, setZoom] = React.useState(1);
+  // tartalomjegyzék a lap mellett: kattintásra odaugrik
+  const outline = blocks
+    .filter((b) => !(b.attachedTo && blocks.some((x) => x.id === b.attachedTo)) && b.type !== 'page_break')
+    .map((b) => {
+      const plain = (t?: string) => stripRich(t || '').replace(/\s+/g, ' ').trim();
+      const label =
+        b.type === 'template_section'
+          ? plain(b.sectionTitle).replace(/\s*\(\d+\s*[×x]\s*\d+[^)]*\)\s*$/, '')
+          : b.textStyle === 'greeting'
+            ? 'Megszólítás és bevezető'
+            : b.textStyle === 'footer_info'
+              ? plain(b.title) || 'Információ'
+              : b.textStyle === 'category_intro'
+                ? `Leírás: ${plain(b.content).slice(0, 28)}…`
+                : b.textStyle === 'options'
+                  ? 'Opcionálisan rendelhető'
+                  : b.textStyle === 'promo'
+                    ? 'Akció'
+                    : b.type === 'photo_box'
+                      ? 'Fotó'
+                      : plain(b.title || b.content).slice(0, 32) || 'Szöveg';
+      return { id: b.id, label, product: b.type === 'template_section' };
+    });
+  const changedCount = templateTargetOf ? blocks.filter((b) => templateTargetOf(b) && changed(b)).length : 0;
   // oldal keret: a fő kategória dizájnja; a blokkok a saját kategóriájukét kapják (ha van eltérés)
   const D = getDocDesign(config, primaryCategory(blocks, categories));
   const pageD = D;
@@ -347,6 +408,41 @@ export function DocumentEditor({
           .replace(/\{\{\s*magassag\s*\}\}/g, sizeM[3])
           .replace(/\{\{\s*beepites\s*\}\}/g, (sizeM[4] || '').trim())
       : '';
+    const stacked = (list: PhotoCaptionBlock[]) => (
+          <div className="space-y-3 py-2">
+            {list.map((p) => {
+              const all = blk.sectionPhotos || [];
+              const i = all.indexOf(p);
+              const patch = (pt: Partial<PhotoCaptionBlock>) =>
+                updateBlock(blk.id, (b) => {
+                  const arr = [...(b.sectionPhotos || [])];
+                  arr[i] = { ...arr[i], ...pt };
+                  return { ...b, sectionPhotos: arr };
+                });
+              return (
+                <PhotoFrame
+                  key={p.id || i}
+                  photo={p}
+                  defaultPct={photoWidthPct({ widthPct: p.widthPct })}
+                  onPatch={patch}
+                  onMove={(dir) =>
+                    updateBlock(blk.id, (b) => {
+                      const arr = [...(b.sectionPhotos || [])];
+                      const j = i + dir;
+                      if (j < 0 || j >= arr.length) return b;
+                      [arr[i], arr[j]] = [arr[j], arr[i]];
+                      return { ...b, sectionPhotos: arr };
+                    })
+                  }
+                  onRemove={() => updateBlock(blk.id, (b) => ({ ...b, sectionPhotos: (b.sectionPhotos || []).filter((_, k2) => k2 !== i) }))}
+                  above={p.titleAbove ? photoCaption(blk, i, p, 'titleAbove') : undefined}
+                  below={photoCaption(blk, i, p, 'captionBelow')}
+                />
+              );
+            })}
+          </div>
+        
+    );
     const visible = rows.map((r, i) => ({ r, i })).filter(({ r }) => r.included !== false && !r.systemRole);
     const base = visible.filter(({ r }) => r.itemRole !== 'optional');
     const opt = visible.filter(({ r }) => r.itemRole === 'optional');
@@ -426,40 +522,7 @@ export function DocumentEditor({
         <RichInline readOnly={!!lockedReason?.(blk)} value={blk.sectionIntroText || ''} onChange={(v) => updateBlock(blk.id, (b) => ({ ...b, sectionIntroText: v }))} style={body} placeholder="Termék leírása" />
 
         </>)}
-        {!attached && photos.length > 0 && D.photoLayout === 'stacked' && (
-          <div className="space-y-3 py-2">
-            {photos.map((p) => {
-              const all = blk.sectionPhotos || [];
-              const i = all.indexOf(p);
-              const patch = (pt: Partial<PhotoCaptionBlock>) =>
-                updateBlock(blk.id, (b) => {
-                  const arr = [...(b.sectionPhotos || [])];
-                  arr[i] = { ...arr[i], ...pt };
-                  return { ...b, sectionPhotos: arr };
-                });
-              return (
-                <PhotoFrame
-                  key={p.id || i}
-                  photo={p}
-                  defaultPct={photoWidthPct({ widthPct: p.widthPct })}
-                  onPatch={patch}
-                  onMove={(dir) =>
-                    updateBlock(blk.id, (b) => {
-                      const arr = [...(b.sectionPhotos || [])];
-                      const j = i + dir;
-                      if (j < 0 || j >= arr.length) return b;
-                      [arr[i], arr[j]] = [arr[j], arr[i]];
-                      return { ...b, sectionPhotos: arr };
-                    })
-                  }
-                  onRemove={() => updateBlock(blk.id, (b) => ({ ...b, sectionPhotos: (b.sectionPhotos || []).filter((_, k2) => k2 !== i) }))}
-                  above={p.titleAbove ? photoCaption(blk, i, p, 'titleAbove') : undefined}
-                  below={photoCaption(blk, i, p, 'captionBelow')}
-                />
-              );
-            })}
-          </div>
-        )}
+        {!attached && photos.length > 0 && D.photoLayout === 'stacked' && stacked(photos.slice(0, D.photosBeforeTable))}
         {!attached && photos.length > 0 && D.photoLayout !== 'stacked' && (
           <div className="space-y-3 py-1">
             <figure className="mx-auto w-[75%]">
@@ -596,7 +659,8 @@ export function DocumentEditor({
               <>
                 <RichInline readOnly={ro} value={promo} onChange={(v) => save(v, rest)} className="font-bold" style={{ ...body, ...headC, marginTop: ptPx(D.bodySize), paddingLeft: ptPx(30) }} placeholder="Akció (pl. Ha …-ig megrendeli…)" />
                 {atts.map((a) => (
-                  <div key={a.id} className="group/att relative pt-3">
+                  <div key={a.id} className={`group/att relative pt-3 ${templateTargetOf?.(a) && changed(a) ? 'outline outline-1 outline-amber-300 outline-offset-4 rounded-sm' : ''}`}>
+                    {saveBtn(a)}
                     <button
                       type="button"
                       title="Kiegészítő táblázat törlése ennél a terméknél"
@@ -608,6 +672,7 @@ export function DocumentEditor({
                     {renderSection(a, true)}
                   </div>
                 ))}
+                {D.photoLayout === 'stacked' && photos.length > D.photosBeforeTable && stacked(photos.slice(D.photosBeforeTable))}
                 <RichInline readOnly={ro} value={rest} onChange={(v) => save(promo, v)} style={{ ...body, marginTop: ptPx(D.bodySize) }} placeholder="Záró szöveg (színek, opcionálisan rendelhető…)" />
               </>
             );
@@ -617,7 +682,25 @@ export function DocumentEditor({
   };
 
   return (
-    <div className="bg-slate-200/70 rounded-2xl p-3 sm:p-6 overflow-x-auto space-y-3">
+    <div className="bg-slate-200/70 rounded-2xl p-3 sm:p-6 overflow-x-auto space-y-3 relative">
+      {/* tartalomjegyzék: széles képernyőn a lap bal oldalán */}
+      <nav className="hidden 2xl:block absolute left-4 top-24 w-48 space-y-0.5 print:hidden" style={{ position: 'absolute' }}>
+        <div className="sticky top-4 rounded-xl bg-white/90 border border-slate-200 p-2 shadow-sm">
+          <div className="px-2 pb-1 text-[10px] font-semibold uppercase tracking-wide text-slate-400">Tartalom</div>
+          {outline.map((o) => (
+            <button
+              key={o.id}
+              type="button"
+              onClick={() => document.getElementById(`doc-blk-${o.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+              className={`block w-full truncate rounded-md px-2 py-1 text-left text-[12px] hover:bg-slate-100 ${o.product ? 'font-semibold text-slate-900' : 'text-slate-600'}`}
+              title={o.label}
+            >
+              {o.label}
+              {templateTargetOf && changed(blocks.find((b) => b.id === o.id)!) && templateTargetOf(blocks.find((b) => b.id === o.id)!) ? <span className="ml-1 text-amber-600">●</span> : null}
+            </button>
+          ))}
+        </div>
+      </nav>
       <div className="mx-auto" style={{ width: ptPx(595.28) }}>
         <FormatToolbar
           accent={D.accent}
@@ -627,10 +710,31 @@ export function DocumentEditor({
               ? (a) => updateBlock(focused.id, (b) => ({ ...b, align: a }))
               : undefined
           }
-          extra={toolbarExtra}
+          extra={
+            <>
+              {toolbarExtra}
+              <select
+                value={String(zoom)}
+                onChange={(e) => setZoom(Number(e.target.value))}
+                title="Nagyítás"
+                className="h-8 rounded-md border border-slate-200 bg-white px-1.5 text-[13px]"
+              >
+                {[0.75, 0.9, 1, 1.1, 1.25].map((z) => (
+                  <option key={z} value={z}>
+                    {Math.round(z * 100)}%
+                  </option>
+                ))}
+              </select>
+              {changedCount > 0 && (
+                <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-[11px] font-semibold text-amber-900" title="A sárga keretes részeknél a „Mentés: … sablonba” gombbal a módosítás a sablonba menthető">
+                  <BookmarkPlus className="w-3.5 h-3.5" /> {changedCount} módosított rész menthető a sablonba
+                </span>
+              )}
+            </>
+          }
         />
       </div>
-      <div className="mx-auto bg-white shadow-xl shrink-0" style={{ width: ptPx(595.28), fontFamily: pageFont, color: D.text }}>
+      <div className="mx-auto bg-white shadow-xl shrink-0" style={{ width: ptPx(595.28), fontFamily: pageFont, color: D.text, zoom }}>
         {/* fejléc: a fejléces papír teteje (logó), mint a PDF-ben és a Word ajánlatokban */}
         {letterhead ? (
           <div
@@ -647,7 +751,8 @@ export function DocumentEditor({
           {insertBar(-1)}
           {blocks.map((blk, idx) => blk.attachedTo && blocks.some((b) => b.id === blk.attachedTo) ? null : (
             <React.Fragment key={blk.id}>
-              <div className={`group relative py-1.5 ${lockedReason?.(blk) ? 'opacity-90' : ''}`} onFocus={() => setFocusId(blk.id)}>
+              <div id={`doc-blk-${blk.id}`} className={`group relative py-1.5 scroll-mt-24 ${lockedReason?.(blk) ? 'opacity-90' : ''} ${templateTargetOf?.(blk) && changed(blk) ? 'outline outline-1 outline-amber-300 outline-offset-4 rounded-sm' : ''}`} onFocus={() => setFocusId(blk.id)}>
+                {saveBtn(blk)}
                 {lockedReason?.(blk) && (
                   <div className="absolute -right-[64px] top-1 w-[58px] text-[9px] leading-tight text-slate-400 print:hidden">{lockedReason(blk)}</div>
                 )}

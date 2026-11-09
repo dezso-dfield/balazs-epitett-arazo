@@ -1318,7 +1318,15 @@ export function buildFullQuoteDocumentBlocks(params: {
   const buildBlock = (tpl: QuoteTemplate, no: number) => {
     const blk = buildEditableBlockFromTemplate(tpl, no, calc, config, selectedMaterialsByTemplate?.[tpl.id], adjustmentsByTemplate?.[tpl.id]);
     const cat = catOf(tpl.categoryId);
-    if (cat?.docTotalLabel?.trim()) blk.totalLabel = replaceTemplateVariables(cat.docTotalLabel, varCtx);
+    if (cat?.docTotalLabel?.trim()) {
+      let label = replaceTemplateVariables(cat.docTotalLabel, varCtx).trim();
+      // önálló kiegészítő ajánlatnál (pl. csak üvegfal) nem opció: „Opció, üvegfalrendszer szereléssel:” → „Üvegfalrendszer szereléssel Összesen:”
+      if (!isAccessory(tpl.categoryId) && cat.categoryType === 'accessory' && /^opci/i.test(label)) {
+        label = label.replace(/^opció[,:]?\s*/i, '').replace(/:\s*$/, '');
+        label = `${label.charAt(0).toUpperCase()}${label.slice(1)}${/összesen/i.test(label) ? '' : ' Összesen'}:`;
+      }
+      blk.totalLabel = label;
+    }
     return blk;
   };
   // a kiegészítők táblázatai egyszer kiszámolva, minden pergola alá másolva
@@ -1335,7 +1343,8 @@ export function buildFullQuoteDocumentBlocks(params: {
   mainTemplates.forEach((tpl, idx) => {
     const cat = catOf(tpl.categoryId);
     if (idx === 0 || mainTemplates[idx - 1].categoryId !== tpl.categoryId) {
-      const heading = replaceTemplateVariables(cat?.docHeading || '', varCtx).trim();
+      // kiegészítő kategória címe („Opció üvegfal rendszerek:”) önálló ajánlatnál nem kell
+      const heading = cat?.categoryType === 'accessory' ? '' : replaceTemplateVariables(cat?.docHeading || '', varCtx).trim();
       if (heading) blocks.push({ ...tb('cathead', 'category_heading', '', heading), docCategoryId: tpl.categoryId });
     }
     const tplBlock = buildBlock(tpl, idx + 1);
@@ -1390,8 +1399,8 @@ export function buildFullQuoteDocumentBlocks(params: {
   const titleCase = (t: string) => t.replace(/\p{L}+/gu, (w) => (/\d/.test(w) ? w : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()));
   const snowOf = (tpl: QuoteTemplate) =>
     `${tpl.introText || ''}\n${(tpl.textBlocks || []).map((x) => x.content).join('\n')}\n${tpl.closingText || ''}`.match(
-      /h[óo]terhel[ée]s(?:e)?[^:\n]{0,30}:\s*(?:max\.?\s*)?(\d[\d.,]*\s*kg\/m[²2])/i
-    )?.[1];
+      /h[óo]terhel[ée]s(?:e)?[^:\n]{0,30}:\s*((?:[^.\n]|\.(?=\s*\d))*?\d[\d.,]*\s*kg\/m[²2](?:[^.\n]*?kg\/m[²2])?)/i
+    )?.[1]?.trim();
   for (const [cid, introBlk] of catIntroBlocks) {
     const inCat = mainSections.filter((m) => m.tpl.categoryId === cid);
     const pitches: string[] = [];
@@ -1405,6 +1414,7 @@ export function buildFullQuoteDocumentBlocks(params: {
       if (at >= 0) pitch = `${pitch.slice(0, at)}[b]${pitch.slice(at, at + name.length)}[/b]${pitch.slice(at + name.length)}`;
       pitches.push(pitch);
       block.sectionIntroText = paras.slice(1).join('\n\n');
+      if (at >= 0) block.pitchName = name;
     }
     const catParas = replaceTemplateVariables(catOf(cid)?.docIntro || '', varCtx)
       .split(/\n\s*\n/)
@@ -1412,6 +1422,19 @@ export function buildFullQuoteDocumentBlocks(params: {
       .filter(Boolean);
     const loads = inCat.map((m) => [titleCase(modelName(m.tpl)), snowOf(m.tpl)] as const);
     const dynamicSnow = loads.length > 0 && loads.every(([, l]) => l);
+    if (dynamicSnow) {
+      // a hóterhelés a bevezetőbe került (modellenként), a termék szövegében nem ismétlődik
+      const dropSnow = (t?: string) =>
+        (t || '')
+          .replace(/(^|\n)\s*-\s*h[óo]terhel[ée]s[^\n]*(?=\n|$)/gi, '$1')
+          .replace(/h[óo]terhel[ée]s(?:e)?[^:\n]{0,30}:\s*(?:[^.\n]|\.(?=\s*\d))*?kg\/m[²2](?:[^.\n]*?kg\/m[²2])?\.?\s*/gi, '')
+          .replace(/\n{3,}/g, '\n\n')
+          .trim();
+      for (const m of inCat) {
+        m.block.sectionIntroText = dropSnow(m.block.sectionIntroText);
+        m.block.sectionClosingText = dropSnow(m.block.sectionClosingText);
+      }
+    }
     const isSnow = (t: string) => /^h[óo]terhel/i.test(t);
     const isWind = (t: string) => /^sz[ée]lterhel/i.test(t);
     const [first, ...rest] = catParas;
@@ -1465,6 +1488,7 @@ export function buildFullQuoteDocumentBlocks(params: {
     giftsSentence: giftNames.length ? `Ajándék ${giftNames.join(' és ajándék ')}.` : '',
     accessoriesSentence: accCats.map((c) => `Opcionálisan feltüntetjük a pergola oldalainak beépítését ${huWith(catOf(c)?.name || '')} is.`).join(' '),
   };
+  introBlock.templateVars = introVars;
   introBlock.content = replaceTemplateVariables(introTemplate, { ...varCtx, ...introVars })
     .replace(/[ \t]{2,}/g, ' ')
     .replace(/\.\s*\./g, '.')
@@ -1487,6 +1511,14 @@ export function buildFullQuoteDocumentBlocks(params: {
   // a termékek saját záró szövegében álló akció („Ha …-ig megrendeli…”) is számít: az Információban nem ismétlődik
   if (mainSections.some((m) => /^\s*ha\s.{0,60}megrendeli/im.test(m.block.sectionClosingText || ''))) promoShown = true;
   // ha a kategóriáknál már volt akció, az Információ elején álló akció-bekezdés nem ismétlődik
+  if (!promoShown && mainSections.length) {
+    const promoPar = closingText.split(/\n\s*\n/).find((par) => /^\s*ha\s.{0,60}megrendeli/i.test(par));
+    if (promoPar) {
+      const first = mainSections[0].block;
+      first.sectionClosingText = [promoPar.trim(), first.sectionClosingText || ''].filter((x) => x.trim()).join('\n\n');
+      promoShown = true;
+    }
+  }
   const closingContent = promoShown
     ? closingText
         .split(/\n\s*\n/)

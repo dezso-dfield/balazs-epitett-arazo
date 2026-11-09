@@ -28,6 +28,7 @@ export interface DocDesign {
   tableSize: number; // táblázat betűmérete (Word: 11 pt)
   tableWide: boolean; // a táblázat szélesebb a szövegnél (Word: 18,7 cm, középre)
   photoLayout: 'stacked' | 'grid'; // fotók egymás alatt teljes szélességben (Word) vagy kettesével
+  photosBeforeTable: number; // ennyi termékfotó áll a táblázat előtt, a többi utána (Word ajánlatok: 3)
 }
 
 /** A saját fejléces papír (a Word ajánlatok fejlécéből) */
@@ -57,6 +58,7 @@ export const DEFAULT_DOC_DESIGN: DocDesign = {
   tableSize: 11,
   tableWide: true,
   photoLayout: 'stacked',
+  photosBeforeTable: 3,
 };
 
 /** Csak a ténylegesen kitöltött mezők (üres szöveg / NaN nem írja felül az örökölt értéket) */
@@ -81,6 +83,7 @@ export function getDocDesign(config?: Partial<SystemConfig> | null, category?: P
   d.lineHeight = num(d.lineHeight, 1.22, 1, 2.2);
   d.marginPt = num(d.marginPt, 70.85, 30, 100);
   d.tableSize = num(d.tableSize, 11, 7, 14);
+  d.photosBeforeTable = Math.round(num(d.photosBeforeTable, 3, 0, 50));
   return d;
 }
 

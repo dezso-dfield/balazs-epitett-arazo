@@ -246,7 +246,7 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
 
     const photos = attached ? [] : (block.sectionPhotos || []).filter((p) => p.imageUrl);
     if (photos.length && D.photoLayout === 'stacked') {
-      for (const ph of photos) {
+      for (const ph of photos.slice(0, D.photosBeforeTable)) {
         (await photo(ph, (CONTENT_PT * photoWidthPct(ph)) / 100, photoMaxH(ph), D)).forEach(push);
         const subs = (ph.subPhotos || []).filter((p) => p.imageUrl);
         if (subs.length) await photoGrid(subs, 3, 135, D);
@@ -369,6 +369,13 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
     const isPromo = (t: string) => /^ha\s/i.test(stripRich(t));
     for (const t of closing.filter(isPromo)) push(paras(t, { size: D.bodySize, bold: true, color: D.heading, after: gap0, indent: 30 }));
     for (const att of blocks.filter((b) => b.attachedTo === block.id && b.type === 'template_section')) await drawSection(att, designOf(att), true);
+    if (D.photoLayout === 'stacked') {
+      for (const ph of photos.slice(D.photosBeforeTable)) {
+        (await photo(ph, (CONTENT_PT * photoWidthPct(ph)) / 100, photoMaxH(ph), D)).forEach(push);
+        const subs = (ph.subPhotos || []).filter((p) => p.imageUrl);
+        if (subs.length) await photoGrid(subs, 3, 135, D);
+      }
+    }
 
     // tételek képei (LED, színek, ZIP…) és a színválaszték
     const rowPhotos = active.flatMap((r) => (r.photos || []).filter((p) => p.imageUrl).map((p) => ({ ...p, titleAbove: p.titleAbove || r.name })));

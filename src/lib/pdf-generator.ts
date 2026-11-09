@@ -765,7 +765,8 @@ export async function renderEditableQuotePdfBytes(
     // Termékfotók: az első nagyban, a többi 2 oszlopos rácsban
     const sectionPhotos = attached ? [] : (block.sectionPhotos || []).filter((sp) => sp.imageUrl);
     if (sectionPhotos.length > 0 && D.photoLayout === 'stacked') {
-      for (const ph of sectionPhotos) {
+      // a Word ajánlatokban kb. 3 fotó a táblázat előtt, a többi (opciók, színek, részletek) utána
+      for (const ph of sectionPhotos.slice(0, D.photosBeforeTable)) {
         await drawPhotoWithCaption({ ...ph, widthPct: photoWidthPct(ph) }, photoMaxH(ph));
         const subs = (ph.subPhotos || []).filter((p) => p.imageUrl);
         if (subs.length) await drawSubPhotoRow(subs);
@@ -944,6 +945,13 @@ export async function renderEditableQuotePdfBytes(
       await drawSection(att, true);
     }
     useDesign(mainD);
+    if (D.photoLayout === 'stacked') {
+      for (const ph of sectionPhotos.slice(D.photosBeforeTable)) {
+        await drawPhotoWithCaption({ ...ph, widthPct: photoWidthPct(ph) }, photoMaxH(ph));
+        const subs = (ph.subPhotos || []).filter((p) => p.imageUrl);
+        if (subs.length) await drawSubPhotoRow(subs);
+      }
+    }
 
     // A kiválasztott tételek (pl. LED, RAL színek, ZIP, üvegfal) képei a táblázat után
     const rowPhotos = activeRows.flatMap((row) =>

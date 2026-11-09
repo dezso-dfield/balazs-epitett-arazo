@@ -753,6 +753,15 @@ export default function CustomPricerAppPage() {
                 onBackToWizard={() => setActiveModule('guided_wizard')}
                 onSendQuote={(saved) => setQuoteToSend(saved)}
                 onSaveTemplate={handleSaveTemplate}
+                onSaveCategory={async (cat) => {
+                  const res = await fetch('/api/config', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ upsertCategory: cat }) });
+                  const data = await res.json();
+                  if (data?.ok) {
+                    setCategories(data.categories || []);
+                    showToast('Kategória sablon elmentve', `„${cat.name}” – az új ajánlatokban már így szerepel.`);
+                  }
+                }}
+                onSaveConfigPatch={(patch) => handleSaveSystemConfig({ ...config, ...patch })}
               />
             )}
 
