@@ -202,6 +202,7 @@ export function DocumentEditor({
   onAddText,
   onAddPhoto,
   onAddPageBreak,
+  onAddSizeVariant,
   lockedReason,
   toolbarExtra,
   hideStructureControls,
@@ -219,6 +220,8 @@ export function DocumentEditor({
   onAddText: (afterIndex: number) => void;
   onAddPhoto: (afterIndex: number) => void;
   onAddPageBreak: (at: number) => void;
+  /** méret változat a termék alá (pl. 800x400 a 700x400 mellett) */
+  onAddSizeVariant?: (blk: QuoteDocumentBlock) => void;
   /** sablon tervezőben: ha szöveget ad vissza, a blokk csak megjelenik (pl. „Termékek oldalon szerkeszthető”) */
   lockedReason?: (blk: QuoteDocumentBlock) => string | null;
   toolbarExtra?: React.ReactNode;
@@ -465,7 +468,7 @@ export function DocumentEditor({
             <NumCell bold value={r.discountPriceEur} onChange={(n) => setRow(i, { discountPriceEur: n }, true)} />
           </td>
           <td className="border border-[var(--tb)] px-1 py-0 align-bottom font-bold">
-            <Inline value={r.note || (gift ? 'Ajándék' : r.itemRole === 'optional' ? (Number(r.listPriceEur) > Number(r.discountPriceEur) ? 'Opció-kedvezmény-' : 'Opció') : attached && Number(r.listPriceEur) > Number(r.discountPriceEur) ? 'Opció' : '')} single onChange={(v) => setRow(i, { note: v })} className="font-bold" />
+            <Inline value={r.note || (gift ? 'Ajándék' : r.itemRole === 'optional' ? (Number(r.listPriceEur) > Number(r.discountPriceEur) ? 'Opció-kedvezmény-' : 'Opció') : attached && !blk.sizeOverride && Number(r.listPriceEur) > Number(r.discountPriceEur) ? 'Opció' : '')} single onChange={(v) => setRow(i, { note: v })} className="font-bold" />
           </td>
         </tr>
       );
@@ -654,24 +657,27 @@ export function DocumentEditor({
             const rest = paras.filter((t) => !isPromo(t)).join('\n\n');
             const save = (p: string, r: string) => updateBlock(blk.id, (b) => ({ ...b, sectionClosingText: [p, r].filter((x) => x.trim()).join('\n\n') }));
             const ro = !!lockedReason?.(blk);
-            const atts = blocks.filter((b) => b.attachedTo === blk.id && b.type === 'template_section');
+            const atts = blocks.filter((b) => b.attachedTo === blk.id && b.type === 'template_section' && !b.sizeOverride);
+            const variants = blocks.filter((b) => b.attachedTo === blk.id && b.type === 'template_section' && b.sizeOverride);
+            const attEl = (a: QuoteDocumentBlock) => (
+              <div key={a.id} className={`group/att relative pt-3 ${templateTargetOf?.(a) && changed(a) ? 'outline outline-1 outline-amber-300 outline-offset-4 rounded-sm' : ''}`}>
+                {saveBtn(a)}
+                <button
+                  type="button"
+                  title={a.sizeOverride ? 'Méret változat törlése' : 'Kiegészítő táblázat törlése ennél a terméknél'}
+                  onClick={() => window.confirm(a.sizeOverride ? 'Törlöd ezt a méret változatot?' : 'Törlöd ezt a kiegészítő táblázatot ennél a terméknél?') && removeBlock(a.id)}
+                  className="absolute -left-[30px] top-3 p-1 rounded-md bg-white border border-slate-200 text-slate-400 hover:text-rose-600 opacity-0 group-hover/att:opacity-100 print:hidden"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+                {renderSection(a, true)}
+              </div>
+            );
             return (
               <>
+                {variants.map(attEl)}
                 <RichInline readOnly={ro} value={promo} onChange={(v) => save(v, rest)} className="font-bold" style={{ ...body, ...headC, marginTop: ptPx(D.bodySize), paddingLeft: ptPx(30) }} placeholder="Akció (pl. Ha …-ig megrendeli…)" />
-                {atts.map((a) => (
-                  <div key={a.id} className={`group/att relative pt-3 ${templateTargetOf?.(a) && changed(a) ? 'outline outline-1 outline-amber-300 outline-offset-4 rounded-sm' : ''}`}>
-                    {saveBtn(a)}
-                    <button
-                      type="button"
-                      title="Kiegészítő táblázat törlése ennél a terméknél"
-                      onClick={() => window.confirm('Törlöd ezt a kiegészítő táblázatot ennél a terméknél?') && removeBlock(a.id)}
-                      className="absolute -left-[30px] top-3 p-1 rounded-md bg-white border border-slate-200 text-slate-400 hover:text-rose-600 opacity-0 group-hover/att:opacity-100 print:hidden"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                    {renderSection(a, true)}
-                  </div>
-                ))}
+                {atts.map(attEl)}
                 {D.photoLayout === 'stacked' && photos.length > D.photosBeforeTable && stacked(photos.slice(D.photosBeforeTable))}
                 <RichInline readOnly={ro} value={rest} onChange={(v) => save(promo, v)} style={{ ...body, marginTop: ptPx(D.bodySize) }} placeholder="Záró szöveg (színek, opcionálisan rendelhető…)" />
               </>
@@ -764,6 +770,11 @@ export function DocumentEditor({
                   <button type="button" title="Lejjebb" disabled={idx === blocks.length - 1} onClick={() => moveBlock(idx, 1)} className="p-1 rounded-md bg-white border border-slate-200 text-slate-500 hover:text-slate-900 disabled:opacity-30">
                     <ArrowDown className="w-3.5 h-3.5" />
                   </button>
+                  {onAddSizeVariant && blk.type === 'template_section' && !blk.attachedTo && (
+                    <button type="button" title="Méret változat (pl. 800x400 a 700x400 mellett, saját táblázattal)" onClick={() => onAddSizeVariant(blk)} className="p-1 rounded-md bg-white border border-slate-200 text-slate-500 hover:text-indigo-700 text-[10px] font-bold leading-none">
+                      +M
+                    </button>
+                  )}
                   <button
                     type="button"
                     title="Törlés"

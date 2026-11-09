@@ -120,7 +120,7 @@ export async function renderQuoteHtml(quote: Partial<QuoteRecord>, config: Syste
         const note = (r.note || '').trim();
         rowsHtml.push(
           `<tr>${td(esc(stripRich(fill(r.name))))}${td(list > price || (gift && list > 0) ? String(Math.round(list)) : '', 'text-align:right')}${td(`<b>${Math.round(gift ? 0 : price)}</b>`, 'text-align:right')}${td(
-            `<b>${gift ? 'Ajándék' : note && note !== discountLabel && !/aj[aá]nd[eé]k/i.test(note) ? esc(note) : attached && list > price ? 'Opció' : ''}</b>`
+            `<b>${gift ? 'Ajándék' : note && note !== discountLabel && !/aj[aá]nd[eé]k/i.test(note) ? esc(note) : attached && !block.sizeOverride && list > price ? 'Opció' : ''}</b>`
           )}</tr>`
         );
       }
@@ -157,8 +157,9 @@ export async function renderQuoteHtml(quote: Partial<QuoteRecord>, config: Syste
     const isPromo = (t: string) => /^ha\s/i.test(stripRich(t));
     const colorPara = active.some((r) => (r.algorithm?.colorOptions || []).length) ? closing.find((t) => /alapsz[ií]n/i.test(stripRich(t)) && stripRich(t).length < 90) : undefined;
     const colorHeading = colorPara ? stripRich(colorPara).replace(/:\s*\d+\s*(db\s*)?alapsz[ií]n\.?\s*$/i, '').replace(/[:.\s]+$/, '') : '';
+    for (const v of blocks.filter((b) => b.attachedTo === block.id && b.type === 'template_section' && b.sizeOverride)) await section(v, true);
     for (const t of closing.filter(isPromo)) p(`<b>${rich(t)}</b>`, `${body(D)};margin-left:30pt`), blank();
-    for (const att of blocks.filter((b) => b.attachedTo === block.id && b.type === 'template_section')) await section(att, true);
+    for (const att of blocks.filter((b) => b.attachedTo === block.id && b.type === 'template_section' && !b.sizeOverride)) await section(att, true);
     if (D.photoLayout === 'stacked') for (const ph of photos.slice(D.photosBeforeTable)) await photo(ph, photoWidthPct(ph));
     for (const r of active) {
       const colors = r.algorithm?.colorOptions || [];

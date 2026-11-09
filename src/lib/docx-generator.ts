@@ -322,7 +322,7 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
             name: withQty(stripRich(fill(r.name)), r.quantityLabel),
             list: list > price || (gift && list > 0) ? plain(list) : '',
             price: plain(gift ? 0 : price),
-            note: gift ? 'Ajándék' : note && note !== discountLabel && !/aj[aá]nd[eé]k/i.test(note) ? note : attached && list > price ? 'Opció' : undefined,
+            note: gift ? 'Ajándék' : note && note !== discountLabel && !/aj[aá]nd[eé]k/i.test(note) ? note : attached && !block.sizeOverride && list > price ? 'Opció' : undefined,
           })
         );
       }
@@ -369,8 +369,9 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
     const isPromo = (t: string) => /^ha\s/i.test(stripRich(t));
     const colorPara = active.some((r) => (r.algorithm?.colorOptions || []).length) ? closing.find((t) => /alapsz[ií]n/i.test(stripRich(t)) && stripRich(t).length < 90) : undefined;
     const colorHeading = colorPara ? stripRich(colorPara).replace(/:\s*\d+\s*(db\s*)?alapsz[ií]n\.?\s*$/i, '').replace(/[:.\s]+$/, '') : '';
+    for (const v of blocks.filter((b) => b.attachedTo === block.id && b.type === 'template_section' && b.sizeOverride)) await drawSection(v, D, true);
     for (const t of closing.filter(isPromo)) push(paras(t, { size: D.bodySize, bold: true, color: D.heading, after: gap0, indent: 30 }));
-    for (const att of blocks.filter((b) => b.attachedTo === block.id && b.type === 'template_section')) await drawSection(att, designOf(att), true);
+    for (const att of blocks.filter((b) => b.attachedTo === block.id && b.type === 'template_section' && !b.sizeOverride)) await drawSection(att, designOf(att), true);
     if (D.photoLayout === 'stacked') {
       for (const ph of photos.slice(D.photosBeforeTable)) {
         (await photo(ph, (CONTENT_PT * photoWidthPct(ph)) / 100, photoMaxH(ph), D)).forEach(push);

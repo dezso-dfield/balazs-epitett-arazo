@@ -1568,6 +1568,8 @@ export function recalculateBlockWithAlgorithms(
   templates?: QuoteTemplate[]
 ): QuoteDocumentBlock {
   if (block.type !== 'template_section' || !block.rows) return block;
+  // méret változat: a saját méretével számol (a Word ajánlatokban „800x400 cm-es szerkezet:” a 700x400 mellett)
+  if (block.sizeOverride) ctx = { ...ctx, ...block.sizeOverride };
 
   const sourceTpl = templates?.find((t) => t.id === block.templateId);
 

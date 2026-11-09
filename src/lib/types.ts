@@ -414,6 +414,7 @@ export interface QuoteDocumentBlock {
   docCategoryId?: string;     // kategória szövegdoboz forrása (visszamenthető a kategória sablonba)
   attachedTo?: string;        // kiegészítő (ZIP, üvegfal) a fő szerkezet blokkja alatt, mint a Word ajánlatokban
   attachTitle?: string;
+  sizeOverride?: { widthCm: number; projectionCm: number; heightCm: number }; // méret változat (pl. 800x400 a 700x400 mellett), a fő termék alatt
   sumLabel?: string;
   pitchName?: string;         // a termék ajánló bekezdése a bevezetőbe került; a név alapján visszakereshető (sablonba mentéshez)
   templateVars?: { products?: string; optionsSentence?: string; giftsSentence?: string; accessoriesSentence?: string }; // a bevezető változói (sablonba mentéshez)          // a táblázat összesítő sorának felirata (alapból „Összesen:”)       // a csatolt táblázat címe (pl. „Opció üvegfal rendszerek:”)

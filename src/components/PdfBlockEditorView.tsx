@@ -568,6 +568,7 @@ export function PdfBlockEditorView({
    */
   const templateTargetOf = (blk: QuoteDocumentBlock): string | null => {
     if (blk.type === 'template_section') {
+      if (blk.sizeOverride) return null; // méret változat: az ajánlat része, nem sablon
       if (blk.attachedTo && onSaveCategory && blk.categoryId) return 'Kategória + termék sablon';
       return onSaveTemplate && blk.templateId && templates.some((t) => t.id === blk.templateId) ? 'Termék sablonba' : null;
     }
@@ -625,6 +626,41 @@ export function PdfBlockEditorView({
       return true;
     }
     return false;
+  };
+
+  /** Méret változat: ugyanaz a termék más mérettel, saját táblázattal a termék alatt („800x400 cm-es szerkezet:”) */
+  const addSizeVariant = (blk: QuoteDocumentBlock) => {
+    const cur = blk.sizeOverride || { widthCm, projectionCm, heightCm };
+    const answer = window.prompt('A változat mérete (szélesség x kinyúlás x magasság, cm), pl. 800x400x255', `${cur.widthCm}x${cur.projectionCm}x${cur.heightCm}`);
+    const m = answer?.match(/(\d+)\s*[x×*]\s*(\d+)(?:\s*[x×*]\s*(\d+))?/i);
+    if (!m) return;
+    const size = { widthCm: Number(m[1]), projectionCm: Number(m[2]), heightCm: Number(m[3] || cur.heightCm) };
+    const base = JSON.parse(JSON.stringify(blk)) as QuoteDocumentBlock;
+    const variant = recalculateBlockWithAlgorithms(
+      {
+        ...base,
+        id: `blk_var_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        attachedTo: blk.id,
+        attachTitle: `${size.widthCm}x${size.projectionCm} cm-es szerkezet:`,
+        sizeOverride: size,
+        sectionTitle: (blk.sectionTitle || '').replace(/\((\d+)\s*[×x]\s*(\d+)\s*[×x]\s*(\d+)\s*cm/, `(${size.widthCm}×${size.projectionCm}×${size.heightCm} cm`),
+        pitchName: undefined,
+      },
+      calcCtx,
+      templates
+    );
+    setBlocks((prev) => {
+      const i = prev.findIndex((b) => b.id === blk.id);
+      const next = [...prev];
+      next.splice(i + 1, 0, variant);
+      // a bevezetőben: „1db 700x400x255 cm-es, vagy 1db 800x400x255 cm-es”
+      const dimsRe = new RegExp(`1\\s?db ${widthCm}x${projectionCm}x${heightCm} cm-es`);
+      return next.map((b) =>
+        b.textStyle === 'greeting' && dimsRe.test(b.content || '') && !(b.content || '').includes(`${size.widthCm}x${size.projectionCm}x${size.heightCm} cm-es`)
+          ? { ...b, content: (b.content || '').replace(dimsRe, (x) => `${x}, vagy 1db ${size.widthCm}x${size.projectionCm}x${size.heightCm} cm-es`) }
+          : b
+      );
+    });
   };
 
   const handleInsertSavedTemplateBlock = (at?: number, templateId = templateToInsertId) => {
@@ -1417,6 +1453,7 @@ export function PdfBlockEditorView({
             categories={categories}
             templateTargetOf={templateTargetOf}
             onSaveToTemplate={saveBlockToTemplate}
+            onAddSizeVariant={addSizeVariant}
           />
           <div className="hidden 2xl:block min-w-0 2xl:sticky 2xl:top-4">{renderPreviewCard('h-[820px]')}</div>
         </div>

@@ -884,7 +884,7 @@ export async function renderEditableQuotePdfBytes(
             ? 'Ajándék'
             : note && note !== discountLabel && !/aj[aá]nd[eé]k/i.test(note)
               ? note
-              : attached && list > price
+              : attached && !block.sizeOverride && list > price
                 ? 'Opció'
                 : undefined,
         });
@@ -944,13 +944,17 @@ export async function renderEditableQuotePdfBytes(
     const hasColors = activeRows.some((r) => (r.algorithm?.colorOptions || []).length);
     const colorPara = hasColors ? closingParas.find((t) => /alapsz[ií]n/i.test(stripRich(t)) && stripRich(t).length < 90) : undefined;
     const colorHeading = colorPara ? stripRich(colorPara).replace(/:\s*\d+\s*(db\s*)?alapsz[ií]n\.?\s*$/i, '').replace(/[:.\s]+$/, '') : '';
+    const mainD = D;
+    // méret változatok („800x400 cm-es szerkezet:” saját táblázattal) közvetlenül a táblázat után, az akció előtt
+    for (const v of blocks.filter((b) => b.attachedTo === block.id && b.type === 'template_section' && b.sizeOverride)) {
+      await drawSection(v, true);
+    }
     for (const t of closingParas.filter(isPromo)) {
       drawTextParagraph(t, { bold: true, size: D.bodySize, color: C.ink, lineHeight: D.lineHeight, indentX: 30 });
       current.y -= BLs;
     }
     // a fő szerkezethez csatolt kiegészítők (oldalsó árnyékoló, üvegfal) táblázatai
-    const mainD = D;
-    for (const att of blocks.filter((b) => b.attachedTo === block.id && b.type === 'template_section')) {
+    for (const att of blocks.filter((b) => b.attachedTo === block.id && b.type === 'template_section' && !b.sizeOverride)) {
       useDesign(designOfBlock(att));
       await drawSection(att, true);
     }
