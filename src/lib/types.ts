@@ -309,6 +309,8 @@ export interface ProductCategory {
   docOptions?: string;        // a kategória termékei után: „+Opcionálisan rendelhető a termékhez:” lista
   docPromo?: string;          // félkövér akció, pl. „Ha {{hatarido}}-ig megrendeli az alapszerkezetet…”
   docDesign?: Partial<import('./doc-design').DocDesign>; // a kategória saját dizájnja (csak az eltérések az általánoshoz képest)
+  docProductPhrase?: string;  // a bevezetőben: „1db 600x300x250 cm-es, bioklimatikus pergola, forgatható lamellás tetővel”
+  docIntroMention?: string;   // kiegészítőnél a bevezető mondata, pl. „Opcionálisan feltüntetjük a pergola front- ({{szelesseg}} cm) … beépítését, motoros-vertikális árnyékolóval.”
   docAlsoDescribe?: string[]; // kiegészítő kategóriák, amelyek leírása mindig az ajánlat végére kerül (pl. üvegfal, oldalsó árnyékoló a pergoláknál)
   docTotalLabel?: string;     // összesítő sor felirata, pl. „Opció, árnyékolók szereléssel Összesen:” (üresen az általános)
 }

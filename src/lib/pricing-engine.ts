@@ -1464,11 +1464,14 @@ export function buildFullQuoteDocumentBlocks(params: {
   const dims = `[b]1db ${widthCm}x${projectionCm}x${heightCm} cm-es[/b]`;
   const lcFirst = (t: string) => t.replace(/^(\p{Lu})(\p{Ll})/u, (_m, a, b) => a.toLowerCase() + b);
   const mainCats = [...new Set(mainTemplates.map((t) => t.categoryId))];
+  // a Word ajánlatokban a termékcsalád leírása áll itt (nem a modell): „1db 600x300x250 cm-es, bioklimatikus pergola,
+  // forgatható lamellás tetővel”; több terméknél „…, termékeinkre”
+  const phrase = (c: string) => replaceTemplateVariables(catOf(c)?.docProductPhrase || '', varCtx).trim() || lcFirst(catOf(c)?.name || '');
   const products =
     mainTemplates.length === 1
-      ? `${dims} ${mainTemplates[0].name}`
+      ? `${dims.replace('[/b]', ',[/b]')} ${phrase(mainTemplates[0].categoryId)}`
       : mainTemplates.length > 1
-        ? `${dims} ${huList(mainCats.map((c) => lcFirst(catOf(c)?.name || '')))} termékeinkre`
+        ? `${dims} ${huList(mainCats.map(phrase))}, termékeinkre`
         : huList(orderedTemplates.map((t) => t.name));
   const rowsOf = (secs: QuoteDocumentBlock[], pred: (r: NonNullable<QuoteDocumentBlock['rows']>[number]) => boolean) => {
     const seen = new Set<string>();
@@ -1485,13 +1488,17 @@ export function buildFullQuoteDocumentBlocks(params: {
   };
   const mainBlocks = mainSections.length ? mainSections.map((m) => m.block) : blocks.filter((b) => b.type === 'template_section');
   const optNames = rowsOf(mainBlocks, (r) => r.itemRole === 'optional').slice(0, 3);
-  const giftNames = rowsOf(mainBlocks, (r) => r.itemRole === 'gift' || (Number(r.discountPriceEur) === 0 && Number(r.listPriceEur) > 0));
+  const giftNames0 = rowsOf(mainBlocks, (r) => r.itemRole === 'gift' || (Number(r.discountPriceEur) === 0 && Number(r.listPriceEur) > 0));
+  // a Word ajánlatokban: „Ajándék eső érzékelővel és ajándék infrafűtéssel.” (az érzékelő elöl)
+  const giftNames = [...giftNames0].sort((x, y) => Number(/érzékel/i.test(y)) - Number(/érzékel/i.test(x)));
   const accCats = [...new Set(accessoryTemplates.map((t) => t.categoryId))];
   const introVars = {
     products: products || undefined,
     optionsSentence: optNames.length ? `Opcionálisan ${huList(optNames)}.` : '',
     giftsSentence: giftNames.length ? `Ajándék ${giftNames.join(' és ajándék ')}.` : '',
-    accessoriesSentence: accCats.map((c) => `Opcionálisan feltüntetjük a pergola oldalainak beépítését ${huWith(catOf(c)?.name || '')} is.`).join(' '),
+    accessoriesSentence: accCats
+      .map((c) => replaceTemplateVariables(catOf(c)?.docIntroMention || '', varCtx).trim() || `Opcionálisan feltüntetjük a pergola oldalainak beépítését ${huWith(catOf(c)?.name || '')} is.`)
+      .join(' '),
   };
   introBlock.templateVars = introVars;
   introBlock.content = replaceTemplateVariables(introTemplate, { ...varCtx, ...introVars })

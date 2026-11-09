@@ -12,7 +12,7 @@ import { TEMPLATE_VARIABLES_HELP } from '@/lib/constants';
  * Kategória sablon: az ajánlatban a kategória termékei köré kerülő szövegek, a saját Word ajánlatok szerkezetében.
  * Fő szerkezetnél a leírás a megszólítás után, kiegészítőnél (üvegfal, árnyékoló) az Információ előtt jelenik meg.
  */
-type DocFields = Pick<ProductCategory, 'categoryType' | 'docHeading' | 'docIntro' | 'docOptions' | 'docPromo' | 'docTotalLabel'>;
+type DocFields = Pick<ProductCategory, 'categoryType' | 'docHeading' | 'docIntro' | 'docOptions' | 'docPromo' | 'docTotalLabel' | 'docProductPhrase' | 'docIntroMention'>;
 
 const TELIKERT = `Illetve ezeket a termékeket lehet körbe szerelni elcsúsztatható üvegfalrendszerrel és oldalsó árnyékolókkal, így megnövelve nem csak a terasz, de akár a nappali méretét és kihasználhatóságát. Ezekkel az opciókkal igazából egy télikertet kialakítva, amit tényleg télen-nyáron lehet használni.`;
 const WIND6 = 'Szélterhelése az EN 13561 szabvány szerinti legmagasabb, 6. osztályba sorolt, azaz orkán erejű szélnek is ellenáll (119 km/h).';
@@ -40,6 +40,7 @@ const KAROS_OPTS = `+Opcionálisan rendelhető a termékhez:
  */
 const LIBRARY: [RegExp, Partial<DocFields>][] = [
   [/üvegtet|glassfix/, {
+    docProductPhrase: 'üvegtetős pergola',
     categoryType: 'main_structure',
     docHeading: '',
     docIntro: `Azért ajánljuk ezeket a szerkezeteket, mert télen-nyáron használhatóak, az üvegtetővel elegendő fény mennyiség tud jutni a tető alá.
@@ -53,6 +54,7 @@ ${WIND6}`,
     docPromo: '',
   }],
   [/polikarbon|szendvics/, {
+    docProductPhrase: 'polikarbonát tetejű pergola',
     categoryType: 'main_structure',
     docHeading: '',
     docIntro: `Azért ajánljuk ezeket a szerkezeteket, mert télen-nyáron használhatóak, opálszínű polikarbonát tetővel elegendő fény mennyiség tud jutni a tető alá, de a napsugarakat megszűrve a meleget nem engedi át.
@@ -69,6 +71,7 @@ ${WIND6}`,
     docPromo: '',
   }],
   [/kocsibe/, {
+    docProductPhrase: 'polikarbonát tetejű kocsibeálló',
     categoryType: 'main_structure',
     docHeading: '',
     docIntro: `A szerkezet teljes vázszerkezete szinterezett alumíniumból készül. A talpkonzolok rozsdamentes acélból készülnek. Választható polikarbonát színek: opál, víztiszta, bronz, antracit.
@@ -82,6 +85,7 @@ ${WIND6}`,
     docPromo: '',
   }],
   [/feszített/, {
+    docProductPhrase: 'elhúzható, feszített vásznas pergola',
     categoryType: 'main_structure',
     docHeading: '',
     docIntro: `A napellenző ponyva teljesen be van zárva egy kazettás koncepcióba, a napháló megvezetése egy speciális oldalsó megvezetésben rejlik. A ponyva mindkét oldalára egy zipzár van felhegesztve, ami így lehetővé teszi, hogy a ponyva mindig feszes (ráncoktól mentes) maradjon és mindvégig az oldalsó megvezető profilokban mozogjon.
@@ -93,6 +97,7 @@ Szélterhelése az EN 13561 szabvány szerinti 3. osztályba sorolt, azaz erős 
     docPromo: '',
   }],
   [/ponyv|pvc|elhúzható/, {
+    docProductPhrase: 'elhúzható PVC ponyvás pergola',
     categoryType: 'main_structure',
     docHeading: '',
     docIntro: `Tetején a keresztléc profilok és a vezető sínek rögzítve vannak, így teszik lehetővé a rendszer vízszintes csúszását.
@@ -103,6 +108,7 @@ Szélterhelése az EN 13561 szabvány szerinti legmagasabb, 6. osztályba sorolt
     docPromo: PROMO,
   }],
   [/üveg|guillotine|glass/, {
+    docIntroMention: 'Opcionálisan feltüntetjük a pergola oldalainak beépítését üvegfal rendszerrel is.',
     categoryType: 'accessory',
     docHeading: 'Opció üvegfal rendszerek:',
     docIntro: `[b][u]Keret nélküli, elcsúsztatható üvegfalrendszereink:[/u][/b]
@@ -119,6 +125,7 @@ Az üvegfalak szélterhelése az EN 13561 szabvány szerinti legmagasabb, 6. osz
     docPromo: '',
   }],
   [/zip|vertik|oldalsó árnyékol/, {
+    docIntroMention: 'Opcionálisan feltüntetjük a pergola front- ({{szelesseg}} cm) és oldalának ({{kinyulas}} cm) beépítését, motoros-vertikális árnyékolóval.',
     categoryType: 'accessory',
     // a Word ajánlatokban a ZIP táblázat felett nincs cím, az összesítő: „Az árnyékolók szereléssel Összesen: 2.565 EUR (+ Áfa)”
     docHeading: '',
@@ -135,6 +142,7 @@ A motoros-vertikális árnyékolók szélterhelése az EN 13561 szabvány szerin
     docPromo: '',
   }],
   [/meglévő|tetőárnyék|tetejére/, {
+    docProductPhrase: 'meglévő szerkezetre építhető, elhúzható vásznas tetőárnyékoló',
     categoryType: 'main_structure',
     docHeading: '',
     docIntro: `Elhúzható, feszített vásznas tetőárnyékolóink, amiket tudunk építeni már meglévő szerkezet tetejére vagy a tartó gerendák alá. Csak árnyékolásra ajánljuk.
@@ -146,6 +154,7 @@ Szélterhelése az EN 13561 szabvány szerinti 5. osztályba sorolt, azaz viharo
     docPromo: '',
   }],
   [/vitorl|kolibri/, {
+    docProductPhrase: 'napvitorla',
     categoryType: 'main_structure',
     docHeading: '',
     docIntro: `Manuális vezérlésű vagy automatizált motoros árnyékoló vitorla. Manuális és motoros vezérléssel is lehet választani. Motoros vezérlésű termékhez jár ajándékba a szélérzékelő (automatikusan betekeri a vásznat, ha nagy szélsebességet érzékel).
@@ -158,6 +167,7 @@ Amennyiben motoros vezérléssel kéri, 3 x 1,5-es 230V-os kábel kell majd a mo
     docPromo: '',
   }],
   [/kézi|tekerős/, {
+    docProductPhrase: 'kézi tekerős napellenző',
     categoryType: 'main_structure',
     docHeading: 'Karos napellenzők, kézi működtetésű szerkezetek:',
     docIntro: 'Prémium minőségű, lengyel, jó ár-érték arányú termékek, manuálisan vezérelhetők, motoros ponyvamozgatással is kérhetők. A termékek több szerkezet/karok színben választhatóak (lásd lejjebb) és rengeteg szövet szín variációval.',
@@ -166,6 +176,7 @@ Amennyiben motoros vezérléssel kéri, 3 x 1,5-es 230V-os kábel kell majd a mo
     docPromo: '',
   }],
   [/kazett.*nélk|nélküli/, {
+    docProductPhrase: 'kazetta nélküli karos napellenző',
     categoryType: 'main_structure',
     docHeading: 'Karos napellenzők, Kazetta nélküli szerkezetek:',
     docIntro: 'Prémium minőségű, lengyel, jó ár-érték arányú termékek. Kazetta nélküli kivitelben, manuálisan vezérelhetők, motoros ponyvamozgatással is kérhetők. A termékek hét féle szerkezet/karok színben választhatóak (lásd lejjebb) és rengeteg szövet szín variációval.',
@@ -174,6 +185,7 @@ Amennyiben motoros vezérléssel kéri, 3 x 1,5-es 230V-os kábel kell majd a mo
     docPromo: '',
   }],
   [/kazett|napellenz|karos/, {
+    docProductPhrase: 'kazettás karos napellenző',
     categoryType: 'main_structure',
     docHeading: 'Kazettás szerkezetek:',
     docIntro: `Motorosan mozgatható karos napellenzőink kazettás kivitelben (Zárt szerkezet, becsukott állapotban a szövetet nem éri az időjárás okozta károsító hatások: -napfény, -fagy, -eső).
@@ -194,6 +206,7 @@ A termékek több szerkezet színben választhatóak (lásd lejjebb) és rengete
     docPromo: '',
   }],
   [/bioklim|lamell|pergol/, {
+    docProductPhrase: 'bioklimatikus pergola, forgatható lamellás tetővel',
     categoryType: 'main_structure',
     docHeading: '',
     docIntro: `Azért ajánljuk ezeket a lamellás szerkezeteket, mert télen-nyáron használhatóak, és lamellák dőlésszögének állításával nem csak a bejutó fény mennyiségét tudjuk szabályozni, hanem a szellőzést is, így megvalósul a bioklimatikus hatás.
@@ -330,7 +343,15 @@ export function CategoryDocEditor({
         <div className="space-y-3 pb-8" style={{ paddingLeft: ptPx(D.marginPt), paddingRight: ptPx(D.marginPt) }}>
           {!accessory ? (
             <>
-              <Slot>Kedves …! · bevezető (Beállítások › Dizájn és sablon)</Slot>
+              <Slot>Kedves …! · Örömmel fogadtuk megkeresését! … paraméterek alapján:</Slot>
+              <div>
+                <Tag>A termék megnevezése a bevezetőben („1db 600x300x250 cm-es, …”)</Tag>
+                <div style={body} className="flex items-baseline gap-1 flex-wrap">
+                  <b className="font-sans text-slate-400 text-[12px]">1db 600x300x250 cm-es,</b>
+                  <RichInline single value={category.docProductPhrase || ''} placeholder={(category.name || '').toLowerCase()} onChange={(v) => onChange({ docProductPhrase: v })} style={{ display: 'inline-block', width: 'auto', minWidth: '20ch' }} />
+                  <span className="font-sans text-slate-400 text-[12px]">… Opcionálisan … Ajándék …</span>
+                </div>
+              </div>
               <div>
                 <Tag>Kategória leírás · a bevezető után</Tag>
                 <RichInline value={category.docIntro || ''} onChange={(v) => onChange({ docIntro: v })} style={body} placeholder="Azért ajánljuk ezeket a szerkezeteket, mert…" />
@@ -374,6 +395,10 @@ export function CategoryDocEditor({
             </>
           ) : (
             <>
+              <div>
+                <Tag>Mondat a bevezetőben, ha a vevő ezt is kéri (változókkal: {'{{szelesseg}}, {{kinyulas}}'})</Tag>
+                <RichInline value={category.docIntroMention || ''} onChange={(v) => onChange({ docIntroMention: v })} style={body} placeholder="Opcionálisan feltüntetjük a pergola oldalainak beépítését … is." />
+              </div>
               <Slot>Kedves …! · bevezető · a pergola leírása, táblázata, összesítője és akciója</Slot>
               <div>
                 <Tag>Táblázat címe a pergola alatt</Tag>
@@ -413,6 +438,14 @@ export function CategoryDocEditor({
           <label className={lbl}>Összesítő sor felirata</label>
           <input className={field} value={category.docTotalLabel || ''} placeholder={label} onChange={(e) => onChange({ docTotalLabel: e.target.value })} />
         </div>
+      </div>
+      <div>
+        <label className={lbl}>{accessory ? 'Mondat a bevezetőben, ha a vevő ezt is kéri' : 'A termék megnevezése a bevezetőben („1db 600x300x250 cm-es, …”)'}</label>
+        {accessory ? (
+          <input className={field} value={category.docIntroMention || ''} onChange={(e) => onChange({ docIntroMention: e.target.value })} />
+        ) : (
+          <input className={field} value={category.docProductPhrase || ''} placeholder={(category.name || '').toLowerCase()} onChange={(e) => onChange({ docProductPhrase: e.target.value })} />
+        )}
       </div>
       <div>
         <label className={lbl}>Kategória leírás {accessory ? '(az ajánlat végén, az Információ előtt)' : '(a megszólítás és bevezető után)'}</label>
