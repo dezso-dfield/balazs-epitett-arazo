@@ -5,7 +5,7 @@ import fontkit from '@pdf-lib/fontkit';
 import { degrees, PDFDocument, PDFFont, PDFImage, PDFPage, rgb } from 'pdf-lib';
 import { formatDotNumber, replaceTemplateVariables } from './constants';
 import { hasRich, parseRich, stripRich } from './richtext';
-import { blockCategoryId, getDocDesign, LETTERHEAD_URL, primaryCategory, type DocDesign } from './doc-design';
+import { blockCategoryId, getDocDesign, LETTERHEAD_URL, photoMaxH, photoWidthPct, primaryCategory, type DocDesign } from './doc-design';
 import { getDb, SAVED_PDFS_DIR } from './db';
 import { blobEnabled, readUploadFromBlob } from './blob-store';
 import { computeBlockTotals } from './pricing-engine';
@@ -523,7 +523,7 @@ export async function renderEditableQuotePdfBytes(
       const dims = img.scale(1);
       const ratio = dims.height / Math.max(1, dims.width);
       // a Word ajánlatokhoz hasonlóan nagy, középre igazított kép
-      const widthPct = Math.min(100, Math.max(40, Number(photoBlock.widthPct) || 75));
+      const widthPct = Math.min(100, Math.max(20, Number(photoBlock.widthPct) || 75));
       let targetW = CONTENT_W * (widthPct / 100);
       let targetH = targetW * ratio;
       if (targetH > maxHeightPt) {
@@ -766,7 +766,7 @@ export async function renderEditableQuotePdfBytes(
     const sectionPhotos = attached ? [] : (block.sectionPhotos || []).filter((sp) => sp.imageUrl);
     if (sectionPhotos.length > 0 && D.photoLayout === 'stacked') {
       for (const ph of sectionPhotos) {
-        await drawPhotoWithCaption({ ...ph, widthPct: ph.widthPct && Number(ph.widthPct) !== 75 ? ph.widthPct : 100 }, 330);
+        await drawPhotoWithCaption({ ...ph, widthPct: photoWidthPct(ph) }, photoMaxH(ph));
         const subs = (ph.subPhotos || []).filter((p) => p.imageUrl);
         if (subs.length) await drawSubPhotoRow(subs);
       }
@@ -822,26 +822,30 @@ export async function renderEditableQuotePdfBytes(
       };
 
       const drawRow = (row: { name: string; list?: string; listLabel?: string; price: string; note?: string; strong?: boolean }) => {
+        const SZr = row.strong ? SZ + 1 : SZ; // az Összesen sor nagyobb, félkövér
         const nameLines = wrapTextLines(row.name, fontRegular, SZ, COLW[0] - PAD * 2);
         const noteLines = row.note ? wrapTextLines(row.note, fontBold, SZ, COLW[3] - PAD * 2) : [];
         const n = Math.max(nameLines.length, noteLines.length, 1);
-        const h = Math.max(14.5, n * LH + 3);
+        const h = Math.max(row.strong ? 17 : 14.5, n * LH + 3);
         if (current.y - h < BOTTOM_Y) {
           current = createNewPage();
           drawTableHeader();
         }
         const top = current.y;
         // Összesen sor: halvány kiemelés, vastagabb felső vonal, félkövér felirat és összeg
-        if (row.strong) current.page.drawRectangle({ x: TBL_X, y: top - h, width: TBL_W, height: h, color: rgb(1 - (1 - C.headFill.red) * 0.55, 1 - (1 - C.headFill.green) * 0.55, 1 - (1 - C.headFill.blue) * 0.55) });
+        if (row.strong) current.page.drawRectangle({ x: TBL_X, y: top - h, width: TBL_W, height: h, color: C.headFill });
         const lineY = (j: number) => top - h + 2 + SZ * 0.22 + LH * (n - 1 - j);
         nameLines.forEach((l, j) => current.page.drawText(l, { x: COLX[0] + PAD, y: lineY(j), size: SZ, font: fontRegular, color: C.ink }));
         const bottomY = lineY(n - 1);
-        if (row.listLabel) current.page.drawText(row.listLabel, { x: COLX[1] + PAD, y: bottomY, size: SZ, font: row.strong ? fontBold : fontRegular, color: C.ink });
+        if (row.listLabel) current.page.drawText(row.listLabel, { x: COLX[1] + PAD, y: bottomY, size: SZr, font: row.strong ? fontBold : fontRegular, color: C.ink });
         if (row.list) drawRight(current.page, row.list, bottomY, SZ, fontRegular, C.ink, COLX[1] + COLW[1] - PAD);
-        if (row.price) drawRight(current.page, row.price, bottomY, SZ, fontBold, C.ink, COLX[2] + COLW[2] - PAD);
+        if (row.price) drawRight(current.page, row.price, bottomY, SZr, fontBold, C.ink, COLX[2] + COLW[2] - PAD);
         noteLines.forEach((l, j) => current.page.drawText(l, { x: COLX[3] + PAD, y: lineY(j + n - noteLines.length), size: SZ, font: fontBold, color: C.ink }));
         cellLines(top, top - h);
-        if (row.strong) current.page.drawRectangle({ x: TBL_X, y: top - 0.6, width: TBL_W, height: 1.2, color: border });
+        if (row.strong) {
+          current.page.drawRectangle({ x: TBL_X, y: top - 0.75, width: TBL_W, height: 1.5, color: border });
+          current.page.drawRectangle({ x: TBL_X, y: top - h - 0.75, width: TBL_W, height: 1.5, color: border });
+        }
         current.y = top - h;
       };
 
@@ -1052,7 +1056,7 @@ export async function renderEditableQuotePdfBytes(
     }
 
     if (block.type === 'photo_box' && block.photo) {
-      await drawPhotoWithCaption(block.photo, 300);
+      await drawPhotoWithCaption({ ...block.photo, widthPct: block.photo.sizePct || block.photo.widthPct }, block.photo.sizePct ? 640 : 300);
       const subs = (block.photo.subPhotos || []).filter((p) => p.imageUrl);
       if (subs.length) await drawSubPhotoRow(subs);
       continue;

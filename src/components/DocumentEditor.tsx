@@ -1,11 +1,11 @@
 'use client';
 
 import React from 'react';
-import { ArrowDown, ArrowUp, ImagePlus, Plus, Scissors, Trash2, Type, X } from 'lucide-react';
+import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ImagePlus, Minus, Plus, Scissors, Trash2, Type, X } from 'lucide-react';
 import { formatDotNumber } from '@/lib/constants';
 import { computeBlockTotals, recalculateBlockTotals } from '@/lib/pricing-engine';
 import type { PhotoCaptionBlock, ProductCategory, QuoteDocumentBlock, SystemConfig } from '@/lib/types';
-import { blockCategoryId, getDocDesign, LETTERHEAD_URL, primaryCategory, ptPx } from '@/lib/doc-design';
+import { blockCategoryId, getDocDesign, LETTERHEAD_URL, photoWidthPct, primaryCategory, ptPx } from '@/lib/doc-design';
 import { FormatToolbar, RichInline } from '@/components/RichEdit';
 import { stripRich } from '@/lib/richtext';
 
@@ -49,6 +49,122 @@ function Inline({
       onChange={(e) => onChange(single ? e.target.value.replace(/\n/g, ' ') : e.target.value)}
       className={`block w-full resize-none overflow-hidden bg-transparent border-0 p-0 m-0 outline-none rounded-sm focus:bg-amber-50/70 hover:bg-slate-50 focus:ring-2 focus:ring-indigo-200 ${className}`}
     />
+  );
+}
+
+/**
+ * Fotó a lapon, mint a Wordben: rámutatva méret (−/+, 25-50-75-100%), igazítás, sorrend és törlés;
+ * a jobb alsó sarok fogantyújával húzva is átméretezhető. A PDF és a Word export ugyanígy rajzolja.
+ */
+function PhotoFrame({
+  photo,
+  defaultPct,
+  onPatch,
+  onMove,
+  onRemove,
+  above,
+  below,
+}: {
+  photo: PhotoCaptionBlock;
+  defaultPct: number;
+  onPatch: (patch: Partial<PhotoCaptionBlock>) => void;
+  onMove?: (dir: -1 | 1) => void;
+  onRemove?: () => void;
+  above?: React.ReactNode;
+  below?: React.ReactNode;
+}) {
+  const pct = Math.round(Number(photo.sizePct) || defaultPct);
+  const ref = React.useRef<HTMLElement>(null);
+  const [drag, setDrag] = React.useState<number | null>(null);
+  const shown = drag ?? pct;
+  const setPct = (n: number) => onPatch({ sizePct: Math.max(20, Math.min(100, Math.round(n))) });
+  const align = photo.align || 'center';
+  const btnCls = 'h-6 min-w-6 px-1 inline-flex items-center justify-center rounded text-[11px] text-slate-700 hover:bg-slate-100';
+  return (
+    <figure
+      ref={ref}
+      className="group/ph relative"
+      style={{ width: `${shown}%`, marginLeft: align === 'left' ? 0 : 'auto', marginRight: align === 'right' ? 0 : 'auto' }}
+    >
+      {above}
+      <img src={photo.imageUrl} alt="" className="w-full object-contain select-none" draggable={false} style={{ maxHeight: ptPx(photo.sizePct ? 640 : 330) }} />
+      {below}
+      <div className="absolute right-1 top-1 z-10 flex flex-wrap items-center gap-0.5 rounded-lg border border-slate-200 bg-white/95 px-1 py-0.5 shadow-sm opacity-0 group-hover/ph:opacity-100 transition print:hidden font-sans">
+        <button type="button" title="Kisebb" className={btnCls} onClick={() => setPct(pct - 10)}>
+          <Minus className="w-3 h-3" />
+        </button>
+        {[25, 50, 75, 100].map((n) => (
+          <button key={n} type="button" title={`${n}% szélesség`} className={`${btnCls} ${pct === n ? 'bg-indigo-100 text-indigo-800' : ''}`} onClick={() => setPct(n)}>
+            {n}%
+          </button>
+        ))}
+        <button type="button" title="Nagyobb" className={btnCls} onClick={() => setPct(pct + 10)}>
+          <Plus className="w-3 h-3" />
+        </button>
+        <span className="w-px h-4 bg-slate-200 mx-0.5" />
+        {(
+          [
+            ['left', AlignLeft],
+            ['center', AlignCenter],
+            ['right', AlignRight],
+          ] as const
+        ).map(([a, Icon]) => (
+          <button key={a} type="button" title={a === 'left' ? 'Balra' : a === 'right' ? 'Jobbra' : 'Középre'} className={`${btnCls} ${align === a ? 'bg-indigo-100 text-indigo-800' : ''}`} onClick={() => onPatch({ align: a })}>
+            <Icon className="w-3 h-3" />
+          </button>
+        ))}
+        {onMove && (
+          <>
+            <span className="w-px h-4 bg-slate-200 mx-0.5" />
+            <button type="button" title="Feljebb" className={btnCls} onClick={() => onMove(-1)}>
+              <ArrowUp className="w-3 h-3" />
+            </button>
+            <button type="button" title="Lejjebb" className={btnCls} onClick={() => onMove(1)}>
+              <ArrowDown className="w-3 h-3" />
+            </button>
+          </>
+        )}
+        {photo.sizePct ? (
+          <button type="button" title="Vissza az alapméretre" className={`${btnCls} text-slate-500`} onClick={() => onPatch({ sizePct: undefined })}>
+            alap
+          </button>
+        ) : null}
+        {onRemove && (
+          <button type="button" title="Fotó törlése az ajánlatból" className={`${btnCls} hover:text-rose-600`} onClick={() => window.confirm('Törlöd ezt a fotót az ajánlatból?') && onRemove()}>
+            <Trash2 className="w-3 h-3" />
+          </button>
+        )}
+      </div>
+      {/* húzással átméretezés (a lap tartalomszélességéhez képest, 5%-os lépésekben) */}
+      <span
+        title="Húzd az átméretezéshez"
+        className="absolute -right-1.5 -bottom-1.5 w-3.5 h-3.5 rounded-sm border-2 border-indigo-500 bg-white cursor-nwse-resize opacity-0 group-hover/ph:opacity-100 print:hidden"
+        onPointerDown={(e) => {
+          e.preventDefault();
+          const fig = ref.current;
+          const host = fig?.parentElement;
+          if (!fig || !host) return;
+          const startX = e.clientX;
+          const startW = fig.getBoundingClientRect().width;
+          const full = host.getBoundingClientRect().width || 1;
+          let last = pct;
+          const move = (ev: PointerEvent) => {
+            const dx = (ev.clientX - startX) * (align === 'center' ? 2 : align === 'right' ? -1 : 1);
+            last = Math.max(20, Math.min(100, Math.round((((startW + dx) / full) * 100) / 5) * 5));
+            setDrag(last);
+          };
+          const up = () => {
+            window.removeEventListener('pointermove', move);
+            window.removeEventListener('pointerup', up);
+            setDrag(null);
+            setPct(last);
+          };
+          window.addEventListener('pointermove', move);
+          window.addEventListener('pointerup', up);
+        }}
+      />
+      {drag !== null && <span className="absolute left-1 top-1 rounded bg-indigo-600 px-1.5 py-0.5 text-[10px] font-semibold text-white">{drag}%</span>}
+    </figure>
   );
 }
 
@@ -312,13 +428,36 @@ export function DocumentEditor({
         </>)}
         {!attached && photos.length > 0 && D.photoLayout === 'stacked' && (
           <div className="space-y-3 py-2">
-            {photos.map((p, k) => (
-              <figure key={p.id || k} className="mx-auto w-full">
-                {p.titleAbove && photoCaption(blk, k, p, 'titleAbove')}
-                <img src={p.imageUrl} alt="" className="mx-auto w-full object-contain" style={{ maxHeight: ptPx(330) }} />
-                {photoCaption(blk, k, p, 'captionBelow')}
-              </figure>
-            ))}
+            {photos.map((p) => {
+              const all = blk.sectionPhotos || [];
+              const i = all.indexOf(p);
+              const patch = (pt: Partial<PhotoCaptionBlock>) =>
+                updateBlock(blk.id, (b) => {
+                  const arr = [...(b.sectionPhotos || [])];
+                  arr[i] = { ...arr[i], ...pt };
+                  return { ...b, sectionPhotos: arr };
+                });
+              return (
+                <PhotoFrame
+                  key={p.id || i}
+                  photo={p}
+                  defaultPct={photoWidthPct({ widthPct: p.widthPct })}
+                  onPatch={patch}
+                  onMove={(dir) =>
+                    updateBlock(blk.id, (b) => {
+                      const arr = [...(b.sectionPhotos || [])];
+                      const j = i + dir;
+                      if (j < 0 || j >= arr.length) return b;
+                      [arr[i], arr[j]] = [arr[j], arr[i]];
+                      return { ...b, sectionPhotos: arr };
+                    })
+                  }
+                  onRemove={() => updateBlock(blk.id, (b) => ({ ...b, sectionPhotos: (b.sectionPhotos || []).filter((_, k2) => k2 !== i) }))}
+                  above={p.titleAbove ? photoCaption(blk, i, p, 'titleAbove') : undefined}
+                  below={photoCaption(blk, i, p, 'captionBelow')}
+                />
+              );
+            })}
           </div>
         )}
         {!attached && photos.length > 0 && D.photoLayout !== 'stacked' && (
@@ -369,12 +508,12 @@ export function DocumentEditor({
             <tbody>
               {base.map(rowEl)}
               {/* Összesen sor: kiemelve; a felirat és az összeg is átírható (az összeg kézi felülírása visszaállítható) */}
-              <tr className="font-bold" style={{ background: `color-mix(in srgb, ${D.tableHead} 55%, white)`, borderTop: `1.5px solid ${D.tableBorder}` }}>
-                <td className="border border-[var(--tb)]" style={{ borderTopWidth: 1.5 }} />
-                <td className="border border-[var(--tb)] px-1 py-0" style={{ borderTopWidth: 1.5 }}>
+              <tr className="font-bold" style={{ background: D.tableHead, fontSize: ptPx(D.tableSize + 1), borderTop: `2px solid ${D.tableBorder}`, borderBottom: `2px solid ${D.tableBorder}` }}>
+                <td className="border border-[var(--tb)]" style={{ borderTopWidth: 2, borderBottomWidth: 2 }} />
+                <td className="border border-[var(--tb)] px-1 py-0" style={{ borderTopWidth: 2, borderBottomWidth: 2 }}>
                   <Inline value={blk.sumLabel ?? 'Összesen:'} single onChange={(v) => updateBlock(blk.id, (b) => ({ ...b, sumLabel: v }))} className="font-bold" />
                 </td>
-                <td className="border border-[var(--tb)] px-1 py-0 text-right tabular-nums" style={{ borderTopWidth: 1.5 }}>
+                <td className="border border-[var(--tb)] px-1 py-0 text-right tabular-nums" style={{ borderTopWidth: 2, borderBottomWidth: 2 }}>
                   <NumCell
                     bold
                     value={totals.totalEur}
@@ -386,7 +525,7 @@ export function DocumentEditor({
                     }
                   />
                 </td>
-                <td className="border border-[var(--tb)] px-1 py-0 text-[10px] font-normal text-slate-500 print:hidden" style={{ borderTopWidth: 1.5 }}>
+                <td className="border border-[var(--tb)] px-1 py-0 text-[10px] font-normal text-slate-500 print:hidden" style={{ borderTopWidth: 2, borderBottomWidth: 2 }}>
                   {blk.manualTotalEur !== null && blk.manualTotalEur !== undefined && (
                     <button
                       type="button"
@@ -531,17 +670,21 @@ export function DocumentEditor({
                 </div>
                 {blk.type === 'text_box' && renderTextBox(blk)}
                 {blk.type === 'template_section' && renderSection(blk)}
-                {blk.type === 'photo_box' && blk.photo && (
-                  <figure className="mx-auto w-[75%]">
-                    {blk.photo.imageUrl && <img src={blk.photo.imageUrl} alt="" className="w-full max-h-[390px] object-contain" />}
-                    <Inline
-                      value={blk.photo.captionBelow || ''}
-                      single
-                      placeholder="Képaláírás"
-                      onChange={(v) => updateBlock(blk.id, (b) => ({ ...b, photo: { ...b.photo!, captionBelow: v } }))}
-                      className="text-[11px] text-slate-500 text-center"
-                    />
-                  </figure>
+                {blk.type === 'photo_box' && blk.photo && blk.photo.imageUrl && (
+                  <PhotoFrame
+                    photo={blk.photo}
+                    defaultPct={Number(blk.photo.widthPct) || 75}
+                    onPatch={(pt) => updateBlock(blk.id, (b) => ({ ...b, photo: { ...b.photo!, ...pt } }))}
+                    below={
+                      <Inline
+                        value={blk.photo.captionBelow || ''}
+                        single
+                        placeholder="Képaláírás"
+                        onChange={(v) => updateBlock(blk.id, (b) => ({ ...b, photo: { ...b.photo!, captionBelow: v } }))}
+                        className="text-[11px] text-slate-500 text-center"
+                      />
+                    }
+                  />
                 )}
                 {blk.type === 'page_break' && (
                   <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-slate-400">

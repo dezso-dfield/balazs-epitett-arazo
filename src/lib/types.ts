@@ -77,6 +77,7 @@ export interface PhotoCaptionBlock {
   titleAbove?: string;
   captionBelow: string;
   widthPct?: number; // 30..100, alapértelmezett ~75%
+  sizePct?: number; // a Word-szerű szerkesztőben beállított szélesség (20..100%); ha nincs, a dizájn szerinti
   align?: 'left' | 'center' | 'right';
   // Részletképek a nagy kép alatt (pl. motor, LED, profil közelről)
   subPhotos?: PhotoCaptionBlock[];

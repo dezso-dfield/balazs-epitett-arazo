@@ -96,5 +96,11 @@ export function primaryCategory(blocks: QuoteDocumentBlock[], categories: Produc
   return cats.find((c) => c.categoryType !== 'accessory') || cats[0];
 }
 
+/** Egy fotó szélessége a tartalom szélességéhez képest (%): a szerkesztőben beállított, különben teljes szélesség (Word ajánlatok) */
+export const photoWidthPct = (p: { sizePct?: number; widthPct?: number }) =>
+  Math.min(100, Math.max(20, Number(p.sizePct) || (p.widthPct && Number(p.widthPct) !== 75 ? Number(p.widthPct) : 100)));
+/** a beállított méretű fotó magasabb is lehet (a Word ajánlatokban kézzel méretezett képek) */
+export const photoMaxH = (p: { sizePct?: number }) => (p.sizePct ? 640 : 330);
+
 /** Szerkesztő: PDF pont → képernyő pixel (13px ≈ 10pt) */
 export const ptPx = (pt: number) => `${+(pt * 1.3).toFixed(1)}px`;

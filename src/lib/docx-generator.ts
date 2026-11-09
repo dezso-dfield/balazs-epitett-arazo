@@ -22,7 +22,7 @@ import {
 } from 'docx';
 import { PDFDocument } from 'pdf-lib';
 import { formatDotNumber, replaceTemplateVariables } from './constants';
-import { blockCategoryId, getDocDesign, LETTERHEAD_URL, primaryCategory, type DocDesign } from './doc-design';
+import { blockCategoryId, getDocDesign, LETTERHEAD_URL, photoMaxH, photoWidthPct, primaryCategory, type DocDesign } from './doc-design';
 import { loadImageBytes } from './pdf-generator';
 import { computeBlockTotals } from './pricing-engine';
 import { parseRich, stripRich } from './richtext';
@@ -193,7 +193,7 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
     if (!im) return [] as Paragraph[];
     const out: Paragraph[] = [];
     if (p.titleAbove) out.push(para(stripRich(fill(p.titleAbove)), { size: 9.5, bold: true, color: D.heading, align: 'center', after: 2 }));
-    out.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 2 * PT }, children: [imageRun(im, maxW, maxH)] }));
+    out.push(new Paragraph({ alignment: p.align === 'left' ? AlignmentType.LEFT : p.align === 'right' ? AlignmentType.RIGHT : AlignmentType.CENTER, spacing: { after: 2 * PT }, children: [imageRun(im, maxW, maxH)] }));
     if (p.captionBelow) out.push(para(stripRich(fill(p.captionBelow)), { size: 8.5, color: D.muted, align: 'center', after: 8 }));
     return out;
   };
@@ -247,7 +247,7 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
     const photos = attached ? [] : (block.sectionPhotos || []).filter((p) => p.imageUrl);
     if (photos.length && D.photoLayout === 'stacked') {
       for (const ph of photos) {
-        (await photo(ph, CONTENT_PT, 330, D)).forEach(push);
+        (await photo(ph, (CONTENT_PT * photoWidthPct(ph)) / 100, photoMaxH(ph), D)).forEach(push);
         const subs = (ph.subPhotos || []).filter((p) => p.imageUrl);
         if (subs.length) await photoGrid(subs, 3, 135, D);
       }
@@ -266,16 +266,12 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
       const border = { style: BorderStyle.SINGLE, size: 4, color: hex(D.tableBorder) };
       const borders = { top: border, bottom: border, left: border, right: border };
       // Összesen sor: halvány kiemelés, vastagabb felső vonal (a fejléc színének világosabb árnyalata)
-      const sumFill = (() => {
-        const h = D.tableHead.replace('#', '');
-        const ch = [0, 2, 4].map((i) => Math.round(255 - (255 - parseInt(h.slice(i, i + 2), 16)) * 0.55));
-        return ch.map((c) => c.toString(16).padStart(2, '0')).join('').toUpperCase();
-      })();
+      const sumFill = hex(D.tableHead);
       const strongTop = { style: BorderStyle.SINGLE, size: 12, color: hex(D.tableBorder) };
       const cell = (text: string, i: number, o: { bold?: boolean; right?: boolean; head?: boolean; strong?: boolean } = {}) =>
         new TableCell({
           width: { size: COLW[i], type: WidthType.DXA },
-          borders: o.strong ? { ...borders, top: strongTop } : borders,
+          borders: o.strong ? { ...borders, top: strongTop, bottom: strongTop } : borders,
           verticalAlign: o.head ? VerticalAlign.TOP : VerticalAlign.BOTTOM,
           shading: o.head ? { type: ShadingType.CLEAR, color: 'auto', fill: hex(D.tableHead) } : o.strong ? { type: ShadingType.CLEAR, color: 'auto', fill: sumFill } : undefined,
           margins: { left: 70, right: 70, top: 0, bottom: 0 },
@@ -283,7 +279,7 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
             new Paragraph({
               alignment: o.right ? AlignmentType.RIGHT : o.head && i === 0 ? AlignmentType.CENTER : AlignmentType.LEFT,
               spacing: { after: 0, line: 240 },
-              children: [new TextRun({ text, bold: o.bold || o.head, size: Math.round(D.tableSize * 2), font: FONT.name, color: hex(D.heading) })],
+              children: [new TextRun({ text, bold: o.bold || o.head || o.strong, size: Math.round((D.tableSize + (o.strong ? 1 : 0)) * 2), font: FONT.name, color: hex(D.heading) })],
             }),
           ],
         });
@@ -474,7 +470,7 @@ export async function renderQuoteDocxBytes(quote: Partial<QuoteRecord>, config: 
     }
 
     if (block.type === 'photo_box' && block.photo) {
-      (await photo(block.photo, CONTENT_PT, 330, D)).forEach(push);
+      (await photo(block.photo, (CONTENT_PT * (block.photo.sizePct || block.photo.widthPct || 75)) / 100, block.photo.sizePct ? 640 : 330, D)).forEach(push);
       const subs = (block.photo.subPhotos || []).filter((p) => p.imageUrl);
       if (subs.length) await photoGrid(subs, 3, 135, D);
       continue;
