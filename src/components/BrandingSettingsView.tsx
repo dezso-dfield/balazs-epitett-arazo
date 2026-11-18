@@ -1171,8 +1171,8 @@ export function BrandingSettingsView({
               <div className="flex items-center gap-2">
                 <img
                   src={form.pdfSignatureCardUrl}
-                  alt=""
-                  className="w-24 h-14 object-cover rounded border border-slate-300"
+                  alt="Névjegy előnézet"
+                  className="w-72 max-w-full h-auto object-contain rounded border border-slate-300 bg-white"
                 />
                 <button
                   type="button"

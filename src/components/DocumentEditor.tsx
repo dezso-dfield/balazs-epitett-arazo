@@ -824,6 +824,15 @@ export function DocumentEditor({
               {insertBar(idx)}
             </React.Fragment>
           ))}
+          {/* névjegy / aláírás: a PDF és a Word ajánlat végén is ugyanez (300 × 140 pt-ig) */}
+          {config.pdfSignatureCardUrl && (
+            <img
+              src={config.pdfSignatureCardUrl}
+              alt="Névjegy"
+              title="Névjegy a végén (Beállítások › Cég és arculat)"
+              style={{ display: 'block', width: ptPx(300), maxHeight: ptPx(140), objectFit: 'contain', objectPosition: 'left top', marginTop: ptPx(6) }}
+            />
+          )}
         </div>
         {/* lábléc: a fejléces papír alja (sötétkék sáv a weboldallal), vagy a dizájn szerinti sáv */}
         {letterhead ? (
